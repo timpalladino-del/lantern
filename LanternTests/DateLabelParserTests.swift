@@ -14,65 +14,66 @@ final class DateLabelParserTests: XCTestCase {
 
     private func parser() -> DateLabelParser { DateLabelParser(calendar: calendar, today: today) }
 
-    private func ymd(_ d: Date) -> (Int, Int, Int) {
+    /// "2027-03-15" so XCTAssertEqual can compare it (tuples are not Equatable).
+    private func ymd(_ d: Date) -> String {
         let c = calendar.dateComponents([.year, .month, .day], from: d)
-        return (c.year!, c.month!, c.day!)
+        return String(format: "%04d-%02d-%02d", c.year!, c.month!, c.day!)
     }
 
     func testISODate() {
         let d = parser().bestDate(in: "BEST BY 2027-03-15 LOT 4471")
         XCTAssertNotNil(d)
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testUSSlashFullYear() {
         let d = parser().bestDate(in: "EXP 03/15/2027")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testUSSlashTwoDigitYear() {
         let d = parser().bestDate(in: "BB 3/15/27")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testDayFirstWhenFirstNumberCannotBeMonth() {
         let d = parser().bestDate(in: "15/03/2027")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testMonthNameDayFirst() {
         let d = parser().bestDate(in: "BEST IF USED BY 15 MAR 2027")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testCompactMonthName() {
         let d = parser().bestDate(in: "15MAR27")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testMonthNameThenDayAndYear() {
         let d = parser().bestDate(in: "Best By: MAR 15, 2027")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testMonthYearOnlyResolvesToEndOfMonth() {
         let d = parser().bestDate(in: "BEST BY MAR 2027")
-        XCTAssertEqual(ymd(d!), (2027, 3, 31))
+        XCTAssertEqual(ymd(d!), "2027-03-31")
     }
 
     func testNumericMonthYear() {
         let d = parser().bestDate(in: "BEST BY 06/2028")
-        XCTAssertEqual(ymd(d!), (2028, 6, 30))
+        XCTAssertEqual(ymd(d!), "2028-06-30")
     }
 
     func testFullMonthName() {
         let d = parser().bestDate(in: "Use by September 2027")
-        XCTAssertEqual(ymd(d!), (2027, 9, 30))
+        XCTAssertEqual(ymd(d!), "2027-09-30")
     }
 
     func testCompactDigitsYYYYMMDD() {
         let d = parser().bestDate(in: "20270315")
-        XCTAssertEqual(ymd(d!), (2027, 3, 15))
+        XCTAssertEqual(ymd(d!), "2027-03-15")
     }
 
     func testRejectsWordsThatStartLikeMonths() {
@@ -99,7 +100,7 @@ final class DateLabelParserTests: XCTestCase {
 
     func testPicksHighestConfidenceAmongSeveral() {
         let results = parser().parse("LOT 20261102 EXP 2028-06-30")
-        XCTAssertEqual(ymd(results.first!.date), (2028, 6, 30))
+        XCTAssertEqual(ymd(results.first!.date), "2028-06-30")
     }
 
     func testInvalidDayRejected() {

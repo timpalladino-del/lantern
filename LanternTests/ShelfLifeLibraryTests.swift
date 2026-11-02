@@ -23,7 +23,8 @@ final class ShelfLifeLibraryTests: XCTestCase {
     }
 
     func testBestMatchOnProductName() {
-        XCTAssertEqual(library.bestMatch(for: "Bush's Black Beans")?.key, "canned_low_acid")
+        XCTAssertEqual(library.bestMatch(for: "Canned Black Beans")?.key, "canned_low_acid")
+        XCTAssertEqual(library.bestMatch(for: "Bush's Black Beans")?.key, "beans_dried", "no 'canned' in the name, so the dry-goods entry wins; the user picks canned in the editor")
         XCTAssertEqual(library.bestMatch(for: "Energizer AA Batteries")?.key, "batteries_alkaline")
         XCTAssertEqual(library.bestMatch(for: "Jif Peanut Butter")?.key, "peanut_butter")
     }

@@ -55,9 +55,11 @@ struct DateLabelParser {
         }
 
         func add(_ y: Int, _ m: Int, _ d: Int?, range: NSRange, base: Double) {
+            // Claim the range first: an invalid or implausible date must not be re-read in pieces
+            // by a looser pattern (e.g. "02/30/2027" as "02/30" = Feb 2030).
+            guard take(range) else { return }
             guard let date = makeDate(year: y, month: m, day: d) else { return }
             guard isPlausible(date) else { return }
-            guard take(range) else { return }
             var conf = base + keywordBoost(before: range)
             if date < today { conf -= 0.3 }
             out.append(Candidate(date: date, confidence: min(1, max(0, conf)),

@@ -57,7 +57,7 @@ struct DataScannerRepresentable: UIViewControllerRepresentable {
                 case .barcode(let barcode):
                     if let value = barcode.payloadStringValue { parent.onBarcode(value) }
                 case .text(let text):
-                    parent.onText(text.transcription)
+                    parent.onText(text.transcript)
                 @unknown default:
                     break
                 }

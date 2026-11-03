@@ -178,3 +178,37 @@ struct OutageView: View {
         return "\(h / 24) d \(h % 24) h"
     }
 }
+
+struct ClockRow: View {
+    let title: String
+    let symbol: String
+    let deadline: Date
+    let now: Date
+    let safeText: String
+    let pastText: String
+
+    var body: some View {
+        let remaining = deadline.timeIntervalSince(now)
+        HStack(alignment: .top, spacing: 12) {
+            Image(systemName: symbol).frame(width: 28).foregroundStyle(remaining > 0 ? Color.moss : Color.ember)
+            VStack(alignment: .leading, spacing: 3) {
+                HStack {
+                    Text(title).font(.subheadline.weight(.semibold))
+                    Spacer()
+                    Text(remaining > 0 ? remainingText(remaining) : "Time's up")
+                        .font(.subheadline.weight(.semibold)).monospacedDigit()
+                        .foregroundStyle(remaining > 0 ? Color.moss : Color.ember)
+                }
+                Text(remaining > 0 ? "\(safeText) \(deadline.formatted(date: .omitted, time: .shortened))." : pastText)
+                    .font(.footnote).foregroundStyle(.secondary)
+            }
+        }
+        .padding(.vertical, 2)
+    }
+
+    private func remainingText(_ s: TimeInterval) -> String {
+        let mins = Int(s / 60)
+        if mins < 60 { return "\(mins) min left" }
+        return "\(mins / 60) h \(mins % 60) min left"
+    }
+}

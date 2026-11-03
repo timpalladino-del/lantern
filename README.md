@@ -60,7 +60,7 @@ The Xcode project uses Xcode 16's synchronized folders, so new files dropped int
 
 Kits and go-bags as containers, household sharing (CloudKit), seasonal hazard checklists, documents
 vault, camera "is this still good" check, scenario planner, widgets, Pro purchase. Pricing (Free for one person and 50
-items, Family $12.99/yr for six people, $3/yr per extra profile, groups) is in `docs/plan.md` section 11.
+items; Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr) is in `docs/plan.md` section 11.
 
 ## Data
 

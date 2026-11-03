@@ -14,6 +14,9 @@ struct HouseholdView: View {
 
     private let targets = [3, 7, 14, 30]
 
+    /// The first person is usually whoever set the app up; the request reads "Tim asked for your profile".
+    private var requesterName: String { household.sortedPeople.first?.name ?? "Your household" }
+
     var body: some View {
         List {
             Section {
@@ -25,11 +28,14 @@ struct HouseholdView: View {
                         }
                 }
                 Button { showNewPerson = true } label: { Label("Add a person", systemImage: "person.badge.plus") }
+                ShareLink(item: ProfileExchange.requestMessage(from: requesterName), subject: Text("Add yourself to our Lantern household")) {
+                    Label("Ask someone to add themselves", systemImage: "paperplane")
+                }
             } header: { Text("People") } footer: {
                 if household.hasPeople {
                     Text("Together: about \(Int(household.caloriesPerDay.rounded())) calories a day.")
                 } else {
-                    Text("Add everyone who lives here, including yourself. Each person's age and size set the food target.")
+                    Text("Add everyone who lives here, including yourself. Each person's age and size set the food target. Or send a link and let them fill in their own.")
                 }
             }
 

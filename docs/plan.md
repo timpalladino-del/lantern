@@ -409,6 +409,7 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
 - 2026-11-03: Medications carry the whole label: form, strength, purpose, clock times, how-to-take and warning
   instructions from a fixed catalog (take with food, do not drive, avoid alcohol...), prescriber, pharmacy, Rx number,
   optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
+- 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
 - 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six). Groups are a separate future SKU.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
@@ -469,6 +470,16 @@ all of it is free on every tier. No pre-written message templates (decided again
   reminder at each dose time (time-sensitive for can't-miss medications).
 - The card lists every person's medications with allergies, shareable as plain text to a group chat or a
   caregiver, or as a PDF for the fridge and the go-bag. Each person also has a share link on their own screen.
+
+**Profile links (people builder)**
+- Household → "Ask someone to add themselves" sends a plain-text message with a `lantern://profile/new?from=Tim`
+  link. On the family member's iPhone it opens a profile builder in a scratch store (it never touches their own
+  household): the same person and medication screens, then "Send to Tim".
+- That reply is a `lantern://profile/import?d=…` link carrying the whole profile as base64url JSON (name, age,
+  size, sex, activity, allergies, diet, notes, every medication with times, instructions, prescriber, pharmacy).
+  Tapping it on the owner's phone shows a preview and "Add to household" or "Update" when the name already exists.
+- No server, no account. The link is the transport. Follow-up: a universal link domain so the same link opens the
+  App Store for people who do not have Lantern yet; today the message tells them to install it and tap again.
 
 **Pass the time**
 - Dice (animated SF Symbol die faces), coin flip, and a 52-card deck to draw from and shuffle. For kids in the

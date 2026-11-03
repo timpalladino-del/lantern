@@ -13,6 +13,18 @@ struct RootView: View {
     @AppStorage(AppSettings.digestHour) private var digestHour = 9
     @AppStorage(AppSettings.hasSeenWelcome) private var hasSeenWelcome = false
     @State private var showOnboarding = false
+    @State private var incomingRoute: IncomingRoute?
+    @State private var screenshotMedication: Medication?
+
+    enum IncomingRoute: Identifiable {
+        case newProfile(String), importProfile(ProfileCard)
+        var id: String {
+            switch self {
+            case .newProfile(let s): return "new-\(s)"
+            case .importProfile(let c): return "import-\(c.name)-\(c.createdAt.timeIntervalSince1970)"
+            }
+        }
+    }
     /// Launch argument `-tab <name>` opens a tab directly (used for screenshots: `xcrun simctl launch ... -tab Toolkit`).
     @State private var selectedTab: String = {
         let args = ProcessInfo.processInfo.arguments
@@ -36,6 +48,24 @@ struct RootView: View {
         .sheet(isPresented: $showOnboarding, onDismiss: { hasSeenWelcome = true }) {
             OnboardingView()
         }
+        .onOpenURL { url in
+            guard let route = ProfileExchange.route(for: url) else { return }
+            showOnboarding = false
+            switch route {
+            case .newProfile(let by): incomingRoute = .newProfile(by)
+            case .importProfile(let card): incomingRoute = .importProfile(card)
+            }
+        }
+        .sheet(item: $incomingRoute) { route in
+            switch route {
+            case .newProfile(let by): ProfileBuilderView(requestedBy: by)
+            case .importProfile(let card): ProfileImportView(card: card)
+            }
+        }
+        .sheet(item: $screenshotMedication) { m in
+            if let p = m.person { MedicationEditView(person: p, medication: m) }
+        }
+        .task { openScreenshotRoute() }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .background, notificationsEnabled else { return }
             let snapshotItems = items
@@ -46,5 +76,37 @@ struct RootView: View {
                                                                digestWeekday: digestWeekday, digestHour: digestHour)
             }
         }
+    }
+
+    /// Launch argument `-screenshot medication` opens the medication editor on a sample record so the
+    /// screen can be captured without tapping through. Debug builds only.
+    private func openScreenshotRoute() {
+        #if DEBUG
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
+        switch args[i + 1] {
+        case "medication":
+            let household = (try? context.fetch(FetchDescriptor<Household>()))?.first ?? Household()
+            let person = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
+            person.allergies = "Penicillin"
+            person.household = household
+            context.insert(person)
+            let m = Medication(name: "Metformin", dose: "500 mg", dosesPerDay: 2, unitsPerDose: 1, unitsOnHand: 48, isCritical: false)
+            m.purpose = "Type 2 diabetes"
+            m.scheduleMinutes = [8 * 60, 20 * 60]
+            m.instructionKeys = [MedicationInstruction.withFood.rawValue, MedicationInstruction.noAlcohol.rawValue, MedicationInstruction.lowSugar.rawValue]
+            m.prescriber = "Dr. Alvarez"
+            m.prescriberPhone = "(305) 555-0142"
+            m.pharmacy = "CVS, Main St"
+            m.pharmacyPhone = "(305) 555-0199"
+            m.rxNumber = "7731904"
+            m.remindersEnabled = true
+            m.person = person
+            context.insert(m)
+            try? context.save()
+            screenshotMedication = m
+        default: break
+        }
+        #endif
     }
 }

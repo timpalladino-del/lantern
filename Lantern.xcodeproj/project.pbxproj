@@ -329,6 +329,7 @@
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Lantern/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, which iOS groups with location. Your location is never stored or sent anywhere.";
@@ -360,6 +361,7 @@
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Lantern/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, which iOS groups with location. Your location is never stored or sent anywhere.";

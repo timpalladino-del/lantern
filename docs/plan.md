@@ -210,24 +210,24 @@ All of this ships inside the app, offline, with citations.
 Decided November 3, 2026, after several passes the same day (earlier drafts are in git history).
 
 Principles: every Toolkit safety tool is free forever, including during an outage. One subscription group with
-three annual tiers and a 7-day free trial. No account is required; purchases are tied to the Apple ID and shared
+three annual tiers and a 7-day free trial. Nothing is sold outside the App Store. No account is required; purchases are tied to the Apple ID and shared
 through Apple Family Sharing so a spouse does not pay twice.
 
 ### The ladder
 
-| | Free | Family 6 | Family 10 | Group 50 | Organizations |
-|---|---|---|---|---|---|
-| Price | $0 | $12.99 / yr | $19.99 / yr | $49.99 / yr | $3 per household / yr, $300 min |
-| People in your house | 1 | 6 | 10 | 10 (organizer's house) | per seat |
-| Households in the group | | | | up to 50 | unlimited |
-| Items | 50 | unlimited | unlimited | unlimited | unlimited |
-| Pets | unlimited | unlimited | unlimited | unlimited | unlimited |
-| Free trial | | 7 days | 7 days | 7 days | no |
-| Toolkit (SOS, outage mode, contacts, plan, know-how, medication card, compass, radio, games) | all, always | all | all | all | all |
-| Scanning, shelf-life library, readiness math, PDFs, CSV | yes | yes | yes | yes | yes |
-| Kits, maintenance reminders, seasonal checklists, documents vault, widgets, sync | no | yes | yes | yes | yes |
-| Profile links and medication cards | first person | all | all | all | all |
-| Group roster, readiness roll-up, shared contacts and plan | | | | yes | yes, plus web admin |
+| | Free | Family 6 | Family 10 | Group 50 |
+|---|---|---|---|---|
+| Price | $0 | $12.99 / yr | $19.99 / yr | $49.99 / yr |
+| People in your house | 1 | 6 | 10 | 10 (organizer's house) |
+| Households in the group | | | | up to 50 |
+| Items | 50 | unlimited | unlimited | unlimited |
+| Pets | unlimited | unlimited | unlimited | unlimited |
+| Free trial | | 7 days | 7 days | 7 days |
+| Toolkit (SOS, outage mode, contacts, plan, know-how, medication card, compass, radio, games) | all, always | all | all | all |
+| Scanning, shelf-life library, readiness math, PDFs, CSV | yes | yes | yes | yes |
+| Kits, maintenance reminders, seasonal checklists, documents vault, widgets, sync | no | yes | yes | yes |
+| Profile links and medication cards | first person | all | all | all |
+| Group roster, readiness roll-up, shared contacts and plan | | | | yes |
 
 What moves someone up: adding a second person or passing 50 items moves Free to Family 6. The seventh person
 moves Family 6 to Family 10 (Apple prorates). A person living alone with more than 50 items pays Family 6; there is
@@ -245,12 +245,6 @@ no solo plan. Store page: "Free until you need it. One plan from $12.99 a year."
 This keeps Group from cannibalizing Family, keeps it on Phase 2 CloudKit sharing with no server, and makes every
 member household a future Family customer. The gap between Family 10 and Group 50 is deliberate; add a middle
 tier only if the data asks for it.
-
-### Organizations
-
-Schools, care homes, businesses, agencies. Needs web admin, a backend that is not someone's iCloud, exports,
-support and a privacy agreement for medical data, so it is per-seat and invoiced through Apple Business Manager
-or directly. Build it when a real one asks; do not build the backend speculatively.
 
 ### Trial and paywall rules
 
@@ -422,7 +416,7 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
   optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
 - 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
-- 2026-11-03: Pricing final for now: Free (1 person, 50 items); Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr (50 households, organizer gets Family 10, members stay Free); Organizations $3/household/yr invoiced. 7-day trial. Toolkit free on every tier. No solo plan, no one-time purchase.
+- 2026-11-03: Pricing final for now: Free (1 person, 50 items); Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr (50 households, organizer gets Family 10, members stay Free); No Organizations tier. 7-day trial. Toolkit free on every tier. No solo plan, no one-time purchase.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,
   medications (dose, times per day, units on hand), allergies and dietary notes, plus pets by species and weight.

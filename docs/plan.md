@@ -137,6 +137,10 @@ Ranked by how often it recurred across forums, reviews and press.
 - "Checked" stamps the kit and its items; a kit not checked in six months shows in Ember.
 - Free: one kit. More kits are part of Family.
 
+### App icon for iOS 26 — built November 3, 2026
+- `Lantern/AppIcon.icon` is an Icon Composer package: a navy fill with the lit disc and lantern as one layer,
+  so iOS 26 derives the Clear and Tinted appearances itself. The asset-catalog AppIcon stays as the iOS 18 fallback.
+
 ### Universal links — built November 3, 2026
 - Profile links are now `https://kismetstudio.io/lantern/p/new` and `/lantern/p/import`, served by the site with
   `/.well-known/apple-app-site-association` and the `applinks:kismetstudio.io` entitlement. Without the app the
@@ -444,6 +448,7 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
   optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
 - 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
+- 2026-11-03: Built kits, universal links, trusted contact, demo data, App Store screenshots (docs/screens/appstore on the Mac), Icon Composer icon. Device build installed on the iPhone 16 Pro Max without the associated-domains entitlement (Release only until the capability is enabled with an Apple ID in Xcode).
 - 2026-11-03: Pricing final for now: Free (1 person, 50 items); Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr (50 households, organizer gets Family 10, members stay Free); No Organizations tier. 7-day trial. Toolkit free on every tier. No solo plan, no one-time purchase.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,

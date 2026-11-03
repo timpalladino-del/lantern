@@ -56,6 +56,19 @@ TestFlight or sandbox. Small Business Program: already enrolled.
 3. Run a TestFlight or Xcode build. Subscriptions renew every few minutes in sandbox (1 year = 1 hour).
 4. In the simulator you do not need any of this: the scheme uses `Config/Lantern.storekit`.
 
+## Associated Domains (universal links)
+
+The Release configuration signs with `Config/Lantern.entitlements` (`applinks:kismetstudio.io`). Before the first
+archive: Xcode → Settings → Accounts → add the Apple ID for team 69MM5TC2UN, then in the Lantern target →
+Signing & Capabilities → + Capability → Associated Domains. Xcode registers it on the App ID. Debug builds do not
+use the entitlement so device builds work without it; profile links fall back to the `lantern://` scheme via the
+page on the site.
+
+## TestFlight
+
+`xcodebuild -scheme Lantern -configuration Release archive` then upload with Xcode Organizer or Transporter. Both
+need the Apple ID signed in on the Mac; nothing in the repo blocks it once the App Store Connect record exists.
+
 ## Checklist
 
 - [ ] App record created with the bundle ID above

@@ -11,7 +11,10 @@ What Apple asks for, and why the first drafts failed:
 - **It has to work as a silhouette.** iOS 18 added Dark and Tinted appearances; iOS 26's Liquid Glass added Clear. In Tinted and Clear the system reduces the artwork to one color, so an icon that depends on shading or color to be recognizable disappears. This is the test that matters now.
 - **Layers for Liquid Glass.** Icon Composer (Xcode 26+) takes a background and up to three foreground layers and applies glass lighting. Simple filled shapes work; fine detail and gradients do not.
 
-What Lantern ships: a three-layer vector icon (navy background, amber glow, white lantern silhouette with an amber window) at 1024 px, with explicit Dark and Tinted variants in the asset catalog. Sources and a render script are in `docs/brand/icon/`; `render.js` produces the PNGs and a preview sheet at 180/120/76/60/40/29 px across appearances. Next step when the Mac is connected: open the SVG layers in Icon Composer and export the `.icon` bundle so Clear mode gets real glass.
+What Lantern ships: a solid navy lantern silhouette cut out of a flat amber disc with a darker halo ring,
+generated in Runway and snapped to the brand palette, at 1024 px with explicit Dark and Tinted variants in the
+asset catalog. Source and preview sheet are in `docs/brand/icon/`. Next step when the Mac is connected: rebuild
+the three layers (ground, disc and halo, lantern) in Icon Composer so Clear mode gets real glass.
 
 ## Color
 

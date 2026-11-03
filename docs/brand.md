@@ -31,8 +31,11 @@ Marketing: Bricolage Grotesque (display), Nunito Sans (body), IBM Plex Mono (dat
 In the app: SF Pro, SF Pro Rounded for section titles, SF Mono for dates and barcodes, tabular figures.
 
 ## Icon
-Concept A, a plain lit household lantern on navy with a soft amber halo. Concept C (arch over a flame) as the
-in-app symbol. Drafts generated in Runway on 2026-11-03; vector draft 2 of concept A is the base.
+Chosen 2026-11-03. A solid navy hurricane-lantern silhouette cut out of a flat amber disc of light, with a
+darker amber halo ring, on navy. Generated in Runway, then snapped to the brand palette: Night #141B2B,
+Glow #F5B041, halo #C98A24. Dark appearance uses a deeper ground (#0B1019); the Tinted variant is grayscale
+on black. Source render, final 1024 and a size preview live in `docs/brand/icon/`. Clear-mode glass layers
+(Icon Composer) still to do on the Mac.
 
 ## Voice
 Say: ready, stocked, supplies, use first, a bad week, the outage, covered for 9 days, checked, still fine.

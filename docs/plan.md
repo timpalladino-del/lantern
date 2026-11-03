@@ -242,12 +242,42 @@ Test $9.99 and $14.99 against $12.99 in the first two months. Keep the number un
 - **More than six people, or more than one home:** still one Pro purchase per Apple ID. A person can belong to
   more than one household (a parent's house and their own) and a household can have any number of people. Multiple
   homes is a Pro feature because it is a convenience, not a safety need.
-- **Groups and organisations** (a church preparedness ministry, a CERT team, a small business, a school): out of
-  scope for the consumer app. If demand shows up, it becomes a separate SKU, "Lantern for Groups", with volume
-  purchasing through Apple Business Manager and a shared roster. Do not try to bend the household model to fit it.
+- **Groups** are a separate set of products, below. Do not try to bend the household model to fit them.
 - **No subscriptions, ever,** unless we later add a service that costs us money per month (hosted alerts, SMS
   check-ins). If that day comes it is a separate optional add-on, and the one-time Pro purchase keeps every
   feature it had on the day it was bought.
+
+### Groups
+
+Three different buyers hide under "group" and they want different things. Members never pay in any of them; the
+organizer buys, everyone else joins with the free app, the same way profile links work today. A member who wants Pro
+for their own house buys it separately; Pro is never required to be in a group.
+
+| | Circle | Group Pack | Lantern for Organizations |
+|---|---|---|---|
+| For | extended family, friends | church ministry, HOA block, CERT team, scout troop | schools, care homes, businesses, agencies |
+| Size | up to 12 households | up to 50 households | unlimited, per seat |
+| Price | $19.99 one-time | $79 one-time | $3 per household per year, $300 minimum |
+| Who pays | one person | the organizer | the organization, invoiced |
+| Runs on | CloudKit sharing, no servers | CloudKit sharing, no servers | small backend plus web admin |
+| Sold through | in-app purchase | in-app purchase | Apple Business Manager or direct invoice |
+
+What a group shares:
+- Roster: each household's name, people and pets counts, and readiness in days. Never the inventory itself.
+- Group contacts and plan: meeting place, who has the generator, who is a nurse, who needs help evacuating.
+- Personal details (medication cards, special needs) are opt-in per household. Default is "covered for 9 days"
+  and nothing else.
+- Gap view for the organizer: "6 of 31 households under 3 days of water."
+
+Why one-time for Circle and Group Pack: they run on CloudKit sharing, which costs nothing per month, so the
+"no subscriptions" promise holds. CloudKit shares cap near a hundred participants, hence 50 households with headroom.
+
+Why annual for Organizations: web admin, a backend that is not someone's iCloud, exports, support and a privacy
+agreement for medical data all cost money every month. $3 a household keeps a 200-student school at $600 a year,
+inside a principal's discretionary budget. The minimum keeps tiny accounts from costing more in support than they pay.
+
+Order of work: Circle and Group Pack ride on Phase 2 household sharing and ship together. Organizations waits until
+a real one asks; do not build the backend speculatively.
 
 ### What stays free in an emergency
 
@@ -411,7 +441,8 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
   optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
 - 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
-- 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six). Groups are a separate future SKU.
+- 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six).
+- 2026-11-03: Groups: Circle ($19.99 once, 12 households), Group Pack ($79 once, 50 households), Organizations ($3/household/year, $300 min). Members never pay.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,
   medications (dose, times per day, units on hand), allergies and dietary notes, plus pets by species and weight.

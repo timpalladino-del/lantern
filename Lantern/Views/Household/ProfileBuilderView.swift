@@ -147,6 +147,9 @@ struct ProfileImportView: View {
         }()
         card.apply(to: person, in: context)
         try? context.save()
+        if let reason = PlanStore.shared.reasonForAdding(personNumber: household.people.count) {
+            PlanStore.shared.pendingPaywall = reason
+        }
         dismiss()
     }
 }

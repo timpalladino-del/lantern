@@ -22,6 +22,8 @@ struct ItemEditView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
+    @Query private var allItems: [SupplyItem]
+    @State private var paywall: PaywallReason?
 
     private let existing: SupplyItem?
     private let onSaved: ((SupplyItem) -> Void)?
@@ -226,6 +228,7 @@ struct ItemEditView: View {
                 }
             }
             .navigationTitle(existing == nil ? "New item" : "Edit item")
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
@@ -268,6 +271,10 @@ struct ItemEditView: View {
     }
 
     private func save() {
+        if existing == nil, !PlanStore.shared.canAddItem(currentCount: allItems.count) {
+            paywall = .itemLimit
+            return
+        }
         let item = existing ?? SupplyItem(name: name, category: category)
         item.name = name.trimmingCharacters(in: .whitespaces)
         item.brand = brand.trimmingCharacters(in: .whitespaces)

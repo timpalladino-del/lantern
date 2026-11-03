@@ -5,8 +5,10 @@ struct StarterPackPickerView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
+    @Query private var items: [SupplyItem]
 
     @State private var selected: StarterPack?
+    @State private var paywall: PaywallReason?
     @State private var location: StorageLocation?
     private let library = StarterPackLibrary.shared
 
@@ -42,12 +44,17 @@ struct StarterPackPickerView: View {
                 }
             }
             .navigationTitle("Starter packs")
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Add") {
                         if let pack = selected {
+                            guard PlanStore.shared.canAddItems(pack.items.count, currentCount: items.count) else {
+                                paywall = .itemLimit
+                                return
+                            }
                             SeedData.apply(pack: pack, to: location, in: context)
                         }
                         dismiss()

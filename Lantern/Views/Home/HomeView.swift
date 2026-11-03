@@ -11,6 +11,8 @@ struct HomeView: View {
     @State private var showAdd = false
     @State private var showShopping = false
     @State private var doneCount = 0
+    @State private var paywall: PaywallReason?
+    @State private var plan = PlanStore.shared
 
     private var now: Date { Date() }
 
@@ -40,6 +42,23 @@ struct HomeView: View {
                         }
                         .listRowInsets(EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16))
                         .listRowBackground(Color.clear)
+                    }
+                }
+
+                if let h = households.first, !plan.covers(peopleCount: h.people.count) {
+                    Section {
+                        Button { paywall = .secondPerson(coveredDays: report.map { min($0.foodDays, $0.waterDays) }) } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "person.2.fill").foregroundStyle(Color.glow)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Your plan covers 1 of \(h.people.count) people").font(.subheadline.weight(.semibold))
+                                    Text(plan.trialEligible ? "Start a 7-day free trial of Family." : "See Family plans.").font(.caption).foregroundStyle(.secondary)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                            }
+                        }
+                        .foregroundStyle(.primary)
                     }
                 }
 
@@ -90,6 +109,7 @@ struct HomeView: View {
             .sheet(isPresented: $showScanner) { ScanSheet() }
             .sheet(isPresented: $showAdd) { ItemEditView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
             .sensoryFeedback(.success, trigger: doneCount)
         }
     }

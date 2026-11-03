@@ -49,6 +49,8 @@ struct SettingsView: View {
                     Text("When on, the barcode digits (and nothing else) are sent to Open Food Facts to fetch a product name. \(OpenFoodFactsClient.attribution)")
                 }
 
+                PlanSettingsSection()
+
                 Section("Household") {
                     if let h = households.first {
                         NavigationLink("People, pets and medications") { HouseholdView(household: h).navigationTitle("Household") }

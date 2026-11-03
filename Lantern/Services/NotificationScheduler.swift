@@ -71,8 +71,8 @@ final class NotificationScheduler {
             try? await center.add(UNNotificationRequest(identifier: "item-\(item.uuid.uuidString)", content: content, trigger: t))
         }
 
-        // Equipment tasks: one notification on the due day.
-        for task in tasks where task.isEnabled {
+        // Equipment tasks: one notification on the due day. Part of Family; Free sees due dates in the app only.
+        for task in tasks where task.isEnabled && PlanStore.shared.plan.isPaid {
             let due = task.nextDue
             guard due > now else { continue }
             let content = UNMutableNotificationContent()

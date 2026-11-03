@@ -8,7 +8,9 @@ struct MedicationCardView: View {
     @State private var shareFile: ShareableFile?
 
     private var people: [Person] { households.first?.sortedPeople ?? [] }
-    private var peopleWithMeds: [Person] { people.filter { !$0.medications.isEmpty } }
+    private var coveredPeople: [Person] { Array(people.prefix(PlanStore.shared.plan.maxPeople)) }
+    private var peopleWithMeds: [Person] { coveredPeople.filter { !$0.medications.isEmpty } }
+    private var uncoveredCount: Int { people.count - coveredPeople.count }
 
     var body: some View {
         List {
@@ -30,6 +32,11 @@ struct MedicationCardView: View {
                         }
                     } header: {
                         Text(person.name)
+                    }
+                }
+                if uncoveredCount > 0 {
+                    Section {
+                        LockedRow(title: uncoveredCount == 1 ? "1 more person is part of Family" : "\(uncoveredCount) more people are part of Family", reason: .feature("Everyone's medication card"))
                     }
                 }
                 Section {

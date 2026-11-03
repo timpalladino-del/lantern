@@ -7,6 +7,9 @@ struct RootView: View {
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
     @Query private var medications: [Medication]
+    @Query private var households: [Household]
+    @State private var plan = PlanStore.shared
+    @State private var paywallReason: PaywallReason?
 
     @AppStorage(AppSettings.notificationsEnabled) private var notificationsEnabled = false
     @AppStorage(AppSettings.digestWeekday) private var digestWeekday = 1
@@ -17,7 +20,7 @@ struct RootView: View {
     @State private var screenshotMedication: Medication?
     @State private var screenshotScrollTarget: String?
 
-    enum IncomingRoute: Identifiable {
+    enum IncomingRoute: Identifiable, Equatable {
         case newProfile(String), importProfile(ProfileCard)
         var id: String {
             switch self {
@@ -43,9 +46,14 @@ struct RootView: View {
         }
         .tint(Color.glow)
         .task {
+            PlanStore.shared.start()
             SeedData.ensureDefaults(in: context)
             if !hasSeenWelcome { showOnboarding = true }
         }
+        .onChange(of: plan.pendingPaywall) { _, _ in presentPendingPaywall() }
+        .onChange(of: showOnboarding) { _, shown in if !shown { presentPendingPaywall() } }
+        .onChange(of: incomingRoute) { _, route in if route == nil { presentPendingPaywall() } }
+        .sheet(item: $paywallReason) { PaywallView(reason: $0).tint(Color.accentColor) }
         .sheet(isPresented: $showOnboarding, onDismiss: { hasSeenWelcome = true }) {
             OnboardingView()
         }
@@ -79,6 +87,21 @@ struct RootView: View {
         }
     }
 
+    /// A sheet that is dismissing cannot present the paywall, so views leave a reason on the store and we
+    /// present it once nothing else is on screen.
+    private func presentPendingPaywall() {
+        guard let reason = plan.pendingPaywall, !showOnboarding, incomingRoute == nil, paywallReason == nil else { return }
+        var enriched = reason
+        if case .secondPerson(nil) = reason, let h = households.first {
+            let report = ReadinessCalculator.compute(items: items, tasks: tasks, household: h, now: Date())
+            enriched = .secondPerson(coveredDays: min(report.foodDays, report.waterDays))
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+            plan.pendingPaywall = nil
+            paywallReason = enriched
+        }
+    }
+
     /// Launch argument `-screenshot medication` opens the medication editor on a sample record so the
     /// screen can be captured without tapping through. Debug builds only.
     private func openScreenshotRoute() {
@@ -94,6 +117,10 @@ struct RootView: View {
         }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
+        case "paywall":
+            paywallReason = .secondPerson(coveredDays: 4)
+        case "paywall-items":
+            paywallReason = .itemLimit
         case "medication", "medication-middle", "medication-bottom":
             screenshotScrollTarget = ["medication-middle": "instructions", "medication-bottom": "notes"][args[i + 1]]
             let household = (try? context.fetch(FetchDescriptor<Household>()))?.first ?? Household()

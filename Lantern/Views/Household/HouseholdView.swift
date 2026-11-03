@@ -28,8 +28,12 @@ struct HouseholdView: View {
                         }
                 }
                 Button { showNewPerson = true } label: { Label("Add a person", systemImage: "person.badge.plus") }
-                ShareLink(item: ProfileExchange.requestMessage(from: requesterName), subject: Text("Add yourself to our Lantern household")) {
-                    Label("Ask someone to add themselves", systemImage: "paperplane")
+                if PlanStore.shared.covers(peopleCount: household.people.count + 1) {
+                    ShareLink(item: ProfileExchange.requestMessage(from: requesterName), subject: Text("Add yourself to our Lantern household")) {
+                        Label("Ask someone to add themselves", systemImage: "paperplane")
+                    }
+                } else {
+                    LockedRow(title: "Ask someone to add themselves", reason: .secondPerson(coveredDays: nil))
                 }
             } header: { Text("People") } footer: {
                 if household.hasPeople {

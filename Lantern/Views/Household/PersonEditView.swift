@@ -97,7 +97,9 @@ struct PersonEditView: View {
                 }
 
                 Section("Medications") {
-                    if let p = existing {
+                    if let p = existing, !PlanStore.shared.coversPerson(at: household.sortedPeople.firstIndex { $0.uuid == p.uuid } ?? 0) {
+                        LockedRow(title: "Medications for \(p.name) are part of Family", reason: .feature("Tracking everyone's medications"))
+                    } else if let p = existing {
                         ForEach(p.medications.sorted { $0.createdAt < $1.createdAt }, id: \.uuid) { m in
                             Button { editingMedication = m } label: { MedicationRow(medication: m) }
                                 .foregroundStyle(.primary)
@@ -154,6 +156,10 @@ struct PersonEditView: View {
             p.sortOrder = household.people.count
             p.household = household
             context.insert(p)
+            // The person is kept either way; readiness needs them. The offer comes after this sheet closes.
+            if let reason = PlanStore.shared.reasonForAdding(personNumber: household.people.count) {
+                PlanStore.shared.pendingPaywall = reason
+            }
         }
         try? context.save()
         dismiss()

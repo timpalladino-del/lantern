@@ -254,6 +254,21 @@ tier only if the data asks for it.
 - The paywall never appears inside Outage mode or any Toolkit tool.
 - Subscription group ranks: Family 6 < Family 10 < Group 50, so upgrades and downgrades behave correctly.
 
+### Paywall as built (November 3, 2026)
+
+- StoreKit 2, one subscription group "Lantern Plan" with `family6`, `family10`, `group50` yearly products, 7-day
+  free introductory offer, Family Sharing on. `Config/Lantern.storekit` mirrors it for the simulator; the shared
+  scheme points at it. Group 50 is defined but hidden (`PlanStore.showsGroupTier`) until group features exist.
+- `PlanStore` reads `Transaction.currentEntitlements`, highest plan wins, listens to `Transaction.updates`.
+  Launch argument `-plan family6` fakes a plan in Debug builds.
+- Gates: 51st item (hard, in the item editor and starter packs); second person (soft: the person is saved, then
+  the paywall opens with "Your household is covered for N days"); seventh person offers Family 10; medications,
+  profile links and the medication card for people beyond the plan show a locked row; equipment reminders only
+  schedule on a paid plan. Home shows "Your plan covers 1 of N people" while over the limit.
+- Never shown inside the Toolkit. Settings has "Your plan" with restore and manage links.
+- Needs before shipping: real Privacy and Terms pages at the URLs in `Legal`, the products created in App Store
+  Connect with the same IDs, and the App Store Small Business Program enrolment (15% commission).
+
 ### What stays free in an emergency
 
 The Toolkit is deliberately outside the paywall. If someone downloads Lantern during a hurricane watch, the SOS

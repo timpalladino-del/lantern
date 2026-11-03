@@ -15,7 +15,7 @@ struct RootView: View {
     @State private var showOnboarding = false
     @State private var incomingRoute: IncomingRoute?
     @State private var screenshotMedication: Medication?
-    @State private var screenshotScrollBottom = false
+    @State private var screenshotScrollTarget: String?
 
     enum IncomingRoute: Identifiable {
         case newProfile(String), importProfile(ProfileCard)
@@ -64,7 +64,7 @@ struct RootView: View {
             }
         }
         .sheet(item: $screenshotMedication) { m in
-            if let p = m.person { MedicationEditView(person: p, medication: m, scrollToBottom: screenshotScrollBottom).tint(Color.accentColor) }
+            if let p = m.person { MedicationEditView(person: p, medication: m, scrollTarget: screenshotScrollTarget).tint(Color.accentColor) }
         }
         .task { openScreenshotRoute() }
         .onChange(of: scenePhase) { _, phase in
@@ -94,8 +94,8 @@ struct RootView: View {
         }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
-        case "medication", "medication-bottom":
-            screenshotScrollBottom = args[i + 1] == "medication-bottom"
+        case "medication", "medication-middle", "medication-bottom":
+            screenshotScrollTarget = ["medication-middle": "instructions", "medication-bottom": "notes"][args[i + 1]]
             let household = (try? context.fetch(FetchDescriptor<Household>()))?.first ?? Household()
             let person = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
             person.allergies = "Penicillin"

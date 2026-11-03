@@ -30,13 +30,13 @@ struct MedicationEditView: View {
     @State private var rxNumber: String
     @State private var remindersEnabled: Bool
     @State private var showInstructionPicker = false
-    /// Screenshot aid only: open scrolled to the bottom half of the form.
-    private let scrollToBottom: Bool
+    /// Screenshot aid only: open scrolled to a section id ("instructions" or "notes").
+    private let scrollTarget: String?
 
-    init(person: Person, medication: Medication? = nil, scrollToBottom: Bool = false) {
+    init(person: Person, medication: Medication? = nil, scrollTarget: String? = nil) {
         self.person = person
         self.existing = medication
-        self.scrollToBottom = scrollToBottom
+        self.scrollTarget = scrollTarget
         _name = State(initialValue: medication?.name ?? "")
         _dose = State(initialValue: medication?.dose ?? "")
         _form = State(initialValue: medication?.form ?? .tablet)
@@ -121,6 +121,7 @@ struct MedicationEditView: View {
                 } header: { Text("How to take it, and what to avoid") } footer: {
                     Text("Take with food, do not drive, avoid alcohol. These print on the medication card so the person helping does not have to guess.")
                 }
+                .id("instructions")
 
                 Section("Supply") {
                     HStack {
@@ -149,7 +150,11 @@ struct MedicationEditView: View {
                 }
                 .id("notes")
             }
-            .onAppear { if scrollToBottom { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { proxy.scrollTo("notes", anchor: .bottom) } } }
+            .onAppear {
+                if let target = scrollTarget {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { proxy.scrollTo(target, anchor: target == "notes" ? .bottom : .top) }
+                }
+            }
             }
             .navigationTitle(existing == nil ? "Add medication" : "Edit medication")
             .navigationBarTitleDisplayMode(.inline)

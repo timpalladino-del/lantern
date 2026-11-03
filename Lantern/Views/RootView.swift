@@ -15,6 +15,7 @@ struct RootView: View {
     @State private var showOnboarding = false
     @State private var incomingRoute: IncomingRoute?
     @State private var screenshotMedication: Medication?
+    @State private var screenshotScrollBottom = false
 
     enum IncomingRoute: Identifiable {
         case newProfile(String), importProfile(ProfileCard)
@@ -58,12 +59,12 @@ struct RootView: View {
         }
         .sheet(item: $incomingRoute) { route in
             switch route {
-            case .newProfile(let by): ProfileBuilderView(requestedBy: by)
-            case .importProfile(let card): ProfileImportView(card: card)
+            case .newProfile(let by): ProfileBuilderView(requestedBy: by).tint(Color.accentColor)
+            case .importProfile(let card): ProfileImportView(card: card).tint(Color.accentColor)
             }
         }
         .sheet(item: $screenshotMedication) { m in
-            if let p = m.person { MedicationEditView(person: p, medication: m) }
+            if let p = m.person { MedicationEditView(person: p, medication: m, scrollToBottom: screenshotScrollBottom).tint(Color.accentColor) }
         }
         .task { openScreenshotRoute() }
         .onChange(of: scenePhase) { _, phase in
@@ -83,9 +84,18 @@ struct RootView: View {
     private func openScreenshotRoute() {
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
+        // `-open lantern://...` routes a link without the simulator's "Open in Lantern?" dialog.
+        if let o = args.firstIndex(of: "-open"), o + 1 < args.count, let url = URL(string: args[o + 1]), let route = ProfileExchange.route(for: url) {
+            showOnboarding = false
+            switch route {
+            case .newProfile(let by): incomingRoute = .newProfile(by)
+            case .importProfile(let card): incomingRoute = .importProfile(card)
+            }
+        }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
-        case "medication":
+        case "medication", "medication-bottom":
+            screenshotScrollBottom = args[i + 1] == "medication-bottom"
             let household = (try? context.fetch(FetchDescriptor<Household>()))?.first ?? Household()
             let person = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
             person.allergies = "Penicillin"

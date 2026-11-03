@@ -30,10 +30,13 @@ struct MedicationEditView: View {
     @State private var rxNumber: String
     @State private var remindersEnabled: Bool
     @State private var showInstructionPicker = false
+    /// Screenshot aid only: open scrolled to the bottom half of the form.
+    private let scrollToBottom: Bool
 
-    init(person: Person, medication: Medication? = nil) {
+    init(person: Person, medication: Medication? = nil, scrollToBottom: Bool = false) {
         self.person = person
         self.existing = medication
+        self.scrollToBottom = scrollToBottom
         _name = State(initialValue: medication?.name ?? "")
         _dose = State(initialValue: medication?.dose ?? "")
         _form = State(initialValue: medication?.form ?? .tablet)
@@ -144,6 +147,7 @@ struct MedicationEditView: View {
                     TextField("Refill rules, what a missed dose means, anything else", text: $notes, axis: .vertical).lineLimit(2...4)
                 }
             }
+            .defaultScrollAnchor(scrollToBottom ? .bottom : .top)
             .navigationTitle(existing == nil ? "Add medication" : "Edit medication")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

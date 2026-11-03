@@ -18,6 +18,12 @@ struct RootView: View {
     @State private var showOnboarding = false
     @State private var incomingRoute: IncomingRoute?
     @State private var screenshotMedication: Medication?
+    @State private var screenshotSheet: ScreenshotSheet?
+
+    enum ScreenshotSheet: String, Identifiable {
+        case outage, kit, medcard, plan, household
+        var id: String { rawValue }
+    }
     @State private var screenshotScrollTarget: String?
 
     enum IncomingRoute: Identifiable, Equatable {
@@ -71,6 +77,18 @@ struct RootView: View {
             case .importProfile(let card): ProfileImportView(card: card).tint(Color.accentColor)
             }
         }
+        .sheet(item: $screenshotSheet) { which in
+            NavigationStack {
+                switch which {
+                case .outage: OutageView()
+                case .kit: if let k = try? context.fetch(FetchDescriptor<Kit>()).first { KitDetailView(kit: k) }
+                case .medcard: MedicationCardView()
+                case .plan: PlanView()
+                case .household: if let h = households.first { HouseholdView(household: h).navigationTitle("Household") }
+                }
+            }
+            .tint(Color.accentColor)
+        }
         .sheet(item: $screenshotMedication) { m in
             if let p = m.person { MedicationEditView(person: p, medication: m, scrollTarget: screenshotScrollTarget).tint(Color.accentColor) }
         }
@@ -107,6 +125,7 @@ struct RootView: View {
     private func openScreenshotRoute() {
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
+        if args.contains("-demo") { SeedData.demo(in: context) }
         // `-open lantern://...` routes a link without the simulator's "Open in Lantern?" dialog.
         if let o = args.firstIndex(of: "-open"), o + 1 < args.count, let url = URL(string: args[o + 1]), let route = ProfileExchange.route(for: url) {
             showOnboarding = false
@@ -117,12 +136,18 @@ struct RootView: View {
         }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
+        case "outage", "kit", "medcard", "plan", "household":
+            screenshotSheet = ScreenshotSheet(rawValue: args[i + 1])
         case "paywall":
             paywallReason = .secondPerson(coveredDays: 4)
         case "paywall-items":
             paywallReason = .itemLimit
         case "medication", "medication-middle", "medication-bottom":
             screenshotScrollTarget = ["medication-middle": "instructions", "medication-bottom": "notes"][args[i + 1]]
+            if let demoMed = (try? context.fetch(FetchDescriptor<Medication>()))?.first(where: { $0.name == "Metformin" && $0.person?.name == "Maria" }) {
+                screenshotMedication = demoMed
+                return
+            }
             let household = (try? context.fetch(FetchDescriptor<Household>()))?.first ?? Household()
             let person = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
             person.allergies = "Penicillin"

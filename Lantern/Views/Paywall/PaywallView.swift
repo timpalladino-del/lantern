@@ -62,7 +62,9 @@ struct PaywallView: View {
 
     private var headline: String {
         switch reason {
-        case .secondPerson(let days?): return "Your household is covered for \(ReadinessCalculator.formatDays(days))."
+        case .secondPerson(let days?):
+            let whole = Int(days.rounded(.down))
+            return whole <= 0 ? "Lantern covers one person for free." : "Your household is covered for \(whole) day\(whole == 1 ? "" : "s")."
         case .secondPerson(nil): return "Lantern covers one person for free."
         case .itemLimit: return "You've tracked 50 items. That's a real pantry."
         case .moreThanSix: return "More than six people? Family 10 has room."

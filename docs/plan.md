@@ -406,6 +406,9 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
 ## 18. Decisions log
 
 - 2026-11-03: Name is Lantern. Tagline: "Ready for when you need it most." Supporting line: "Know what you have."
+- 2026-11-03: Medications carry the whole label: form, strength, purpose, clock times, how-to-take and warning
+  instructions from a fixed catalog (take with food, do not drive, avoid alcohol...), prescriber, pharmacy, Rx number,
+  optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
 - 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six). Groups are a separate future SKU.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
@@ -458,6 +461,14 @@ all of it is free on every tier. No pre-written message templates (decided again
 - Signals: how Wireless Emergency Alerts work with a shortcut to the Settings toggle; the seven NOAA Weather
   Radio frequencies with a field to remember the local station; a pointer to Apple's Emergency SOS via
   satellite and how to reach it.
+
+**Medication card**
+- Every medication records form, strength, what it is for, the clock times it is taken, how to take it and what to
+  avoid (chosen from a catalog of standard label instructions so the wording matches the pharmacy), free-text
+  extras, prescriber and phone, pharmacy and phone, Rx number, on-hand count, expiry, and an optional local
+  reminder at each dose time (time-sensitive for can't-miss medications).
+- The card lists every person's medications with allergies, shareable as plain text to a group chat or a
+  caregiver, or as a PDF for the fridge and the go-bag. Each person also has a share link on their own screen.
 
 **Pass the time**
 - Dice (animated SF Symbol die faces), coin flip, and a 52-card deck to draw from and shuffle. For kids in the

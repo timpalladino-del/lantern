@@ -43,6 +43,7 @@ struct ToolkitView: View {
 
                 Section("Information, no signal needed") {
                     NavigationLink { ContactsView() } label: { Label("Emergency numbers and contacts", systemImage: "phone.fill") }
+                    NavigationLink { MedicationCardView() } label: { Label("Medication card", systemImage: "pills.fill") }
                     NavigationLink { PlanView() } label: { Label("Our plan: meeting spots and shutoffs", systemImage: "map.fill") }
                     NavigationLink { KnowHowView() } label: { Label("Know-how cards", systemImage: "book.closed.fill") }
                     NavigationLink { SignalsView() } label: { Label("Alerts, weather radio and satellite SOS", systemImage: "antenna.radiowaves.left.and.right") }

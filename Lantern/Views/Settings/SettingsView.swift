@@ -5,6 +5,7 @@ struct SettingsView: View {
     @Environment(\.modelContext) private var context
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
+    @Query private var medications: [Medication]
     @Query private var equipment: [Equipment]
     @Query private var households: [Household]
 
@@ -104,7 +105,7 @@ struct SettingsView: View {
     }
 
     private func reschedule() async {
-        await NotificationScheduler.shared.reschedule(items: items, tasks: tasks, digestWeekday: digestWeekday, digestHour: digestHour)
+        await NotificationScheduler.shared.reschedule(items: items, tasks: tasks, medications: medications, digestWeekday: digestWeekday, digestHour: digestHour)
     }
 }
 

@@ -106,6 +106,11 @@ struct PersonEditView: View {
                                 }
                         }
                         Button { showNewMedication = true } label: { Label("Add a medication", systemImage: "plus") }
+                        if !p.medications.isEmpty {
+                            ShareLink(item: MedicationCardView.cardText(for: [p]), subject: Text("\(p.name)'s medication card")) {
+                                Label("Share \(p.name)'s medication card", systemImage: "square.and.arrow.up")
+                            }
+                        }
                     } else {
                         Text("Save this person first, then add medications.").foregroundStyle(.secondary)
                     }
@@ -177,110 +182,9 @@ struct MedicationRow: View {
     private var subtitle: String {
         var parts: [String] = []
         if !medication.dose.isEmpty { parts.append(medication.dose) }
-        parts.append(medication.dosesPerDay == 1 ? "once a day" : "\(trim(medication.dosesPerDay))× a day")
+        parts.append(medication.scheduleSummary)
         parts.append("\(trim(medication.unitsOnHand)) on hand")
         return parts.joined(separator: " · ")
     }
     private func trim(_ d: Double) -> String { d == d.rounded() ? String(Int(d)) : String(format: "%.1f", d) }
-}
-
-struct MedicationEditView: View {
-    @Environment(\.modelContext) private var context
-    @Environment(\.dismiss) private var dismiss
-    let person: Person
-    private let existing: Medication?
-
-    @State private var name: String
-    @State private var dose: String
-    @State private var dosesPerDay: Double
-    @State private var unitsPerDose: Double
-    @State private var unitsOnHand: Double
-    @State private var isCritical: Bool
-    @State private var hasExpiration: Bool
-    @State private var expirationDate: Date
-    @State private var notes: String
-
-    init(person: Person, medication: Medication? = nil) {
-        self.person = person
-        self.existing = medication
-        _name = State(initialValue: medication?.name ?? "")
-        _dose = State(initialValue: medication?.dose ?? "")
-        _dosesPerDay = State(initialValue: medication?.dosesPerDay ?? 1)
-        _unitsPerDose = State(initialValue: medication?.unitsPerDose ?? 1)
-        _unitsOnHand = State(initialValue: medication?.unitsOnHand ?? 30)
-        _isCritical = State(initialValue: medication?.isCritical ?? false)
-        _hasExpiration = State(initialValue: medication?.expirationDate != nil)
-        _expirationDate = State(initialValue: medication?.expirationDate ?? Date())
-        _notes = State(initialValue: medication?.notes ?? "")
-    }
-
-    private var days: Double? {
-        let perDay = dosesPerDay * unitsPerDose
-        return perDay > 0 ? unitsOnHand / perDay : nil
-    }
-
-    var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("Name (e.g. Metformin)", text: $name)
-                    TextField("Dose (e.g. 500 mg, 1 puff)", text: $dose)
-                    HStack {
-                        Text("Times a day")
-                        Spacer()
-                        TextField("1", value: $dosesPerDay, format: .number).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
-                    }
-                    HStack {
-                        Text("Tablets or units per dose")
-                        Spacer()
-                        TextField("1", value: $unitsPerDose, format: .number).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
-                    }
-                    HStack {
-                        Text("On hand")
-                        Spacer()
-                        TextField("30", value: $unitsOnHand, format: .number).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
-                    }
-                    if let d = days {
-                        LabeledContent("Days of supply", value: ReadinessCalculator.formatDays(d))
-                    }
-                }
-                Section {
-                    Toggle("Can't miss a day", isOn: $isCritical)
-                } footer: {
-                    Text("Insulin, seizure, heart, thyroid, inhalers. Flagged medications get a louder reminder and an early place on the shopping list.")
-                }
-                Section("Dates and notes") {
-                    Toggle("Expiration date", isOn: $hasExpiration)
-                    if hasExpiration { DatePicker("Expires", selection: $expirationDate, displayedComponents: .date) }
-                    TextField("Pharmacy, prescriber, refill rules", text: $notes, axis: .vertical).lineLimit(2...4)
-                }
-            }
-            .navigationTitle(existing == nil ? "Add medication" : "Edit medication")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") { save() }.disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
-                }
-            }
-        }
-    }
-
-    private func save() {
-        let m = existing ?? Medication(name: name)
-        m.name = name.trimmingCharacters(in: .whitespaces)
-        m.dose = dose
-        m.dosesPerDay = max(0, dosesPerDay)
-        m.unitsPerDose = max(0, unitsPerDose)
-        m.unitsOnHand = max(0, unitsOnHand)
-        m.isCritical = isCritical
-        m.expirationDate = hasExpiration ? expirationDate : nil
-        m.notes = notes
-        if existing == nil {
-            m.person = person
-            context.insert(m)
-        }
-        try? context.save()
-        dismiss()
-    }
 }

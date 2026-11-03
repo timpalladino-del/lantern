@@ -25,11 +25,13 @@ final class NotificationScheduler {
     /// Rebuilds every scheduled notification from the current data. Call after edits.
     func reschedule(items: [SupplyItem],
                     tasks: [MaintenanceTask],
+                    medications: [Medication] = [],
                     digestWeekday: Int,
                     digestHour: Int,
                     now: Date = Date()) async {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
+        await scheduleMedicationReminders(for: medications)
 
         // Weekly digest
         let soon = items.filter { item in
@@ -81,6 +83,33 @@ final class NotificationScheduler {
             at.hour = digestHour
             let t = UNCalendarNotificationTrigger(dateMatching: at, repeats: false)
             try? await center.add(UNNotificationRequest(identifier: "task-\(task.uuid.uuidString)", content: content, trigger: t))
+        }
+    }
+
+    static let medicationPrefix = "med-"
+
+    /// One repeating notification per scheduled dose time, for medications with reminders on.
+    /// Rebuilt from scratch each time so removed times and turned-off reminders disappear.
+    func scheduleMedicationReminders(for medications: [Medication]) async {
+        let center = UNUserNotificationCenter.current()
+        let pending = await center.pendingNotificationRequests().map(\.identifier).filter { $0.hasPrefix(NotificationScheduler.medicationPrefix) }
+        center.removePendingNotificationRequests(withIdentifiers: pending)
+        for m in medications where m.remindersEnabled {
+            for minutes in m.scheduleMinutes {
+                let content = UNMutableNotificationContent()
+                content.title = m.person.map { "\($0.name): \(m.name)" } ?? m.name
+                var body = m.dose.isEmpty ? "Time for a dose." : "Time for \(m.dose)."
+                if let first = m.instructions.first { body += " \(first.title)." }
+                content.body = body
+                content.sound = .default
+                content.interruptionLevel = m.isCritical ? .timeSensitive : .active
+                var comps = DateComponents()
+                comps.hour = minutes / 60
+                comps.minute = minutes % 60
+                let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
+                let id = "\(NotificationScheduler.medicationPrefix)\(m.uuid.uuidString)-\(minutes)"
+                try? await center.add(UNNotificationRequest(identifier: id, content: content, trigger: trigger))
+            }
         }
     }
 

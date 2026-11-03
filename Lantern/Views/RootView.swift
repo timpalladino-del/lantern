@@ -6,6 +6,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
+    @Query private var medications: [Medication]
 
     @AppStorage(AppSettings.notificationsEnabled) private var notificationsEnabled = false
     @AppStorage(AppSettings.digestWeekday) private var digestWeekday = 1
@@ -39,8 +40,9 @@ struct RootView: View {
             guard phase == .background, notificationsEnabled else { return }
             let snapshotItems = items
             let snapshotTasks = tasks
+            let snapshotMeds = medications
             Task { @MainActor in
-                await NotificationScheduler.shared.reschedule(items: snapshotItems, tasks: snapshotTasks,
+                await NotificationScheduler.shared.reschedule(items: snapshotItems, tasks: snapshotTasks, medications: snapshotMeds,
                                                                digestWeekday: digestWeekday, digestHour: digestHour)
             }
         }

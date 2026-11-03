@@ -46,7 +46,9 @@ The Xcode project uses Xcode 16's synchronized folders, so new files dropped int
 - **Export**: CSV for supplies and equipment, free.
 
 - **Household**: real people (age, weight, height, sex, activity, medications, allergies) and pets, so
-  food readiness is in calories and medication readiness is in days of supply.
+  food readiness is in calories and medication readiness is in days of supply. Each medication carries
+  the full label: strength, form, dose times, how to take it and what to avoid, prescriber, pharmacy
+  and Rx number, with optional dose reminders and a shareable medication card (text or PDF).
 - **Toolkit** (free on every tier): Outage Mode with fridge and freezer clocks, generator and CO cards,
   phone-battery tips and a check-in reminder; torch SOS, blink and steady; full-screen white, amber,
   candle and flasher light; alarm whistle and sleep noise; emergency contacts with one-tap dialing and

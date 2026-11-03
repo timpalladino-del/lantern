@@ -15,6 +15,16 @@ enum SeedData {
         if households.isEmpty {
             context.insert(Household())
         }
+        let contacts = (try? context.fetch(FetchDescriptor<EmergencyContact>())) ?? []
+        if contacts.isEmpty {
+            for (i, c) in EmergencyContact.defaults.enumerated() {
+                context.insert(EmergencyContact(name: c.0, role: c.1, phone: c.2, notes: c.3, isBuiltIn: true, sortOrder: i))
+            }
+        }
+        let plans = (try? context.fetch(FetchDescriptor<HouseholdPlan>())) ?? []
+        if plans.isEmpty {
+            context.insert(HouseholdPlan())
+        }
         try? context.save()
     }
 

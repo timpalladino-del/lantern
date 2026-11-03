@@ -45,11 +45,19 @@ The Xcode project uses Xcode 16's synchronized folders, so new files dropped int
 - **Starter packs**: Ready.gov basic kit, two-week pantry for two, power outage basics.
 - **Export**: CSV for supplies and equipment, free.
 
+- **Household**: real people (age, weight, height, sex, activity, medications, allergies) and pets, so
+  food readiness is in calories and medication readiness is in days of supply.
+- **Toolkit** (free on every tier): Outage Mode with fridge and freezer clocks, generator and CO cards,
+  phone-battery tips and a check-in reminder; torch SOS, blink and steady; full-screen white, amber,
+  candle and flasher light; alarm whistle and sleep noise; emergency contacts with one-tap dialing and
+  a printable PDF; household meeting plan and shutoff locator with photos; 13 sourced know-how cards;
+  compass; Wireless Emergency Alert explainer and NOAA Weather Radio frequencies; dice, coin and cards.
+
 ## Not yet built
 
 Kits and go-bags as containers, household sharing (CloudKit), seasonal hazard checklists, documents
-vault, medication tracker, Outage Mode, camera "is this still good" check, scenario planner, widgets,
-onboarding flow, app icon, Pro purchase. See the plan for phases.
+vault, camera "is this still good" check, scenario planner, widgets, Pro purchase. Pricing and the
+single-user / family / groups model are in `docs/plan.md` section 11.
 
 ## Data
 

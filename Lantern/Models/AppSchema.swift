@@ -13,7 +13,10 @@ enum AppSchema {
         Medication.self,
         Pet.self,
         ProductMemory.self,
-        ShoppingItem.self
+        ShoppingItem.self,
+        EmergencyContact.self,
+        HouseholdPlan.self,
+        OutageEvent.self
     ]
 
     static func container(inMemory: Bool = false) throws -> ModelContainer {

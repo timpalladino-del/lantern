@@ -81,6 +81,12 @@ struct HomeView: View {
                 }
             }
             .navigationTitle("Home")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink { SettingsView() } label: { Image(systemName: "gearshape") }
+                        .accessibilityLabel("Settings")
+                }
+            }
             .sheet(isPresented: $showScanner) { ScanSheet() }
             .sheet(isPresented: $showAdd) { ItemEditView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }

@@ -7,4 +7,6 @@ enum AppSettings {
     static let digestHour = "settings.digestHour"
     static let onlineLookupEnabled = "settings.onlineLookupEnabled"
     static let hasSeenWelcome = "settings.hasSeenWelcome"
+    static let checkInHours = "settings.checkInHours"
+    static let checkInEnabled = "settings.checkInEnabled"
 }

@@ -88,6 +88,24 @@ final class NotificationScheduler {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 
+    static let checkInIdentifier = "outage-check-in"
+
+    /// During an outage: a repeating nudge to text your people. Local, repeats until stopped.
+    func scheduleCheckIn(everyHours hours: Int) async {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: [NotificationScheduler.checkInIdentifier])
+        let content = UNMutableNotificationContent()
+        content.title = "Check in"
+        content.body = "Text your people: where you are, that you're okay, how much battery you have."
+        content.sound = .default
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(max(1, hours)) * 3600, repeats: true)
+        try? await center.add(UNNotificationRequest(identifier: NotificationScheduler.checkInIdentifier, content: content, trigger: trigger))
+    }
+
+    func cancelCheckIn() {
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [NotificationScheduler.checkInIdentifier])
+    }
+
     private func digestBody(itemCount: Int, taskCount: Int, firstItem: String?) -> String {
         var parts: [String] = []
         if itemCount > 0 {

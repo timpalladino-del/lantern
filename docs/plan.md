@@ -199,12 +199,62 @@ All of this ships inside the app, offline, with citations.
 - **Camera check (Phase 3):** reuse the CastleWise Expert Check server pattern (anonymous per-install ID, rate limit, nothing stored).
 - **App Store:** cite sources in-app for health and safety content (Guideline 1.4.1). Add "not a substitute for 911 or medical advice" and "check with a doctor" where medicine appears. Avoid a checklist-only build (Guideline 4.2.2 rejects content aggregators), which the inventory engine satisfies.
 
-## 11. Pricing
+## 11. Pricing and household size
 
-- **Free, always:** inventory up to 50 items, barcode and date scanning, shelf-life library, Outage Mode, export, know-how cards, one kit.
-- **One-time Pro, $12.99 (test $9.99 to $14.99):** unlimited items, equipment maintenance schedules, seasonal checklists, documents vault, household sharing, unlimited kits, widgets.
-- No subscription. Say so on the store page; it is the category's loudest complaint and CastleWise already proved the message.
-- Family Sharing enabled on the purchase, so a spouse does not pay twice.
+Principles: one price, no subscription, no account. Every safety tool is free forever. We charge for depth and
+convenience, never for the thing someone needs during an emergency.
+
+### Tiers
+
+| | Free | Pro (one-time, $12.99) |
+|---|---|---|
+| Inventory | up to 50 items | unlimited |
+| Scanning (barcode, date label) | yes | yes |
+| Shelf-life library, Open Food Facts lookup | yes | yes |
+| People and pets in the household | unlimited | unlimited |
+| Readiness in calories, water, medication days | yes | yes |
+| Kits | 1 | unlimited |
+| **Toolkit** (SOS light, outage mode, contacts, plan, know-how, compass, radio, games) | **all of it, always** | all of it |
+| Equipment maintenance schedules | view only | reminders |
+| Seasonal checklists | - | yes |
+| Documents vault | - | yes |
+| Home-screen and lock-screen widgets | - | yes |
+| Household sharing between devices (Phase 2, CloudKit) | - | yes |
+| Printable plan and contacts PDF | yes | yes |
+| CSV export | yes | yes |
+
+Test $9.99 and $14.99 against $12.99 in the first two months. Keep the number under the price of a case of water.
+
+### Single user vs. family vs. more people
+
+- **Household size is never a paywall.** A household in Lantern is a list of people and pets, and that list is
+  unlimited on every tier. The readiness math needs everyone in it, so gating on headcount would make the free
+  product lie about readiness. Pricing is per *Apple ID*, not per person in the house.
+- **Single user:** buys Pro once. Done.
+- **Family on several iPhones:** one purchase. Pro is enabled for Apple Family Sharing, so up to six Apple IDs in
+  a Family Sharing group unlock Pro from one $12.99 purchase. That is the "family plan"; it costs us nothing to run
+  and the store page says it plainly: "Buy once, share with your family."
+- **Keeping the data in sync across those phones** is a feature, not a tier. It ships in Phase 2 as CloudKit
+  household sharing (private database shared via CKShare, so it stays account-free and we hold no servers). It is
+  part of Pro; the purchaser invites the others with a share link. Free users on the same household can view a
+  shared household but not edit it, which gives the free tier a reason to upgrade without breaking the readiness
+  promise.
+- **More than six people, or more than one home:** still one Pro purchase per Apple ID. A person can belong to
+  more than one household (a parent's house and their own) and a household can have any number of people. Multiple
+  homes is a Pro feature because it is a convenience, not a safety need.
+- **Groups and organisations** (a church preparedness ministry, a CERT team, a small business, a school): out of
+  scope for the consumer app. If demand shows up, it becomes a separate SKU, "Lantern for Groups", with volume
+  purchasing through Apple Business Manager and a shared roster. Do not try to bend the household model to fit it.
+- **No subscriptions, ever,** unless we later add a service that costs us money per month (hosted alerts, SMS
+  check-ins). If that day comes it is a separate optional add-on, and the one-time Pro purchase keeps every
+  feature it had on the day it was bought.
+
+### What stays free in an emergency
+
+The Toolkit is deliberately outside the paywall. If someone downloads Lantern during a hurricane watch, the SOS
+strobe, fridge and freezer clocks, emergency numbers, NOAA frequencies and first-aid cards must work in the first
+thirty seconds with no purchase prompt. The upgrade prompt only ever appears when a user hits the 50-item limit or
+opens a Pro-only screen, and never during an active outage in Outage Mode.
 
 ## 12. Voice (not branding)
 
@@ -356,9 +406,62 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
 ## 18. Decisions log
 
 - 2026-11-03: Name is Lantern. Tagline: "Ready for when you need it most." Supporting line: "Know what you have."
+- 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
+- 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six). Groups are a separate future SKU.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,
   medications (dose, times per day, units on hand), allergies and dietary notes, plus pets by species and weight.
   Food readiness is computed in calories per person per day (Mifflin-St Jeor when height and weight are known,
   Dietary Guidelines age bands otherwise). Medicine readiness is days of supply per medication, with critical
   medications flagged. Infants switch the food target to formula.
+
+## 19. Toolkit (added November 3, 2026)
+
+A fifth tab. Everything a phone can *do* in an emergency, as opposed to what it can track. Built in one pass;
+all of it is free on every tier. No pre-written message templates (decided against: they read as canned).
+
+**Outage Mode (hero card)**
+- Start and end an outage with one tap; the start time is recorded as an `OutageEvent`.
+- Live fridge clock (USDA: 4 hours unopened) and freezer clock (48 hours full, 24 hours half full) with a
+  "freezer is full" toggle and a counter for how many times the fridge door has been opened.
+- "What you have right now": lights, batteries and water pulled from the inventory, plus the household's daily
+  water need so the user can see the gap.
+- Phone battery level and charging state with concrete tips for stretching it.
+- Generator, carbon monoxide and food-safety cards linked from the know-how library.
+- Optional "check in" reminder every N hours (local notification) so someone remembers to text family.
+- Outage history, so a user can show the power company or insurer when it started and ended.
+
+**Light**
+- Torch patterns through the camera flash: steady, slow blink, Morse SOS (… --- …). Warns at ten minutes
+  about battery drain.
+- Full-screen light modes: bright white, warm amber (easier on eyes at night), flickering candle, and a
+  high-contrast flasher. Screen brightness is pushed to maximum and the idle timer is disabled while open.
+
+**Sound**
+- Alarm whistle: a loud synthesized two-tone alarm for attracting attention. The button is tinted Ember while
+  it runs so it cannot be left on by accident.
+- White noise, rain, pink and brown noise for sleeping through a storm or a generator, with a stop-after timer.
+
+**Information**
+- Emergency contacts: 911, Poison Control, 211, FEMA helpline and the Disaster Distress Helpline are seeded
+  and cannot be deleted; the user adds their own. Each row dials with one tap. Printable PDF.
+- Household plan: two meeting places (near home, outside the neighbourhood), out-of-town contact, where the
+  pets and kids go, medical notes, where documents are kept. Reviewed-on date. Printable PDF to stick on the
+  fridge.
+- Shutoff locator: notes and a photo for the gas, water and electric shutoffs, so a babysitter or teenager can
+  find them.
+- Know-how cards: thirteen short, numbered procedures sourced from CDC, USDA, FEMA, Red Cross and NWS
+  (water disinfection, fridge and freezer rules, generator placement, CO alarm response, gas and water shutoff,
+  bleeding, burns, heat illness, hypothermia, flood water, satellite SOS, understanding alerts). Each card
+  links its source and carries a "not medical advice" disclaimer.
+- Compass: a plain magnetic compass using Core Location heading, with permission and unavailable states.
+- Signals: how Wireless Emergency Alerts work with a shortcut to the Settings toggle; the seven NOAA Weather
+  Radio frequencies with a field to remember the local station; a pointer to Apple's Emergency SOS via
+  satellite and how to reach it.
+
+**Pass the time**
+- Dice (animated SF Symbol die faces), coin flip, and a 52-card deck to draw from and shuffle. For kids in the
+  dark with no Wi-Fi.
+
+Rules observed: HIG-compliant layouts, animated SF Symbols, no amber buttons, every action has an accessibility
+label, every tool works offline, nothing here needs a purchase.

@@ -19,7 +19,7 @@ struct RootView: View {
             Tab("Supplies", systemImage: "shippingbox.fill") { SuppliesListView().tint(Color.accentColor) }
             Tab("Equipment", systemImage: "wrench.and.screwdriver.fill") { EquipmentListView().tint(Color.accentColor) }
             Tab("Ready", systemImage: "checkmark.shield.fill") { ReadinessView().tint(Color.accentColor) }
-            Tab("Settings", systemImage: "gearshape.fill") { SettingsView().tint(Color.accentColor) }
+            Tab("Toolkit", systemImage: "flashlight.on.fill") { ToolkitView().tint(Color.accentColor) }
         }
         .tint(Color.glow)
         .task {

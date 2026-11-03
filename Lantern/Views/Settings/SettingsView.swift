@@ -20,8 +20,7 @@ struct SettingsView: View {
     private let weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 
     var body: some View {
-        NavigationStack {
-            Form {
+        Form {
                 Section {
                     Toggle("Weekly digest and due-date reminders", isOn: $notificationsEnabled)
                         .onChange(of: notificationsEnabled) { _, on in
@@ -71,10 +70,10 @@ struct SettingsView: View {
                         .font(.footnote).foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle("Settings")
-            .sheet(item: $exportFile) { file in
-                ShareSheetView(url: file.url)
-            }
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $exportFile) { file in
+            ShareSheetView(url: file.url)
         }
     }
 

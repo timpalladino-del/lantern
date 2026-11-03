@@ -68,6 +68,7 @@ struct MedicationEditView: View {
 
     var body: some View {
         NavigationStack {
+            ScrollViewReader { proxy in
             Form {
                 Section("What") {
                     TextField("Name (e.g. Metformin)", text: $name)
@@ -146,8 +147,10 @@ struct MedicationEditView: View {
                 Section("Notes") {
                     TextField("Refill rules, what a missed dose means, anything else", text: $notes, axis: .vertical).lineLimit(2...4)
                 }
+                .id("notes")
             }
-            .defaultScrollAnchor(scrollToBottom ? .bottom : .top)
+            .onAppear { if scrollToBottom { DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { proxy.scrollTo("notes", anchor: .bottom) } } }
+            }
             .navigationTitle(existing == nil ? "Add medication" : "Edit medication")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

@@ -351,3 +351,14 @@ reachable from this environment, so every finalist still needs a store search an
 Rejected after checking: Larder (two pantry apps), Squirrel (direct competitor "Squirrel: Home Inventory"),
 Kept (home inventory app), Shelf Life (four apps), Provisions ("PROvisions: Expiry Tracker" exists),
 Stocked and Stockpile (existing competitors), anything with Prep, Ready, Survival or Shield in it.
+
+
+## 18. Decisions log
+
+- 2026-11-03: Name is Lantern. Tagline: "Ready for when you need it most." Supporting line: "Know what you have."
+- 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
+- 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,
+  medications (dose, times per day, units on hand), allergies and dietary notes, plus pets by species and weight.
+  Food readiness is computed in calories per person per day (Mifflin-St Jeor when height and weight are known,
+  Dietary Guidelines age bands otherwise). Medicine readiness is days of supply per medication, with critical
+  medications flagged. Infants switch the food target to formula.

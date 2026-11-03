@@ -7,6 +7,8 @@ struct ProductInfo: Equatable {
     let name: String
     let brand: String
     let quantityText: String
+    /// kcal for the whole package when Open Food Facts knows both energy per 100 g and the package size.
+    let caloriesPerPackage: Double?
 }
 
 final class OpenFoodFactsClient {
@@ -26,6 +28,12 @@ final class OpenFoodFactsClient {
             let product_name_en: String?
             let brands: String?
             let quantity: String?
+            let product_quantity: Double?
+            let nutriments: Nutriments?
+            struct Nutriments: Decodable {
+                let energyKcal100g: Double?
+                enum CodingKeys: String, CodingKey { case energyKcal100g = "energy-kcal_100g" }
+            }
         }
         let status: Int?
         let product: Product?
@@ -35,7 +43,7 @@ final class OpenFoodFactsClient {
         let clean = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty, clean.allSatisfy(\.isNumber) else { return nil }
         var comps = URLComponents(string: "https://world.openfoodfacts.org/api/v2/product/\(clean).json")!
-        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity")]
+        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity,product_quantity,nutriments")]
         var req = URLRequest(url: comps.url!)
         req.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         req.timeoutInterval = 8
@@ -45,6 +53,10 @@ final class OpenFoodFactsClient {
         guard decoded.status == 1, let p = decoded.product else { return nil }
         let name = (p.product_name_en?.isEmpty == false ? p.product_name_en : p.product_name) ?? ""
         guard !name.isEmpty else { return nil }
-        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "")
+        var kcal: Double? = nil
+        if let per100 = p.nutriments?.energyKcal100g, let grams = p.product_quantity, grams > 0 {
+            kcal = (per100 * grams / 100).rounded()
+        }
+        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal)
     }
 }

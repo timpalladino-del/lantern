@@ -6,6 +6,7 @@ struct SettingsView: View {
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
     @Query private var equipment: [Equipment]
+    @Query private var households: [Household]
 
     @AppStorage(AppSettings.notificationsEnabled) private var notificationsEnabled = false
     @AppStorage(AppSettings.digestWeekday) private var digestWeekday = 1
@@ -48,7 +49,10 @@ struct SettingsView: View {
                     Text("When on, the barcode digits (and nothing else) are sent to Open Food Facts to fetch a product name. \(OpenFoodFactsClient.attribution)")
                 }
 
-                Section("Places") {
+                Section("Household") {
+                    if let h = households.first {
+                        NavigationLink("People, pets and medications") { HouseholdView(household: h).navigationTitle("Household") }
+                    }
                     NavigationLink("Storage locations") { LocationsEditView() }
                 }
 

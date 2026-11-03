@@ -6,6 +6,7 @@ struct ReadinessView: View {
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
     @Query private var households: [Household]
+    @State private var addedGapIDs: Set<String> = []
 
     var body: some View {
         NavigationStack {
@@ -23,40 +24,30 @@ struct ReadinessView: View {
     @ViewBuilder
     private func content(household: Household) -> some View {
         let report = ReadinessCalculator.compute(items: items, tasks: tasks, household: household)
-        HouseholdForm(household: household, report: report) { gap in
-            context.insert(ShoppingItem(name: gap.shoppingName, quantity: gap.shoppingQuantity, unit: gap.shoppingUnit, reason: "Readiness gap"))
-            try? context.save()
-        }
-    }
-}
-
-private struct HouseholdForm: View {
-    @Bindable var household: Household
-    let report: ReadinessReport
-    let addGap: (ReadinessReport.Gap) -> Void
-    @State private var addedGapIDs: Set<String> = []
-
-    private let targets = [3, 7, 14, 30]
-
-    var body: some View {
         List {
-            Section("Who is covered") {
-                Stepper("Adults: \(household.adults)", value: $household.adults, in: 0...20)
-                Stepper("Children: \(household.children)", value: $household.children, in: 0...20)
-                Stepper("Pets: \(household.pets)", value: $household.pets, in: 0...20)
-                Picker("Days to cover", selection: $household.targetDays) {
-                    ForEach(targets, id: \.self) { d in Text("\(d) days").tag(d) }
+            Section {
+                NavigationLink {
+                    HouseholdView(household: household).navigationTitle("Household")
+                } label: {
+                    VStack(alignment: .leading, spacing: 3) {
+                        Text(household.hasPeople ? household.sortedPeople.map(\.name).joined(separator: ", ") : "Add the people you're covering")
+                        Text(householdSubtitle(household, report)).font(.caption).foregroundStyle(.secondary)
+                    }
                 }
-                Text("Red Cross: 3 days if you may need to leave, 2 weeks to stay home. Pick what feels right and work toward it.")
-                    .font(.footnote).foregroundStyle(.secondary)
-            }
+            } header: { Text("Who is covered") }
 
             Section("Where you stand") {
                 ReadinessBar(title: "Food", value: ReadinessCalculator.formatDays(report.foodDays), fraction: report.foodFraction,
-                             detail: "\(Int(report.foodServings.rounded())) servings on hand, 3 per person per day.")
+                             detail: "\(Int(report.caloriesOnHand.rounded())) calories on hand, \(Int(report.caloriesPerDay.rounded())) needed a day."
+                                + (report.foodIsAssumed ? " Some items have no calorie figure, so 250 per serving is assumed." : ""))
                 ReadinessBar(title: "Water", value: ReadinessCalculator.formatDays(report.waterDays), fraction: report.waterFraction,
-                             detail: String(format: "%.0f litres on hand. One gallon per person per day.", report.waterLiters))
-                LabeledContent("Medicine & first aid", value: report.medicineCount == 0 ? "Nothing logged" : "\(report.medicineCount) items")
+                             detail: String(format: "%.0f litres on hand, %.1f needed a day. One gallon per person, plus pets.", report.waterLiters, report.waterLitersPerDay))
+                if let d = report.medicineDays {
+                    ReadinessBar(title: "Medication", value: ReadinessCalculator.formatDays(d), fraction: report.medicineFraction,
+                                 detail: "Shortest supply across \(report.medications.count) tracked medication\(report.medications.count == 1 ? "" : "s").")
+                } else {
+                    LabeledContent("Medication", value: "None tracked")
+                }
                 if report.itemsNeedingAttention > 0 {
                     LabeledContent("Items to use or check", value: "\(report.itemsNeedingAttention)")
                 }
@@ -65,9 +56,29 @@ private struct HouseholdForm: View {
                 }
             }
 
+            if !report.medications.isEmpty {
+                Section("Medications") {
+                    ForEach(report.medications) { m in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack(spacing: 6) {
+                                    Text(m.name)
+                                    if m.isCritical { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange).font(.caption) }
+                                }
+                                Text(m.personName).font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Text(m.daysOfSupply.map { ReadinessCalculator.formatDays($0) } ?? "–")
+                                .font(.subheadline)
+                                .foregroundStyle((m.daysOfSupply ?? 99) < Double(report.targetDays) ? .orange : .secondary)
+                        }
+                    }
+                }
+            }
+
             Section {
                 if report.gaps.isEmpty {
-                    Label("You are covered for \(report.targetDays) days of food and water.", systemImage: "checkmark.circle.fill")
+                    Label("You are covered for \(report.targetDays) days of food, water and medication.", systemImage: "checkmark.circle.fill")
                         .foregroundStyle(.green)
                 }
                 ForEach(report.gaps) { gap in
@@ -75,7 +86,8 @@ private struct HouseholdForm: View {
                         Text(gap.title).font(.subheadline.weight(.medium))
                         Text(gap.detail).font(.caption).foregroundStyle(.secondary)
                         Button(addedGapIDs.contains(gap.id) ? "On the shopping list" : "Add to shopping list") {
-                            addGap(gap)
+                            context.insert(ShoppingItem(name: gap.shoppingName, quantity: gap.shoppingQuantity, unit: gap.shoppingUnit, reason: "Readiness gap"))
+                            try? context.save()
                             addedGapIDs.insert(gap.id)
                         }
                         .buttonStyle(.bordered).controlSize(.small)
@@ -83,9 +95,17 @@ private struct HouseholdForm: View {
                     }
                 }
             } header: { Text("Gaps") } footer: {
-                Text("Food counts servings you entered per unit. Items past their date and used-up items are left out. Sources: Ready.gov, American Red Cross, CDC.")
+                Text("Calories per person follow Mifflin-St Jeor when weight and height are known, otherwise USDA Dietary Guidelines. Water follows CDC and Ready.gov. Planning numbers, not medical advice.")
             }
         }
+    }
+
+    private func householdSubtitle(_ h: Household, _ r: ReadinessReport) -> String {
+        var parts: [String] = []
+        parts.append(r.people == 1 ? "1 person" : "\(r.people) people")
+        if r.pets > 0 { parts.append(r.pets == 1 ? "1 pet" : "\(r.pets) pets") }
+        parts.append("\(r.targetDays)-day goal")
+        return parts.joined(separator: " · ")
     }
 }
 

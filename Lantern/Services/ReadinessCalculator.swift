@@ -1,6 +1,6 @@
 import Foundation
 
-/// Days-of-supply math against Red Cross and CDC targets. Calm numbers, no scores.
+/// Days-of-supply math against Red Cross and CDC targets, in calories per person. Calm numbers, no scores.
 struct ReadinessReport: Equatable {
     struct Gap: Equatable, Identifiable {
         let id: String
@@ -11,28 +11,47 @@ struct ReadinessReport: Equatable {
         let shoppingUnit: String
     }
 
+    struct MedicationStatus: Equatable, Identifiable {
+        let id: UUID
+        let personName: String
+        let name: String
+        let daysOfSupply: Double?
+        let isCritical: Bool
+    }
+
     let targetDays: Int
     let people: Int
     let pets: Int
 
-    let foodServings: Double
+    let caloriesPerDay: Double
+    let caloriesOnHand: Double
     let foodDays: Double
+    let foodIsAssumed: Bool          // true when any food item has no calorie figure
+    let waterLitersPerDay: Double
     let waterLiters: Double
     let waterDays: Double
 
-    let medicineCount: Int
-    let medicineNeedingAttention: Int
+    let medications: [MedicationStatus]
+    let medicineItemsNeedingAttention: Int
     let itemsNeedingAttention: Int
     let tasksDue: Int
+    let infantCount: Int
 
     let gaps: [Gap]
 
-    static let servingsPerPersonPerDay: Double = 3
     static let litersPerPersonPerDay: Double = 3.785   // 1 US gallon, CDC/Ready.gov
-    static let litersPerPetPerDay: Double = 1.0
 
     var foodFraction: Double { targetDays == 0 ? 1 : min(1, foodDays / Double(targetDays)) }
     var waterFraction: Double { targetDays == 0 ? 1 : min(1, waterDays / Double(targetDays)) }
+
+    /// Shortest medication supply, if any medication is tracked.
+    var medicineDays: Double? {
+        medications.compactMap(\.daysOfSupply).min()
+    }
+    var medicineFraction: Double {
+        guard let d = medicineDays, targetDays > 0 else { return 1 }
+        return min(1, d / Double(targetDays))
+    }
 }
 
 enum ReadinessCalculator {
@@ -40,8 +59,8 @@ enum ReadinessCalculator {
                         tasks: [MaintenanceTask],
                         household: Household,
                         now: Date = Date()) -> ReadinessReport {
-        let people = household.people
-        let pets = max(0, household.pets)
+        let people = household.peopleCount
+        let pets = household.petCount
         let target = max(1, household.targetDays)
 
         // Only count stock that is not past its date and not used up.
@@ -51,29 +70,40 @@ enum ReadinessCalculator {
             return true
         }
 
-        let servings = usable.reduce(0.0) { $0 + $1.totalServings }
+        let calories = usable.reduce(0.0) { $0 + $1.totalCalories }
+        let assumed = usable.contains { $0.caloriesAreAssumed && $0.quantity > 0 }
         let liters = usable.reduce(0.0) { $0 + $1.totalLiters }
 
-        let servingsPerDay = Double(people) * ReadinessReport.servingsPerPersonPerDay
-        let litersPerDay = Double(people) * ReadinessReport.litersPerPersonPerDay + Double(pets) * ReadinessReport.litersPerPetPerDay
+        let caloriesPerDay = max(1, household.caloriesPerDay)
+        let petWater = household.petList.isEmpty
+            ? Double(pets) * 1.0
+            : household.petList.reduce(0.0) { $0 + $1.waterLitersPerDay }
+        let litersPerDay = Double(people) * ReadinessReport.litersPerPersonPerDay + petWater
 
-        let foodDays = servingsPerDay > 0 ? servings / servingsPerDay : 0
+        let foodDays = calories / caloriesPerDay
         let waterDays = litersPerDay > 0 ? liters / litersPerDay : 0
 
-        let medicine = items.filter { $0.category == .medicine }
-        let medicineAttention = medicine.filter { $0.status(on: now).needsAttention }.count
+        let medicineItems = items.filter { $0.category == .medicine }
+        let medicineAttention = medicineItems.filter { $0.status(on: now).needsAttention }.count
         let attention = items.filter { $0.status(on: now).needsAttention }.count
         let due = tasks.filter { $0.isDue(on: now) }.count
 
+        let medStatuses: [ReadinessReport.MedicationStatus] = household.sortedPeople.flatMap { person in
+            person.medications.map { m in
+                ReadinessReport.MedicationStatus(id: m.uuid, personName: person.name, name: m.name,
+                                                  daysOfSupply: m.daysOfSupply, isCritical: m.isCritical)
+            }
+        }
+
         var gaps: [ReadinessReport.Gap] = []
 
-        let foodShortServings = servingsPerDay * Double(target) - servings
-        if foodShortServings > 0 {
-            let cans = Int((foodShortServings / 2.0).rounded(.up))  // about 2 servings per can
+        let foodShort = caloriesPerDay * Double(target) - calories
+        if foodShort > 0 {
+            let cans = Int((foodShort / 350).rounded(.up))  // a can of beans or soup is roughly 350 kcal
             gaps.append(.init(
                 id: "food",
                 title: "Food: \(formatDays(foodDays)) of \(target) days",
-                detail: "About \(cans) more cans, or the equivalent in rice, pasta, and beans.",
+                detail: "About \(Int(foodShort.rounded())) more calories, roughly \(cans) cans, or the equivalent in rice, pasta, and peanut butter.",
                 shoppingName: "Shelf-stable food to close the gap",
                 shoppingQuantity: Double(cans),
                 shoppingUnit: CommonUnit.can.rawValue))
@@ -91,11 +121,36 @@ enum ReadinessCalculator {
                 shoppingUnit: CommonUnit.gal.rawValue))
         }
 
-        if medicine.isEmpty {
+        for m in medStatuses {
+            guard let days = m.daysOfSupply, days < Double(target) else { continue }
+            let short = Double(target) - days
+            gaps.append(.init(
+                id: "med-\(m.id.uuidString)",
+                title: "\(m.name) for \(m.personName): \(formatDays(days)) of \(target)",
+                detail: m.isCritical
+                    ? "Critical. Ask the pharmacist about an early refill or a vacation supply."
+                    : "About \(Int(short.rounded(.up))) more days' worth to reach your goal.",
+                shoppingName: "\(m.name) (\(m.personName))",
+                shoppingQuantity: 1,
+                shoppingUnit: "refill"))
+        }
+
+        let infants = household.infants.count
+        if infants > 0, !items.contains(where: { $0.shelfLifeKey == "infant_formula" || $0.name.lowercased().contains("formula") }) {
+            gaps.append(.init(
+                id: "formula",
+                title: "No infant formula logged",
+                detail: "A baby under one needs formula or stored milk counted separately. Add what you have.",
+                shoppingName: "Infant formula",
+                shoppingQuantity: 1,
+                shoppingUnit: CommonUnit.each.rawValue))
+        }
+
+        if medicineItems.isEmpty && medStatuses.isEmpty {
             gaps.append(.init(
                 id: "medicine",
                 title: "No medicine or first aid logged",
-                detail: "Add your first aid kit and a 7-day supply of any daily medication.",
+                detail: "Add your first aid kit, and any daily medication under each person.",
                 shoppingName: "First aid kit",
                 shoppingQuantity: 1,
                 shoppingUnit: CommonUnit.kit.rawValue))
@@ -103,10 +158,10 @@ enum ReadinessCalculator {
 
         return ReadinessReport(
             targetDays: target, people: people, pets: pets,
-            foodServings: servings, foodDays: foodDays,
-            waterLiters: liters, waterDays: waterDays,
-            medicineCount: medicine.count, medicineNeedingAttention: medicineAttention,
-            itemsNeedingAttention: attention, tasksDue: due,
+            caloriesPerDay: caloriesPerDay, caloriesOnHand: calories, foodDays: foodDays, foodIsAssumed: assumed,
+            waterLitersPerDay: litersPerDay, waterLiters: liters, waterDays: waterDays,
+            medications: medStatuses, medicineItemsNeedingAttention: medicineAttention,
+            itemsNeedingAttention: attention, tasksDue: due, infantCount: infants,
             gaps: gaps)
     }
 

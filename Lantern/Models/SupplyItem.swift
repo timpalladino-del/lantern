@@ -26,8 +26,9 @@ final class SupplyItem {
     /// Key into the shelf-life library, when the item was matched to one.
     var shelfLifeKey: String?
 
-    /// Readiness math. Food: servings per unit. Water: litres per unit.
+    /// Readiness math. Food: calories per unit (preferred) or servings per unit. Water: litres per unit.
     var servingsPerUnit: Double?
+    var caloriesPerUnit: Double?
     var litersPerUnit: Double?
 
     var notes: String = ""
@@ -98,10 +99,21 @@ final class SupplyItem {
     }
 
     /// Readiness helpers
+    static let assumedCaloriesPerServing: Double = 250
+
     var totalServings: Double {
         guard category == .food else { return 0 }
         return max(0, quantity) * (servingsPerUnit ?? 1)
     }
+
+    /// Calories on hand. Uses the per-unit figure when known, else servings at an assumed 250 kcal each.
+    var totalCalories: Double {
+        guard category == .food else { return 0 }
+        if let c = caloriesPerUnit { return max(0, quantity) * c }
+        return totalServings * SupplyItem.assumedCaloriesPerServing
+    }
+
+    var caloriesAreAssumed: Bool { category == .food && caloriesPerUnit == nil }
 
     var totalLiters: Double {
         guard category == .water else { return 0 }

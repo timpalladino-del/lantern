@@ -11,6 +11,7 @@ final class ProductMemory {
     var unit: String = CommonUnit.each.rawValue
     var shelfLifeKey: String?
     var servingsPerUnit: Double?
+    var caloriesPerUnit: Double?
     var litersPerUnit: Double?
     var lastUsedAt: Date = Date()
     var useCount: Int = 0
@@ -37,6 +38,7 @@ final class ProductMemory {
         unit = item.unit
         shelfLifeKey = item.shelfLifeKey
         servingsPerUnit = item.servingsPerUnit
+        caloriesPerUnit = item.caloriesPerUnit
         litersPerUnit = item.litersPerUnit
         lastUsedAt = Date()
         useCount += 1

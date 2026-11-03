@@ -15,6 +15,10 @@ struct ShelfLifeEntry: Codable, Identifiable, Hashable {
     let note: String?
     let source: String
     let sourceURL: String?
+    /// Typical calories and servings for one `kcalUnit` (e.g. one can), for readiness math.
+    let kcalPerUnit: Double?
+    let servingsPerUnit: Double?
+    let kcalUnit: String?
 
     var id: String { key }
     var isIndefinite: Bool { indefinite ?? false }

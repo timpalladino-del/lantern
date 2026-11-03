@@ -14,16 +14,17 @@ Dark mode is the home theme. Light mode is a cool dawn grey, not cream.
 |---|---|---|
 | Night | #141B2B | Dark background |
 | Slate | #1C2436 | Dark cards and rows |
-| Glow | #F5B041 | The accent: icons, progress, primary button in dark mode |
+| Glow | #F5B041 | The accent: icon, glow, progress bars, active tab. Never buttons. |
+| Paper | #F2F4F7 | Text in dark mode, primary button in dark mode |
 | Glow deep | #D98E1F | Amber for light mode fills |
 | Dawn | #F1F3F6 | Light background |
-| Ink | #1A2232 | Text in light mode, buttons in light mode, text on amber |
+| Ink | #1A2232 | Text in light mode, primary button in light mode, text on amber |
 | Mist | #9AA5B5 | Secondary text, dividers |
 | Moss | #5FA37A / #3F7D57 | Fine, checked, covered |
 | Ember | #E07A4C / #C4602F | Use soon, past best-by |
 | Signal | #E0534E / #B93A36 | Medicine expired, CO safety only |
 
-Amber is for light, never for body text (fails contrast on light backgrounds).
+Amber is for light, never for buttons and never for body text. Buttons are Ink on light, Paper on dark, so a tap target never looks like a warning.
 
 ## Type
 Marketing: Bricolage Grotesque (display), Nunito Sans (body), IBM Plex Mono (dates, barcodes).

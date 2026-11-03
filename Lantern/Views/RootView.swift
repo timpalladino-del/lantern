@@ -10,6 +10,8 @@ struct RootView: View {
     @AppStorage(AppSettings.notificationsEnabled) private var notificationsEnabled = false
     @AppStorage(AppSettings.digestWeekday) private var digestWeekday = 1
     @AppStorage(AppSettings.digestHour) private var digestHour = 9
+    @AppStorage(AppSettings.hasSeenWelcome) private var hasSeenWelcome = false
+    @State private var showOnboarding = false
 
     var body: some View {
         TabView {
@@ -26,6 +28,10 @@ struct RootView: View {
         }
         .task {
             SeedData.ensureDefaults(in: context)
+            if !hasSeenWelcome { showOnboarding = true }
+        }
+        .sheet(isPresented: $showOnboarding, onDismiss: { hasSeenWelcome = true }) {
+            OnboardingView()
         }
         .onChange(of: scenePhase) { _, phase in
             guard phase == .background, notificationsEnabled else { return }

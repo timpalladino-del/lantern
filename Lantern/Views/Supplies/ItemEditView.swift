@@ -13,6 +13,7 @@ struct ItemDraft {
     var dateSource: DateSource = .none
     var shelfLifeKey: String?
     var servingsPerUnit: Double?
+    var caloriesPerUnit: Double?
     var litersPerUnit: Double?
     var location: StorageLocation?
 }
@@ -45,6 +46,7 @@ struct ItemEditView: View {
     @State private var fillDate: Date
     @State private var shelfLifeKey: String?
     @State private var servingsPerUnit: Double?
+    @State private var caloriesPerUnit: Double?
     @State private var litersPerUnit: Double?
     @State private var notes: String
     @State private var photoData: Data?
@@ -75,6 +77,7 @@ struct ItemEditView: View {
         _fillDate = State(initialValue: item?.fillDate ?? now)
         _shelfLifeKey = State(initialValue: item?.shelfLifeKey ?? draft.shelfLifeKey)
         _servingsPerUnit = State(initialValue: item?.servingsPerUnit ?? draft.servingsPerUnit)
+        _caloriesPerUnit = State(initialValue: item?.caloriesPerUnit ?? draft.caloriesPerUnit)
         _litersPerUnit = State(initialValue: item?.litersPerUnit ?? draft.litersPerUnit)
         _notes = State(initialValue: item?.notes ?? "")
         _photoData = State(initialValue: item?.photoData)
@@ -130,10 +133,20 @@ struct ItemEditView: View {
                     }
                     if category == .food {
                         HStack {
+                            Text("Calories per \(unit)")
+                            Spacer()
+                            TextField("from label", value: $caloriesPerUnit, format: .number)
+                                .keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 110)
+                        }
+                        HStack {
                             Text("Servings per \(unit)")
                             Spacer()
                             TextField("1", value: $servingsPerUnit, format: .number)
                                 .keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 90)
+                        }
+                        if caloriesPerUnit == nil {
+                            Text("No calorie figure yet, so readiness assumes 250 per serving. The number on the label is better.")
+                                .font(.footnote).foregroundStyle(.secondary)
                         }
                     }
                     if category == .water {
@@ -233,6 +246,8 @@ struct ItemEditView: View {
 
     private func apply(entry: ShelfLifeEntry) {
         shelfLifeKey = entry.key
+        if caloriesPerUnit == nil, let kcal = entry.kcalPerUnit, let u = entry.kcalUnit, u == unit { caloriesPerUnit = kcal }
+        if servingsPerUnit == nil, let s = entry.servingsPerUnit, let u = entry.kcalUnit, u == unit { servingsPerUnit = s }
         if category != entry.supplyCategory, existing == nil { category = entry.supplyCategory }
         dismissedSuggestion = true
         if !hasExpiration, !entry.needsPrintedDate { estimate() }
@@ -270,6 +285,7 @@ struct ItemEditView: View {
         item.fillDate = (category == .water && hasFillDate) ? fillDate : nil
         item.shelfLifeKey = shelfLifeKey
         item.servingsPerUnit = category == .food ? servingsPerUnit : nil
+        item.caloriesPerUnit = category == .food ? caloriesPerUnit : nil
         item.litersPerUnit = category == .water ? (litersPerUnit ?? CommonUnit(rawValue: unit)?.litersPerUnit) : nil
         item.notes = notes
         item.photoData = photoData

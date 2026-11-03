@@ -52,6 +52,12 @@ final class ShelfLifeLibraryTests: XCTestCase {
         XCTAssertTrue(library.entry(for: "infant_formula")!.needsPrintedDate)
     }
 
+    func testStaplesCarryCalories() {
+        XCTAssertEqual(library.entry(for: "canned_low_acid")?.kcalPerUnit, 350)
+        XCTAssertEqual(library.entry(for: "canned_low_acid")?.kcalUnit, "can")
+        XCTAssertNil(library.entry(for: "water_bottled")?.kcalPerUnit)
+    }
+
     func testHumanDays() {
         XCTAssertEqual(ShelfLifeEntry.humanDays(730), "2 years")
         XCTAssertEqual(ShelfLifeEntry.humanDays(180), "6 months")

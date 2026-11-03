@@ -9,6 +9,9 @@ enum AppSchema {
         MaintenanceTask.self,
         MaintenanceLog.self,
         Household.self,
+        Person.self,
+        Medication.self,
+        Pet.self,
         ProductMemory.self,
         ShoppingItem.self
     ]

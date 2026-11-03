@@ -75,6 +75,7 @@ struct ScanSheet: View {
     @State private var barcode: String?
     @State private var productName: String?
     @State private var productBrand: String?
+    @State private var productCalories: Double?
     @State private var memory: ProductMemory?
     @State private var isLookingUp = false
     @State private var bestDate: DateLabelParser.Candidate?
@@ -168,11 +169,13 @@ struct ScanSheet: View {
         d.barcode = barcode
         d.name = productName ?? ""
         d.brand = productBrand ?? ""
+        d.caloriesPerUnit = productCalories
         if let m = memory {
             d.category = m.category
             d.unit = m.unit
             d.shelfLifeKey = m.shelfLifeKey
             d.servingsPerUnit = m.servingsPerUnit
+            d.caloriesPerUnit = m.caloriesPerUnit
             d.litersPerUnit = m.litersPerUnit
         }
         if let c = bestDate {
@@ -186,6 +189,7 @@ struct ScanSheet: View {
         barcode = nil
         productName = nil
         productBrand = nil
+        productCalories = nil
         memory = nil
         bestDate = nil
         addedToExisting = nil
@@ -218,6 +222,7 @@ struct ScanSheet: View {
                 if let info, barcode == clean {
                     productName = info.name
                     productBrand = info.brand
+                    productCalories = info.caloriesPerPackage
                 }
             }
         }

@@ -28,11 +28,21 @@ final class OpenFoodFactsClient {
             let product_name_en: String?
             let brands: String?
             let quantity: String?
-            let product_quantity: Double?
+            let product_quantity: LenientNumber?
             let nutriments: Nutriments?
             struct Nutriments: Decodable {
-                let energyKcal100g: Double?
+                let energyKcal100g: LenientNumber?
                 enum CodingKeys: String, CodingKey { case energyKcal100g = "energy-kcal_100g" }
+            }
+        }
+        /// Open Food Facts sends numbers as numbers or as strings depending on who entered them.
+        struct LenientNumber: Decodable {
+            let value: Double?
+            init(from decoder: Decoder) throws {
+                let c = try decoder.singleValueContainer()
+                if let d = try? c.decode(Double.self) { value = d }
+                else if let s = try? c.decode(String.self) { value = Double(s.trimmingCharacters(in: .whitespaces)) }
+                else { value = nil }
             }
         }
         let status: Int?
@@ -54,7 +64,7 @@ final class OpenFoodFactsClient {
         let name = (p.product_name_en?.isEmpty == false ? p.product_name_en : p.product_name) ?? ""
         guard !name.isEmpty else { return nil }
         var kcal: Double? = nil
-        if let per100 = p.nutriments?.energyKcal100g, let grams = p.product_quantity, grams > 0 {
+        if let per100 = p.nutriments?.energyKcal100g?.value, let grams = p.product_quantity?.value, grams > 0 {
             kcal = (per100 * grams / 100).rounded()
         }
         return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal)

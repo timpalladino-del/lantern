@@ -77,7 +77,7 @@ struct RootView: View {
             case .importProfile(let card): ProfileImportView(card: card).tint(Color.accentColor)
             }
         }
-        .sheet(item: $screenshotSheet) { which in
+        .fullScreenCover(item: $screenshotSheet) { which in
             NavigationStack {
                 switch which {
                 case .outage: OutageView()

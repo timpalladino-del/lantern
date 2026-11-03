@@ -31,21 +31,28 @@ enum SeedData {
     /// Adds a starter pack's lines to a location, estimating dates from today.
     @MainActor
     static func apply(pack: StarterPack, to location: StorageLocation?, in context: ModelContext, library: ShelfLifeLibrary = .shared) {
-        let today = Date()
         for line in pack.items {
-            let item = SupplyItem(name: line.name, category: SupplyCategory.from(line.category), quantity: line.quantity, unit: line.unit, location: location)
-            item.purchaseDate = today
-            item.servingsPerUnit = line.servingsPerUnit
-            item.litersPerUnit = line.litersPerUnit
-            if let key = line.shelfLifeKey, let entry = library.entry(for: key) {
-                item.shelfLifeKey = key
-                if !entry.needsPrintedDate, let est = entry.estimate(from: today, opened: false, deepStorage: false) {
-                    item.expirationDate = est
-                    item.dateSource = .estimated
-                }
-            }
-            context.insert(item)
+            context.insert(makeItem(from: line, location: location, kit: nil, library: library))
         }
         try? context.save()
+    }
+
+    /// One template line as a real item, dated today with an estimated best-by when the library knows one.
+    @discardableResult
+    static func makeItem(from line: StarterPackItem, location: StorageLocation?, kit: Kit?, library: ShelfLifeLibrary = .shared) -> SupplyItem {
+        let today = Date()
+        let item = SupplyItem(name: line.name, category: SupplyCategory.from(line.category), quantity: line.quantity, unit: line.unit, location: location)
+        item.purchaseDate = today
+        item.servingsPerUnit = line.servingsPerUnit
+        item.litersPerUnit = line.litersPerUnit
+        item.kit = kit
+        if let key = line.shelfLifeKey, let entry = library.entry(for: key) {
+            item.shelfLifeKey = key
+            if !entry.needsPrintedDate, let est = entry.estimate(from: today, opened: false, deepStorage: false) {
+                item.expirationDate = est
+                item.dateSource = .estimated
+            }
+        }
+        return item
     }
 }

@@ -120,12 +120,13 @@ final class NotificationScheduler {
     static let checkInIdentifier = "outage-check-in"
 
     /// During an outage: a repeating nudge to text your people. Local, repeats until stopped.
-    func scheduleCheckIn(everyHours hours: Int) async {
+    func scheduleCheckIn(everyHours hours: Int, contactNames: [String] = []) async {
         let center = UNUserNotificationCenter.current()
         center.removePendingNotificationRequests(withIdentifiers: [NotificationScheduler.checkInIdentifier])
         let content = UNMutableNotificationContent()
         content.title = "Check in"
-        content.body = "Text your people: where you are, that you're okay, how much battery you have."
+        let who = contactNames.isEmpty ? "your people" : contactNames.joined(separator: " and ")
+        content.body = "Text \(who): where you are, that you're okay, how much battery you have."
         content.sound = .default
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(max(1, hours)) * 3600, repeats: true)
         try? await center.add(UNNotificationRequest(identifier: NotificationScheduler.checkInIdentifier, content: content, trigger: trigger))

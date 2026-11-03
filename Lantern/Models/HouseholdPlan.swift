@@ -20,6 +20,13 @@ final class HouseholdPlan {
     @Attribute(.externalStorage) var electricPanelPhoto: Data?
 
     var noaaStation: String = ""           // "162.550 MHz, KHB-35"
+
+    /// "Who checks on you?" Someone outside the house who holds the medication card and plan and who the
+    /// outage check-in points at. Matters most for a person living alone.
+    var trustedContactName: String = ""
+    var trustedContactPhone: String = ""
+    var trustedContact2Name: String = ""
+    var trustedContact2Phone: String = ""
     var lastReviewedAt: Date?
     var createdAt: Date = Date()
 
@@ -31,4 +38,11 @@ final class HouseholdPlan {
         [meetNearHome, meetOutsideNeighborhood, outOfTownContact, petsPlan, kidsPlan, medicalNotes, documentsLocation,
          gasShutoffNote, waterShutoffNote, electricPanelNote].allSatisfy { $0.isEmpty }
     }
+
+    var trustedContacts: [(name: String, phone: String)] {
+        [(trustedContactName, trustedContactPhone), (trustedContact2Name, trustedContact2Phone)]
+            .filter { !$0.0.trimmingCharacters(in: .whitespaces).isEmpty }
+            .map { (name: $0.0.trimmingCharacters(in: .whitespaces), phone: $0.1) }
+    }
+    var hasTrustedContact: Bool { !trustedContacts.isEmpty }
 }

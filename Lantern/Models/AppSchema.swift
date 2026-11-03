@@ -16,7 +16,8 @@ enum AppSchema {
         ShoppingItem.self,
         EmergencyContact.self,
         HouseholdPlan.self,
-        OutageEvent.self
+        OutageEvent.self,
+        Kit.self
     ]
 
     static func container(inMemory: Bool = false) throws -> ModelContainer {

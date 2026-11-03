@@ -50,6 +50,8 @@ The Xcode project uses Xcode 16's synchronized folders, so new files dropped int
   the full label: strength, form, dose times, how to take it and what to avoid, prescriber, pharmacy
   and Rx number, with optional dose reminders and a shareable medication card (text or PDF). Family
   members can be sent a `lantern://` link to build their own profile and send it back.
+- **Kits**: go-bag, car and pet kits from Ready.gov lists; pack what you own, see what is missing.
+- **Trusted contact**: "Who checks on you?" gets the medication card and plan; the outage check-in names them.
 - **Plans**: StoreKit 2 paywall with Family 6 and Family 10 yearly subscriptions and a 7-day trial.
   Free is one person and 50 items; the Toolkit is free on every plan. `Config/Lantern.storekit` lets
   the simulator buy without an account.
@@ -61,8 +63,8 @@ The Xcode project uses Xcode 16's synchronized folders, so new files dropped int
 
 ## Not yet built
 
-Kits and go-bags as containers, household sharing (CloudKit), seasonal hazard checklists, documents
-vault, camera "is this still good" check, scenario planner, widgets. Pricing (Free for one person and 50
+Household sharing (CloudKit), seasonal hazard checklists, documents vault, camera "is this still good"
+check, scenario planner, widgets. Pricing (Free for one person and 50
 items; Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr) is in `docs/plan.md` section 11.
 
 ## Data

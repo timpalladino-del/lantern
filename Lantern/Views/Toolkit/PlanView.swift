@@ -26,6 +26,7 @@ struct PlanView: View {
             .init(heading: "People and pets", lines: ["Kids: \(p.kidsPlan)", "Pets: \(p.petsPlan)", "Medical: \(p.medicalNotes)", "Documents: \(p.documentsLocation)"]),
             .init(heading: "Shutoffs", lines: ["Gas: \(p.gasShutoffNote)", "Water: \(p.waterShutoffNote)", "Electrical panel: \(p.electricPanelNote)"]),
             .init(heading: "Weather radio", lines: [p.noaaStation.isEmpty ? "" : "Station: \(p.noaaStation)"]),
+            .init(heading: "Who checks on us", lines: p.trustedContacts.map { "\($0.name): \($0.phone)" }),
             .init(heading: "Contacts", lines: contacts.map { "\($0.name): \($0.phone)" })
         ]
         if let url = PrintService.makePDF(title: "Our emergency plan", subtitle: "Reviewed \(p.lastReviewedAt?.formatted(date: .long, time: .omitted) ?? "never")",

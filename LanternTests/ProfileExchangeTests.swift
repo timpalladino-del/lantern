@@ -19,7 +19,9 @@ final class ProfileExchangeTests: XCTestCase {
 
         let card = ProfileCard(person: p, sentBy: "Maria")
         let url = try XCTUnwrap(ProfileExchange.importURL(for: card))
-        XCTAssertEqual(url.scheme, "lantern")
+        XCTAssertEqual(url.scheme, "https")
+        XCTAssertEqual(url.host, "kismetstudio.io")
+        XCTAssertTrue(url.path.hasPrefix("/lantern/p/import"))
         guard case .importProfile(let decoded)? = ProfileExchange.route(for: url) else { return XCTFail("no import route") }
         XCTAssertEqual(decoded.name, "Maria")
         XCTAssertEqual(decoded.age, 42)
@@ -43,8 +45,11 @@ final class ProfileExchangeTests: XCTestCase {
     func testRequestURLRoutesToBuilder() {
         let url = ProfileExchange.requestURL(from: "Tim")
         XCTAssertEqual(ProfileExchange.route(for: url), .newProfile(requestedBy: "Tim"))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "lantern://profile/new?from=Tim")!), .newProfile(requestedBy: "Tim"))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/p/new/?from=Tim")!), .newProfile(requestedBy: "Tim"))
         XCTAssertNil(ProfileExchange.route(for: URL(string: "lantern://profile/import?d=not-json")!))
-        XCTAssertNil(ProfileExchange.route(for: URL(string: "https://example.com/profile/new")!))
+        XCTAssertNil(ProfileExchange.route(for: URL(string: "https://example.com/lantern/p/new")!))
+        XCTAssertNil(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/privacy/")!))
     }
 
     func testBase64urlHasNoURLUnsafeCharacters() {

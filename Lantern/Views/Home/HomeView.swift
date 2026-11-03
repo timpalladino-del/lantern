@@ -6,6 +6,7 @@ struct HomeView: View {
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
     @Query private var households: [Household]
+    @Query private var plans: [HouseholdPlan]
 
     @State private var showScanner = false
     @State private var showAdd = false
@@ -59,6 +60,20 @@ struct HomeView: View {
                             }
                         }
                         .foregroundStyle(.primary)
+                    }
+                }
+
+                if let h = households.first, h.people.count == 1, let plan = plans.first, !plan.hasTrustedContact {
+                    Section {
+                        NavigationLink { HouseholdView(household: h).navigationTitle("Household") } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "person.crop.circle.badge.checkmark").foregroundStyle(Color.glow)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Who checks on you?").font(.subheadline.weight(.semibold))
+                                    Text("Name someone outside the house. They get your medication card and the plan.").font(.caption).foregroundStyle(.secondary)
+                                }
+                            }
+                        }
                     }
                 }
 

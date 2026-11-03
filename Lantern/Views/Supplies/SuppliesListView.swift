@@ -10,6 +10,7 @@ struct SuppliesListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \SupplyItem.name) private var items: [SupplyItem]
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
+    @Query(sort: \Kit.sortOrder) private var kits: [Kit]
 
     @State private var searchText = ""
     @State private var category: SupplyCategory?
@@ -73,6 +74,7 @@ struct SuppliesListView: View {
                     Menu {
                         Button { showAdd = true } label: { Label("Add by hand", systemImage: "plus") }
                         Button { showPacks = true } label: { Label("Add a starter pack", systemImage: "list.bullet.rectangle") }
+                        NavigationLink { KitsView() } label: { Label("Kits and go-bags", systemImage: "backpack") }
                         Button { showShopping = true } label: { Label("Shopping list", systemImage: "cart") }
                         Divider()
                         Picker("Sort", selection: $sortMode) {
@@ -112,12 +114,24 @@ struct SuppliesListView: View {
                     .buttonStyle(.borderedProminent)
                 Button { showPacks = true } label: { Label("Starter pack", systemImage: "list.bullet.rectangle") }
                     .buttonStyle(.bordered)
+                NavigationLink { KitsView() } label: { Label("Go-bag", systemImage: "backpack") }
+                    .buttonStyle(.bordered)
             }
         }
     }
 
     private var list: some View {
         List {
+            if !kits.isEmpty {
+                Section {
+                    ForEach(kits.prefix(3), id: \.uuid) { kit in
+                        NavigationLink { KitDetailView(kit: kit) } label: { KitRow(kit: kit) }
+                    }
+                    if kits.count > 3 {
+                        NavigationLink { KitsView() } label: { Text("All \(kits.count) kits") }
+                    }
+                } header: { Text("Kits") }
+            }
             if sortMode == .location {
                 ForEach(groupedByLocation, id: \.0) { name, group in
                     Section(name) {

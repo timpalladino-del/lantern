@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "templates": [
+    {"key":"go_bag","kind":"goBag","name":"Go-bag","summary":"Three days, carried. Ready.gov's list, trimmed to what fits in a backpack.","source":"Ready.gov Build a Kit","items":[
+      {"name":"Bottled water","category":"water","quantity":3,"unit":"L","shelfLifeKey":"water_bottled","litersPerUnit":1},
+      {"name":"Granola bars","category":"food","quantity":9,"unit":"bar","shelfLifeKey":"bars","servingsPerUnit":1},
+      {"name":"Peanut butter","category":"food","quantity":1,"unit":"jar","shelfLifeKey":"peanut_butter","servingsPerUnit":14},
+      {"name":"Flashlight","category":"power","quantity":1,"unit":"each"},
+      {"name":"AA batteries","category":"power","quantity":8,"unit":"each","shelfLifeKey":"batteries_alkaline"},
+      {"name":"Battery bank for phone","category":"power","quantity":1,"unit":"each"},
+      {"name":"Phone cable","category":"power","quantity":1,"unit":"each"},
+      {"name":"First aid kit","category":"medicine","quantity":1,"unit":"kit","shelfLifeKey":"first_aid_kit"},
+      {"name":"Medications, 7 days","category":"medicine","quantity":1,"unit":"set"},
+      {"name":"Whistle","category":"tools","quantity":1,"unit":"each"},
+      {"name":"N95 masks","category":"hygiene","quantity":4,"unit":"each"},
+      {"name":"Wet wipes","category":"hygiene","quantity":1,"unit":"pack","shelfLifeKey":"wipes"},
+      {"name":"Hand sanitizer","category":"hygiene","quantity":1,"unit":"bottle","shelfLifeKey":"hand_sanitizer"},
+      {"name":"Toilet paper","category":"hygiene","quantity":1,"unit":"roll"},
+      {"name":"Multi-tool or pliers","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Manual can opener","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Local paper map","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Cash in small bills","category":"tools","quantity":1,"unit":"envelope"},
+      {"name":"Copies of ID, insurance, prescriptions","category":"tools","quantity":1,"unit":"folder"},
+      {"name":"Emergency blanket","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Change of clothes","category":"tools","quantity":1,"unit":"set"},
+      {"name":"Rain poncho","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Matches in waterproof case","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Paper and pencil","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Spare glasses or contacts","category":"medicine","quantity":1,"unit":"each"}
+    ]},
+    {"key":"car_kit","kind":"car","name":"Car kit","summary":"For the night you spend in the car: stuck, stranded, or waiting out a road closure.","source":"NHTSA and Ready.gov vehicle kit guidance","items":[
+      {"name":"Bottled water","category":"water","quantity":4,"unit":"L","shelfLifeKey":"water_bottled","litersPerUnit":1},
+      {"name":"Granola bars","category":"food","quantity":6,"unit":"bar","shelfLifeKey":"bars","servingsPerUnit":1},
+      {"name":"Jumper cables","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Flashlight","category":"power","quantity":1,"unit":"each"},
+      {"name":"AA batteries","category":"power","quantity":4,"unit":"each","shelfLifeKey":"batteries_alkaline"},
+      {"name":"Phone charger (car)","category":"power","quantity":1,"unit":"each"},
+      {"name":"First aid kit","category":"medicine","quantity":1,"unit":"kit","shelfLifeKey":"first_aid_kit"},
+      {"name":"Reflective triangles or flares","category":"tools","quantity":1,"unit":"set"},
+      {"name":"Blanket","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Ice scraper","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Tire gauge and sealant","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Cat litter or sand for traction","category":"tools","quantity":1,"unit":"bag"},
+      {"name":"Basic tool kit","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Rain poncho","category":"tools","quantity":1,"unit":"each"},
+      {"name":"Paper towels","category":"hygiene","quantity":1,"unit":"roll"}
+    ]},
+    {"key":"pet_bag","kind":"pet","name":"Pet bag","summary":"Shelters often cannot take pets without records and a carrier. Pack it once.","source":"Ready.gov Pets and Animals","items":[
+      {"name":"Pet food, 3 days","category":"pet","quantity":1,"unit":"bag","shelfLifeKey":"pet_food_dry"},
+      {"name":"Bottled water for pets","category":"water","quantity":3,"unit":"L","shelfLifeKey":"water_bottled","litersPerUnit":1},
+      {"name":"Collapsible bowls","category":"pet","quantity":2,"unit":"each"},
+      {"name":"Leash and collar with ID","category":"pet","quantity":1,"unit":"each"},
+      {"name":"Carrier or crate","category":"pet","quantity":1,"unit":"each"},
+      {"name":"Pet medications","category":"pet","quantity":1,"unit":"set"},
+      {"name":"Vaccination records and photo of pet","category":"pet","quantity":1,"unit":"folder"},
+      {"name":"Litter and tray, or waste bags","category":"pet","quantity":1,"unit":"each"},
+      {"name":"Familiar blanket or toy","category":"pet","quantity":1,"unit":"each"}
+    ]}
+  ]
+}

@@ -39,6 +39,8 @@ final class SupplyItem {
     var photoData: Data?
 
     var location: StorageLocation?
+    /// The go-bag or car kit this item is packed in, if any.
+    var kit: Kit?
 
     var createdAt: Date = Date()
     var updatedAt: Date = Date()

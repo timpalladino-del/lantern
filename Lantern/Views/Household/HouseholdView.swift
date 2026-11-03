@@ -6,6 +6,7 @@ struct HouseholdView: View {
     @Environment(\.modelContext) private var context
     @Bindable var household: Household
     var showTarget: Bool = true
+    @Query private var plans: [HouseholdPlan]
 
     @State private var editingPerson: Person?
     @State private var showNewPerson = false
@@ -62,6 +63,10 @@ struct HouseholdView: View {
                 Button { showNewPet = true } label: { Label("Add a pet", systemImage: "plus") }
             } header: { Text("Pets") }
 
+            if let plan = plans.first {
+                TrustedContactSection(plan: plan, people: household.sortedPeople)
+            }
+
             if showTarget {
                 Section {
                     Picker("Days to cover", selection: $household.targetDays) {
@@ -105,5 +110,43 @@ struct PersonRow: View {
         if !person.medications.isEmpty { parts.append(person.medications.count == 1 ? "1 medication" : "\(person.medications.count) medications") }
         if parts.isEmpty { parts.append("Tap to add details") }
         return parts.joined(separator: " · ")
+    }
+}
+
+/// Someone outside the house. They get the medication card and the plan, and the outage check-in names them.
+struct TrustedContactSection: View {
+    @Bindable var plan: HouseholdPlan
+    let people: [Person]
+
+    private var shareText: String {
+        var s = MedicationCardView.cardText(for: people.filter { !$0.medications.isEmpty })
+        if people.allSatisfy({ $0.medications.isEmpty }) { s = "MEDICATION CARD\n(no medications tracked yet)\n" }
+        s += "\n\nOUR PLAN\n"
+        if !plan.meetNearHome.isEmpty { s += "Meet near home: \(plan.meetNearHome)\n" }
+        if !plan.meetOutsideNeighborhood.isEmpty { s += "Meet outside the neighborhood: \(plan.meetOutsideNeighborhood)\n" }
+        if !plan.medicalNotes.isEmpty { s += "Medical: \(plan.medicalNotes)\n" }
+        if !plan.documentsLocation.isEmpty { s += "Documents: \(plan.documentsLocation)\n" }
+        s += "\nYou are listed as a trusted contact in Lantern. If you can't reach us during an emergency, this is what you need to know."
+        return s
+    }
+
+    var body: some View {
+        Section {
+            TextField("Name (e.g. Dana, next door)", text: $plan.trustedContactName)
+            TextField("Phone", text: $plan.trustedContactPhone).keyboardType(.phonePad)
+            if !plan.trustedContactName.isEmpty || !plan.trustedContact2Name.isEmpty {
+                TextField("Second contact (optional)", text: $plan.trustedContact2Name)
+                TextField("Phone", text: $plan.trustedContact2Phone).keyboardType(.phonePad)
+            }
+            if plan.hasTrustedContact {
+                ShareLink(item: shareText, subject: Text("Our medication card and plan")) {
+                    Label("Send \(plan.trustedContacts.first!.name) the medication card and plan", systemImage: "square.and.arrow.up")
+                }
+            }
+        } header: { Text("Who checks on you?") } footer: {
+            Text(people.count <= 1
+                 ? "Someone outside the house who knows your medications and your plan, and who you'll text during an outage. For a person living alone, this is the most important line in the app."
+                 : "Someone outside the house who holds the medication card and the plan. The outage check-in reminder names them.")
+        }
     }
 }

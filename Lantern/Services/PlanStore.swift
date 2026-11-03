@@ -84,6 +84,7 @@ enum PaywallReason: Identifiable, Equatable {
 final class PlanStore {
     static let shared = PlanStore()
     static let freeItemLimit = 50
+    static let freeKitLimit = 1
     /// Group 50 exists in App Store Connect but is not sold until group features ship.
     static let showsGroupTier = false
 
@@ -189,6 +190,10 @@ final class PlanStore {
 
     func canAddItem(currentCount: Int) -> Bool {
         plan.isPaid || currentCount < PlanStore.freeItemLimit
+    }
+
+    func canAddKit(currentCount: Int) -> Bool {
+        plan.isPaid || currentCount < PlanStore.freeKitLimit
     }
 
     func canAddItems(_ n: Int, currentCount: Int) -> Bool {

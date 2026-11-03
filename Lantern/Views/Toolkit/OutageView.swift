@@ -5,6 +5,7 @@ struct OutageView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \OutageEvent.startedAt, order: .reverse) private var outages: [OutageEvent]
     @Query private var items: [SupplyItem]
+    @Query private var plans: [HouseholdPlan]
     @Query private var tasks: [MaintenanceTask]
     @Query private var households: [Household]
     @AppStorage(AppSettings.checkInEnabled) private var checkInEnabled = false
@@ -140,7 +141,7 @@ struct OutageView: View {
                     Task {
                         if on {
                             let ok = await NotificationScheduler.shared.requestAuthorization()
-                            if ok { await NotificationScheduler.shared.scheduleCheckIn(everyHours: checkInHours) } else { checkInEnabled = false }
+                            if ok { await NotificationScheduler.shared.scheduleCheckIn(everyHours: checkInHours, contactNames: plans.first?.trustedContacts.map(\.name) ?? []) } else { checkInEnabled = false }
                         } else {
                             NotificationScheduler.shared.cancelCheckIn()
                         }
@@ -150,7 +151,7 @@ struct OutageView: View {
                 Picker("Every", selection: $checkInHours) {
                     ForEach([2, 4, 6, 12], id: \.self) { Text("\($0) hours").tag($0) }
                 }
-                .onChange(of: checkInHours) { _, h in Task { await NotificationScheduler.shared.scheduleCheckIn(everyHours: h) } }
+                .onChange(of: checkInHours) { _, h in Task { await NotificationScheduler.shared.scheduleCheckIn(everyHours: h, contactNames: plans.first?.trustedContacts.map(\.name) ?? []) } }
             }
         } header: { Text("Check in") } footer: {
             Text("A nudge to text where you are, that you're okay, and how much battery you have. Texts get through when calls don't.")

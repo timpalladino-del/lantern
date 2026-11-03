@@ -103,40 +103,51 @@ struct ProfileCard: Codable, Equatable {
 
 enum ProfileExchange {
     static let scheme = "lantern"
+    /// Universal links. Opens the app when installed; otherwise a page on the site explains and offers the app.
+    static let webHost = "kismetstudio.io"
+    static let webPath = "/lantern/p"
 
     enum Route: Equatable {
         case newProfile(requestedBy: String)
         case importProfile(ProfileCard)
     }
 
-    /// `lantern://profile/new?from=Tim`: opens the profile builder on the family member's phone.
+    /// `https://kismetstudio.io/lantern/p/new?from=Tim`: opens the profile builder on the family member's phone.
     static func requestURL(from requester: String) -> URL {
         var c = URLComponents()
-        c.scheme = scheme
-        c.host = "profile"
-        c.path = "/new"
+        c.scheme = "https"
+        c.host = webHost
+        c.path = webPath + "/new"
         c.queryItems = [URLQueryItem(name: "from", value: requester)]
         return c.url!
     }
 
-    /// `lantern://profile/import?d=<base64url json>`: taps straight into the owner's household.
+    /// `https://kismetstudio.io/lantern/p/import?d=<base64url json>`: taps straight into the owner's household.
     static func importURL(for card: ProfileCard) -> URL? {
         let enc = JSONEncoder()
         enc.dateEncodingStrategy = .iso8601
         guard let data = try? enc.encode(card) else { return nil }
         var c = URLComponents()
-        c.scheme = scheme
-        c.host = "profile"
-        c.path = "/import"
+        c.scheme = "https"
+        c.host = webHost
+        c.path = webPath + "/import"
         c.queryItems = [URLQueryItem(name: "d", value: base64url(data))]
         return c.url
     }
 
+    /// Accepts both the universal link form and the older `lantern://profile/...` form.
     static func route(for url: URL) -> Route? {
-        guard url.scheme == scheme, url.host == "profile",
-              let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        guard let comps = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return nil }
+        let action: String
+        if url.scheme == scheme, url.host == "profile" {
+            action = comps.path
+        } else if url.scheme == "https", url.host == webHost, comps.path.hasPrefix(webPath + "/") {
+            action = String(comps.path.dropFirst(webPath.count))
+        } else {
+            return nil
+        }
         let q = Dictionary(uniqueKeysWithValues: (comps.queryItems ?? []).map { ($0.name, $0.value ?? "") })
-        switch comps.path {
+        switch action.hasSuffix("/") ? String(action.dropLast()) : action {
         case "/new":
             return .newProfile(requestedBy: q["from"] ?? "")
         case "/import":
@@ -156,10 +167,10 @@ enum ProfileExchange {
         \(requester) is setting up Lantern for the household and needs your details: age, any medications \
         (dose and when you take them), and allergies. It all stays on your phones; nothing goes to a server.
 
-        Open this on your iPhone with Lantern installed and fill in your own profile:
+        Tap this on your iPhone to fill in your own profile:
         \(requestURL(from: requester).absoluteString)
 
-        Don't have Lantern yet? Get it from the App Store, then tap the link again.
+        Don't have Lantern yet? The link explains where to get it.
         """
     }
 

@@ -329,6 +329,7 @@
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Lantern.entitlements;
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
@@ -361,6 +362,7 @@
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				CODE_SIGN_ENTITLEMENTS = Config/Lantern.entitlements;
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";

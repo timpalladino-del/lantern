@@ -123,11 +123,24 @@ Ranked by how often it recurred across forums, reviews and press.
 - **Widgets and Siri.** "Hey Siri, we used a can of beans." Lock-screen widget showing items expiring this month.
 - **Smart suggestions.** "You have 40 cans of beans and no can opener in the go-bag." Rule-based, from the library.
 
-### Phase 1.5: Trusted contact (for people living alone)
-- Household gains "Who checks on you?": one or two named contacts outside the house with phone numbers.
-- Sending them the medication card and plan reuses the profile link and share sheet already built.
+### Phase 1.5: Trusted contact (for people living alone) — built November 3, 2026
+- Household has "Who checks on you?": one or two named contacts outside the house with phone numbers.
+- One tap sends them the medication card and the plan as text.
 - The outage check-in reminder names them ("Text Dana: where you are, that you're okay, your battery").
-- Shown on the Home tab when the household has exactly one person and no trusted contact yet.
+- Home prompts for it when the household has exactly one person and no trusted contact yet; the plan PDF lists them.
+
+### Kits — built November 3, 2026
+- `Kit` is a container (go-bag, car, pet, work, other). Items in a kit are ordinary supplies with a `kit` link,
+  so they count toward readiness and get the same reminders. Deleting a kit keeps its items.
+- Templates in `kits.json` (Ready.gov go-bag, car kit, pet bag). A kit started from a template shows what is
+  still missing with one-tap add. "Pack something you already have" moves existing items in.
+- "Checked" stamps the kit and its items; a kit not checked in six months shows in Ember.
+- Free: one kit. More kits are part of Family.
+
+### Universal links — built November 3, 2026
+- Profile links are now `https://kismetstudio.io/lantern/p/new` and `/lantern/p/import`, served by the site with
+  `/.well-known/apple-app-site-association` and the `applinks:kismetstudio.io` entitlement. Without the app the
+  link lands on a page that explains and tries the `lantern://` scheme; the app still accepts both forms.
 
 ## 7. More ideas to consider (backlog)
 

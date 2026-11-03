@@ -207,58 +207,46 @@ All of this ships inside the app, offline, with citations.
 
 ## 11. Pricing and household size
 
-Principles: one price, no subscription, no account. Every safety tool is free forever. We charge for depth and
-convenience, never for the thing someone needs during an emergency.
+Decided November 3, 2026 (supersedes the one-time model drafted earlier that day; that draft is kept in git history).
+
+Principles: every Toolkit safety tool is free forever, including during an outage. We charge for the household
+record and its upkeep, which is an annual subscription. No account is required; purchases are tied to the Apple ID.
 
 ### Tiers
 
-| | Free | Pro (one-time, $12.99) |
-|---|---|---|
-| Inventory | up to 50 items | unlimited |
-| Scanning (barcode, date label) | yes | yes |
-| Shelf-life library, Open Food Facts lookup | yes | yes |
-| People and pets in the household | unlimited | unlimited |
-| Readiness in calories, water, medication days | yes | yes |
-| Kits | 1 | unlimited |
-| **Toolkit** (SOS light, outage mode, contacts, plan, know-how, compass, radio, games) | **all of it, always** | all of it |
-| Equipment maintenance schedules | view only | reminders |
-| Seasonal checklists | - | yes |
-| Documents vault | - | yes |
-| Home-screen and lock-screen widgets | - | yes |
-| Household sharing between devices (Phase 2, CloudKit) | - | yes |
-| Printable plan and contacts PDF | yes | yes |
-| CSV export | yes | yes |
+| | Free | Solo | Family | Extra profiles |
+|---|---|---|---|---|
+| Price | $0 | $7.99 / year | $12.99 / year | $3 / year each |
+| People (profiles) | 1 | 1 | 6 (purchaser plus 5) | 7th person and up |
+| Pets | unlimited | unlimited | unlimited | |
+| Items | 50 | unlimited | unlimited | |
+| Scanning, shelf-life library, product lookup | yes | yes | yes | |
+| Readiness in calories, water, medication days | yes | yes | yes | |
+| Toolkit (SOS, outage mode, contacts, plan, know-how, medication card, compass, radio, games) | all, always | all | all | |
+| Kits and go-bags | 1 | unlimited | unlimited | |
+| Equipment maintenance reminders | view only | yes | yes | |
+| Seasonal checklists, documents vault, widgets | no | yes | yes | |
+| Household sync across phones (Phase 2, CloudKit) | no | n/a | yes | |
+| Profile links, per-person medication cards | first person only | first person only | all people | |
+| Printable PDFs, CSV export | yes | yes | yes | |
 
-Test $9.99 and $14.99 against $12.99 in the first two months. Keep the number under the price of a case of water.
+### Open implementation questions (answer before building the paywall)
 
-### Single user vs. family vs. more people
+1. Free-tier trial for families. Recommended: Free may add people for the readiness math so a family sees
+   "covered for 4 days" on day one, and Family gates the per-person *profile* (medications, profile links,
+   medication card) beyond the first person. Alternative: hard cap of one person on Free.
+2. Extra profiles as App Store products. StoreKit cannot sell one auto-renewing subscription "times three", so
+   extra profiles are tiers in the Family subscription group: Family 6 $12.99, Family 8 $18.99, Family 10 $24.99,
+   Family 15 $39.99 (the $3-per-profile rate, rounded). Apple prorates upgrades between tiers.
+3. Family Sharing: enable it on Solo and Family so a spouse does not pay twice. Family Sharing shares the
+   purchase across Apple IDs; the profile count is still the tier's.
+4. Groups (below) were priced one-time; moving them to annual for consistency is likely (Circle $19.99/yr,
+   Group Pack $79/yr). Undecided.
 
-- **Household size is never a paywall.** A household in Lantern is a list of people and pets, and that list is
-  unlimited on every tier. The readiness math needs everyone in it, so gating on headcount would make the free
-  product lie about readiness. Pricing is per *Apple ID*, not per person in the house.
-- **Single user:** buys Pro once. Done.
-- **Family on several iPhones:** one purchase. Pro is enabled for Apple Family Sharing, so up to six Apple IDs in
-  a Family Sharing group unlock Pro from one $12.99 purchase. That is the "family plan"; it costs us nothing to run
-  and the store page says it plainly: "Buy once, share with your family."
-- **Keeping the data in sync across those phones** is a feature, not a tier. It ships in Phase 2 as CloudKit
-  household sharing (private database shared via CKShare, so it stays account-free and we hold no servers). It is
-  part of Pro; the purchaser invites the others with a share link. Free users on the same household can view a
-  shared household but not edit it, which gives the free tier a reason to upgrade without breaking the readiness
-  promise.
-- **More than six people, or more than one home:** still one Pro purchase per Apple ID. A person can belong to
-  more than one household (a parent's house and their own) and a household can have any number of people. Multiple
-  homes is a Pro feature because it is a convenience, not a safety need.
-- **Solo user:** same Free and Pro as everyone, no Solo tier. Free covers most people living alone (50 items,
-  one kit, the whole Toolkit). A Solo discount cannot be enforced without capping people, which would break the
-  readiness promise, and it muddles "one price, no matter how many people you are protecting". If solo conversion
-  is weak, the lever is a limited-time introductory price for everyone, not a solo tier. What the solo user needs
-  is product, not pricing: a named trusted contact ("Who checks on you?") who receives the medication card and
-  plan and whom the outage check-in reminder points at; and joining a Circle for free so an adult child's purchase
-  covers a parent living alone.
-- **Groups** are a separate set of products, below. Do not try to bend the household model to fit them.
-- **No subscriptions, ever,** unless we later add a service that costs us money per month (hosted alerts, SMS
-  check-ins). If that day comes it is a separate optional add-on, and the one-time Pro purchase keeps every
-  feature it had on the day it was bought.
+### The upgrade moment
+
+The upgrade prompt appears when someone hits 50 items, adds a second person's medications, or opens a paid
+screen. It never appears inside Outage mode or any Toolkit tool.
 
 ### Groups
 
@@ -454,7 +442,7 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
   optional dose reminders. A Medication card (Toolkit) shares the household's medications as text or PDF.
 - 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
-- 2026-11-03: Household size is never a paywall. Pro is per Apple ID, shared via Family Sharing (up to six).
+- 2026-11-03: Pricing decided as annual: Free (1 person, 50 items), Solo $7.99/yr, Family $12.99/yr for 6 people, $3/yr per extra profile. Toolkit free on every tier. Supersedes the one-time Pro draft from earlier the same day.
 - 2026-11-03: Groups: Circle ($19.99 once, 12 households), Group Pack ($79 once, 50 households), Organizations ($3/household/year, $300 min). Members never pay.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,

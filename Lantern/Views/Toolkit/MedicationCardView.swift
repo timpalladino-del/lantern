@@ -45,7 +45,7 @@ struct MedicationCardView: View {
         }
         .navigationTitle("Medication card")
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(item: $shareFile) { FileShareSheet(url: $0.url) }
+        .sheet(item: $shareFile) { FileShareSheet(file: $0) }
     }
 
     private func makePDF() {

@@ -162,7 +162,7 @@ struct MedicationRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
                     Text(medication.name)
-                    if medication.isCritical { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange).font(.caption) }
+                    if medication.isCritical { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(Color.ember).font(.caption) }
                 }
                 Text(subtitle).font(.caption).foregroundStyle(.secondary)
             }
@@ -170,7 +170,7 @@ struct MedicationRow: View {
             if let d = medication.daysOfSupply {
                 Text(ReadinessCalculator.formatDays(d))
                     .font(.caption.weight(.medium))
-                    .foregroundStyle(d < 7 ? .orange : .secondary)
+                    .foregroundStyle(d < 7 ? Color.ember : Color.secondary)
             }
         }
     }

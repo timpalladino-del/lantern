@@ -19,6 +19,7 @@ struct SuppliesListView: View {
     @State private var showPacks = false
     @State private var showShopping = false
     @State private var showOut = true
+    @State private var usedCount = 0
 
     private var now: Date { Date() }
 
@@ -68,6 +69,7 @@ struct SuppliesListView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button { showScanner = true } label: { Image(systemName: "barcode.viewfinder") }
+                        .accessibilityLabel("Scan a barcode")
                     Menu {
                         Button { showAdd = true } label: { Label("Add by hand", systemImage: "plus") }
                         Button { showPacks = true } label: { Label("Add a starter pack", systemImage: "list.bullet.rectangle") }
@@ -78,6 +80,7 @@ struct SuppliesListView: View {
                         }
                         Toggle("Show used-up items", isOn: $showOut)
                     } label: { Image(systemName: "ellipsis.circle") }
+                    .accessibilityLabel("More options")
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Menu {
@@ -94,13 +97,16 @@ struct SuppliesListView: View {
             .sheet(isPresented: $showAdd) { ItemEditView() }
             .sheet(isPresented: $showPacks) { StarterPackPickerView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }
+            .sensoryFeedback(.impact(weight: .light), trigger: usedCount)
         }
     }
 
     private var emptyState: some View {
-        VStack(spacing: 16) {
-            EmptyStateView(symbol: "shippingbox", title: "Nothing here yet",
-                           message: "Scan a barcode, add an item by hand, or start from a ready-made list.")
+        ContentUnavailableView {
+            Label("Nothing here yet", systemImage: "shippingbox")
+        } description: {
+            Text("Scan a barcode, add an item by hand, or start from a ready-made list.")
+        } actions: {
             HStack(spacing: 12) {
                 Button { showScanner = true } label: { Label("Scan", systemImage: "barcode.viewfinder") }
                     .buttonStyle(.borderedProminent)
@@ -128,18 +134,19 @@ struct SuppliesListView: View {
         NavigationLink { ItemDetailView(item: item) } label: { ItemRow(item: item) }
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button { useOne(item) } label: { Label("Used 1", systemImage: "minus.circle") }
-                    .tint(.blue)
+                    .tint(Color.accentColor)
                 Button(role: .destructive) { context.delete(item); try? context.save() } label: { Label("Delete", systemImage: "trash") }
             }
             .swipeActions(edge: .leading) {
                 Button { checked(item) } label: { Label("Checked", systemImage: "checkmark.circle") }
-                    .tint(.green)
+                    .tint(Color.moss)
             }
     }
 
     private func useOne(_ item: SupplyItem) {
         item.quantity = max(0, item.quantity - 1)
         item.touch()
+        usedCount += 1
         if item.quantity == 0 {
             context.insert(ShoppingItem(name: item.name, quantity: 1, unit: item.unit, reason: "Used up"))
         }

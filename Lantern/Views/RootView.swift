@@ -15,17 +15,13 @@ struct RootView: View {
 
     var body: some View {
         TabView {
-            HomeView()
-                .tabItem { Label("Home", systemImage: "house.fill") }
-            SuppliesListView()
-                .tabItem { Label("Supplies", systemImage: "shippingbox.fill") }
-            EquipmentListView()
-                .tabItem { Label("Equipment", systemImage: "wrench.and.screwdriver.fill") }
-            ReadinessView()
-                .tabItem { Label("Ready", systemImage: "checkmark.shield.fill") }
-            SettingsView()
-                .tabItem { Label("Settings", systemImage: "gearshape.fill") }
+            Tab("Home", systemImage: "house.fill") { HomeView().tint(Color.accentColor) }
+            Tab("Supplies", systemImage: "shippingbox.fill") { SuppliesListView().tint(Color.accentColor) }
+            Tab("Equipment", systemImage: "wrench.and.screwdriver.fill") { EquipmentListView().tint(Color.accentColor) }
+            Tab("Ready", systemImage: "checkmark.shield.fill") { ReadinessView().tint(Color.accentColor) }
+            Tab("Settings", systemImage: "gearshape.fill") { SettingsView().tint(Color.accentColor) }
         }
+        .tint(Color.glow)
         .task {
             SeedData.ensureDefaults(in: context)
             if !hasSeenWelcome { showOnboarding = true }

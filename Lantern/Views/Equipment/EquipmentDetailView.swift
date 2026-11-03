@@ -14,6 +14,7 @@ struct EquipmentDetailView: View {
     @State private var newTaskInterval = 30
     @State private var newLogNote = ""
     @State private var confirmDelete = false
+    @State private var doneCount = 0
 
     private let library = MaintenanceLibrary.shared
 
@@ -40,7 +41,7 @@ struct EquipmentDetailView: View {
                 if !equipment.batteryType.isEmpty { LabeledContent("Batteries", value: "\(equipment.batteryCount) × \(equipment.batteryType)") }
                 if let replace = equipment.replaceBy(lifetimeYears: library.kind(equipment.kindRaw)?.lifetimeYears) {
                     LabeledContent("Replace by", value: replace.formatted(date: .abbreviated, time: .omitted))
-                        .foregroundStyle(replace < Date() ? .orange : .primary)
+                        .foregroundStyle(replace < Date() ? Color.ember : Color.primary)
                 }
             }
 
@@ -53,7 +54,7 @@ struct EquipmentDetailView: View {
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(task.title)
-                                Text(dueText(task)).font(.caption).foregroundStyle(task.isDue() ? .orange : .secondary)
+                                Text(dueText(task)).font(.caption).foregroundStyle(task.isDue() ? Color.ember : Color.secondary)
                             }
                             Spacer()
                             Button("Done") { markDone(task) }.buttonStyle(.bordered).controlSize(.small)
@@ -96,6 +97,7 @@ struct EquipmentDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { ToolbarItem(placement: .topBarTrailing) { Button("Edit") { showEdit = true } } }
         .sheet(isPresented: $showEdit) { EquipmentEditView(equipment: equipment) }
+        .sensoryFeedback(.success, trigger: doneCount)
         .alert("New check", isPresented: $showAddTask) {
             TextField("What to do", text: $newTaskTitle)
             TextField("Every how many days", value: $newTaskInterval, format: .number)
@@ -139,6 +141,7 @@ struct EquipmentDetailView: View {
 
     private func markDone(_ task: MaintenanceTask) {
         task.lastDoneAt = Date()
+        doneCount += 1
         let log = MaintenanceLog(taskTitle: task.title)
         log.equipment = equipment
         context.insert(log)

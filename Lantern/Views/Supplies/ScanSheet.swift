@@ -97,9 +97,11 @@ struct ScanSheet: View {
                     DataScannerRepresentable(onBarcode: handleBarcode, onText: handleText)
                         .ignoresSafeArea(edges: .top)
                 } else {
-                    VStack(spacing: 12) {
-                        EmptyStateView(symbol: "camera.fill", title: "Camera scanning not available",
-                                       message: "This device or simulator cannot scan. Type the barcode instead, or add the item by hand.")
+                    ContentUnavailableView {
+                        Label("Camera scanning not available", systemImage: "camera.fill")
+                    } description: {
+                        Text("This device or simulator cannot scan. Type the barcode instead, or add the item by hand.")
+                    } actions: {
                         HStack {
                             TextField("Barcode digits", text: $manualBarcode).keyboardType(.numberPad).textFieldStyle(.roundedBorder)
                             Button("Use") { handleBarcode(manualBarcode) }.disabled(manualBarcode.isEmpty)
@@ -126,9 +128,13 @@ struct ScanSheet: View {
                 Chip(symbol: "barcode", text: barcode.map { productName ?? "Barcode \($0)" } ?? "Point at a barcode", active: barcode != nil)
                 Chip(symbol: "calendar", text: bestDate.map { "Date: " + $0.date.formatted(date: .abbreviated, time: .omitted) } ?? "Point at the printed date", active: bestDate != nil)
             }
-            if isLookingUp { ProgressView("Looking up product…").font(.caption) }
+            if isLookingUp {
+                Label("Looking up product…", systemImage: "barcode.viewfinder")
+                    .font(.caption)
+                    .symbolEffect(.variableColor.iterative, isActive: isLookingUp)
+            }
             if let added = addedToExisting {
-                Label("Added 1 to \(added)", systemImage: "checkmark.circle.fill").foregroundStyle(.green).font(.subheadline)
+                Label("Added 1 to \(added)", systemImage: "checkmark.circle.fill").foregroundStyle(Color.moss).font(.subheadline)
             }
             HStack(spacing: 10) {
                 if let first = existingMatches.first {
@@ -244,9 +250,10 @@ private struct Chip: View {
         Label(text, systemImage: symbol)
             .font(.caption.weight(.medium))
             .lineLimit(1)
+            .symbolEffect(.bounce, value: active)
             .padding(.horizontal, 10)
             .padding(.vertical, 6)
-            .background((active ? Color.accentColor : Color.secondary).opacity(0.15), in: Capsule())
-            .foregroundStyle(active ? Color.accentColor : Color.secondary)
+            .background((active ? Color.glow : Color.secondary).opacity(0.18), in: Capsule())
+            .foregroundStyle(active ? Color.primary : Color.secondary)
     }
 }

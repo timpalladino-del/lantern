@@ -10,6 +10,7 @@ struct HomeView: View {
     @State private var showScanner = false
     @State private var showAdd = false
     @State private var showShopping = false
+    @State private var doneCount = 0
 
     private var now: Date { Date() }
 
@@ -83,11 +84,13 @@ struct HomeView: View {
             .sheet(isPresented: $showScanner) { ScanSheet() }
             .sheet(isPresented: $showAdd) { ItemEditView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }
+            .sensoryFeedback(.success, trigger: doneCount)
         }
     }
 
     private func markDone(_ task: MaintenanceTask) {
         task.lastDoneAt = Date()
+        doneCount += 1
         if let equipment = task.equipment {
             let log = MaintenanceLog(taskTitle: task.title)
             log.equipment = equipment
@@ -106,8 +109,8 @@ struct StatTile: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(title).font(.caption).foregroundStyle(.secondary)
-            Text(value).font(.title3.weight(.semibold))
-            ProgressView(value: fraction)
+            Text(value).font(.title3.weight(.semibold)).monospacedDigit()
+            ProgressView(value: fraction).tint(Color.glow)
             Text("Goal: \(target) days").font(.caption2).foregroundStyle(.secondary)
         }
         .padding(14)
@@ -149,7 +152,7 @@ struct TaskRow: View {
                     Text(dueText)
                 }
                 .font(.caption)
-                .foregroundStyle(task.isDue() ? .orange : .secondary)
+                .foregroundStyle(task.isDue() ? Color.ember : Color.secondary)
             }
             Spacer()
             Button("Done", action: onDone)

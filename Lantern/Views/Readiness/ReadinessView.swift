@@ -63,14 +63,14 @@ struct ReadinessView: View {
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: 6) {
                                     Text(m.name)
-                                    if m.isCritical { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(.orange).font(.caption) }
+                                    if m.isCritical { Image(systemName: "exclamationmark.circle.fill").foregroundStyle(Color.ember).font(.caption) }
                                 }
                                 Text(m.personName).font(.caption).foregroundStyle(.secondary)
                             }
                             Spacer()
                             Text(m.daysOfSupply.map { ReadinessCalculator.formatDays($0) } ?? "–")
                                 .font(.subheadline)
-                                .foregroundStyle((m.daysOfSupply ?? 99) < Double(report.targetDays) ? .orange : .secondary)
+                                .foregroundStyle((m.daysOfSupply ?? 99) < Double(report.targetDays) ? Color.ember : Color.secondary)
                         }
                     }
                 }
@@ -79,7 +79,8 @@ struct ReadinessView: View {
             Section {
                 if report.gaps.isEmpty {
                     Label("You are covered for \(report.targetDays) days of food, water and medication.", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
+                        .foregroundStyle(Color.moss)
+                        .symbolEffect(.bounce, value: report.gaps.count)
                 }
                 ForEach(report.gaps) { gap in
                     VStack(alignment: .leading, spacing: 6) {
@@ -122,7 +123,7 @@ private struct ReadinessBar: View {
                 Spacer()
                 Text(value).font(.subheadline)
             }
-            ProgressView(value: fraction)
+            ProgressView(value: fraction).tint(Color.glow)
             Text(detail).font(.caption).foregroundStyle(.secondary)
         }
         .padding(.vertical, 4)

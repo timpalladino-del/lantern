@@ -35,7 +35,8 @@ struct OnboardingView: View {
     private var welcome: some View {
         VStack(alignment: .leading, spacing: 18) {
             Spacer()
-            Image(systemName: "lightbulb.max.fill").font(.system(size: 44)).foregroundStyle(Color.accentColor)
+            Image(systemName: "lightbulb.max.fill").font(.system(size: 44)).foregroundStyle(Color.glow)
+                .symbolEffect(.breathe)
             Text("Lantern").font(.largeTitle.weight(.bold))
             Text("Ready for when you need it most.").font(.title3).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 12) {
@@ -64,7 +65,8 @@ struct OnboardingView: View {
     private var finish: some View {
         VStack(alignment: .leading, spacing: 18) {
             Spacer()
-            Image(systemName: "checkmark.circle.fill").font(.system(size: 44)).foregroundStyle(.green)
+            Image(systemName: "checkmark.circle.fill").font(.system(size: 44)).foregroundStyle(Color.moss)
+                .symbolEffect(.bounce, options: .nonRepeating)
             Text("You're set.").font(.largeTitle.weight(.bold))
             Text("Next, add what you already have. The fastest way is the scanner: point it at a can so the barcode and the printed date are both in view.")
                 .foregroundStyle(.secondary)

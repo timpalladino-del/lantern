@@ -28,6 +28,7 @@ struct ShoppingListView: View {
                         HStack {
                             Button { row.isDone = true; try? context.save() } label: { Image(systemName: "circle") }
                                 .buttonStyle(.plain)
+                                .accessibilityLabel("Mark \(row.name) bought")
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(row.name)
                                 Text("\(quantityText(row))\(row.reason.isEmpty ? "" : " · \(row.reason)")").font(.caption).foregroundStyle(.secondary)
@@ -44,8 +45,9 @@ struct ShoppingListView: View {
                     Section {
                         ForEach(done, id: \.uuid) { row in
                             HStack {
-                                Button { row.isDone = false; try? context.save() } label: { Image(systemName: "checkmark.circle.fill").foregroundStyle(.green) }
+                                Button { row.isDone = false; try? context.save() } label: { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.moss).contentTransition(.symbolEffect(.replace)) }
                                     .buttonStyle(.plain)
+                                    .accessibilityLabel("Put \(row.name) back on the list")
                                 Text(row.name).strikethrough().foregroundStyle(.secondary)
                             }
                         }

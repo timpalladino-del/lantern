@@ -37,7 +37,7 @@ struct SettingsView: View {
                         Button("Refresh reminders now") { Task { await reschedule() } }
                     }
                     if authDenied {
-                        Text("Notifications are off in iOS Settings. Turn them on there to get the digest.").font(.footnote).foregroundStyle(.orange)
+                        Text("Notifications are off in iOS Settings. Turn them on there to get the digest.").font(.footnote).foregroundStyle(Color.ember)
                     }
                 } header: { Text("Reminders") } footer: {
                     Text("One digest a week by default. Separate reminders only for medicine, water rotation and equipment checks. Scheduled on this phone, no server.")
@@ -59,7 +59,7 @@ struct SettingsView: View {
                 Section {
                     Button("Export supplies (CSV)") { export(ExportService.suppliesCSV(items), name: "supplies.csv") }
                     Button("Export equipment (CSV)") { export(ExportService.equipmentCSV(equipment), name: "equipment.csv") }
-                    if let err = exportError { Text(err).font(.footnote).foregroundStyle(.red) }
+                    if let err = exportError { Text(err).font(.footnote).foregroundStyle(Color.signal) }
                 } header: { Text("Export") } footer: {
                     Text("Your data is yours. Print the CSV for the binder, or open it in Numbers or Excel.")
                 }

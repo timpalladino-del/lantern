@@ -20,9 +20,11 @@ struct EquipmentListView: View {
         NavigationStack {
             Group {
                 if equipment.isEmpty {
-                    VStack(spacing: 16) {
-                        EmptyStateView(symbol: "wrench.and.screwdriver", title: "No equipment yet",
-                                       message: "Add the generator, smoke alarms, extinguisher, or power station. Each comes with a sensible check schedule you can edit.")
+                    ContentUnavailableView {
+                        Label("No equipment yet", systemImage: "wrench.and.screwdriver")
+                    } description: {
+                        Text("Add the generator, smoke alarms, extinguisher, or power station. Each comes with a sensible check schedule you can edit.")
+                    } actions: {
                         Button { showAdd = true } label: { Label("Add equipment", systemImage: "plus") }
                             .buttonStyle(.borderedProminent)
                     }
@@ -41,6 +43,7 @@ struct EquipmentListView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showAdd = true } label: { Image(systemName: "plus") }
+                        .accessibilityLabel("Add equipment")
                 }
             }
             .sheet(isPresented: $showAdd) { EquipmentEditView() }
@@ -72,9 +75,10 @@ struct EquipmentRow: View {
                 let d = next.daysUntilDue()
                 Text(d <= 0 ? "Due" : "\(d)d")
                     .font(.caption.weight(.medium))
+                    .monospacedDigit()
                     .padding(.horizontal, 8).padding(.vertical, 4)
-                    .background((d <= 0 ? Color.orange : Color.secondary).opacity(0.15), in: Capsule())
-                    .foregroundStyle(d <= 0 ? Color.orange : Color.secondary)
+                    .background((d <= 0 ? Color.ember : Color.secondary).opacity(0.15), in: Capsule())
+                    .foregroundStyle(d <= 0 ? Color.ember : Color.secondary)
             }
         }
     }

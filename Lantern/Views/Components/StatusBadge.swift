@@ -9,6 +9,7 @@ struct StatusBadge: View {
         let status = item.status(on: now)
         Text(label(for: status))
             .font(.caption.weight(.medium))
+            .monospacedDigit()
             .padding(.horizontal, 8)
             .padding(.vertical, 4)
             .background(color(for: status).opacity(0.15), in: Capsule())
@@ -41,9 +42,9 @@ struct StatusBadge: View {
         switch status {
         case .noDate: return .secondary
         case .fine: return .secondary
-        case .soon: return .orange
-        case .past: return item.category.usesSoftDateLanguage ? .orange : .red
-        case .snoozed: return .green
+        case .soon: return Color.ember
+        case .past: return item.category.usesSoftDateLanguage ? Color.ember : Color.signal
+        case .snoozed: return Color.moss
         }
     }
 }
@@ -56,12 +57,13 @@ struct ItemRow: View {
             Image(systemName: item.category.symbol)
                 .frame(width: 28)
                 .foregroundStyle(.secondary)
+                .symbolEffect(.bounce, value: item.quantity)
             VStack(alignment: .leading, spacing: 2) {
                 Text(item.name)
                     .font(.body)
                     .strikethrough(item.isOut)
                 HStack(spacing: 6) {
-                    Text(quantityText)
+                    Text(quantityText).monospacedDigit()
                     if let loc = item.location {
                         Text("·").foregroundStyle(.tertiary)
                         Text(loc.name)

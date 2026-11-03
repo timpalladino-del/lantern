@@ -173,7 +173,7 @@ struct ItemEditView: View {
                     if let e = selectedEntry {
                         Text(e.summary).font(.footnote).foregroundStyle(.secondary)
                         if e.needsPrintedDate {
-                            Text("Use the date printed on the package for this one.").font(.footnote).foregroundStyle(.orange)
+                            Text("Use the date printed on the package for this one.").font(.footnote).foregroundStyle(Color.ember)
                         }
                     }
                     Toggle("Opened", isOn: $isOpened)

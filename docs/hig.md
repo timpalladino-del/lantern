@@ -1,0 +1,62 @@
+# Lantern and Apple's Human Interface Guidelines
+
+How the app follows the HIG, what it deliberately does, and what is still open. Updated 2026-11-03.
+
+## App icon
+
+What Apple asks for, and why the first drafts failed:
+
+- **One simple subject, no text, no photos, no UI chrome.** The icon must read at 29 px. Rendered lanterns with glass and brass turned to mud below 60 px.
+- **Full-bleed square, no baked-in corners.** The system applies the mask.
+- **It has to work as a silhouette.** iOS 18 added Dark and Tinted appearances; iOS 26's Liquid Glass added Clear. In Tinted and Clear the system reduces the artwork to one color, so an icon that depends on shading or color to be recognizable disappears. This is the test that matters now.
+- **Layers for Liquid Glass.** Icon Composer (Xcode 26+) takes a background and up to three foreground layers and applies glass lighting. Simple filled shapes work; fine detail and gradients do not.
+
+What Lantern ships: a three-layer vector icon (navy background, amber glow, white lantern silhouette with an amber window) at 1024 px, with explicit Dark and Tinted variants in the asset catalog. Sources and a render script are in `docs/brand/icon/`; `render.js` produces the PNGs and a preview sheet at 180/120/76/60/40/29 px across appearances. Next step when the Mac is connected: open the SVG layers in Icon Composer and export the `.icon` bundle so Clear mode gets real glass.
+
+## Color
+
+- **Accent color** is Ink in light mode and slate blue in dark mode. System controls (toggles, links, prominent buttons) pick it up. Amber is never a button.
+- **Amber (Glow)** is applied only to the selected tab, progress bars and the onboarding symbol, via explicit tint.
+- **Semantic colors** Moss, Ember and Signal are asset colors with light and dark values, used only for status. Signal (true red) appears only for expired medicine.
+- Everything else is system color so Dark Mode, Increase Contrast and Reduce Transparency work without extra code.
+
+## Navigation and layout
+
+- Five tabs via the iOS 18 `Tab` API. Each tab is its own `NavigationStack` with a large title at the root.
+- Toolbars use standard placements. Icon-only toolbar buttons carry accessibility labels.
+- Lists are system `List` and `Form`, with `LabeledContent` for label and value pairs, so Dynamic Type, VoiceOver and swipe actions behave like every other iOS app.
+- Empty states use `ContentUnavailableView` with a label, description and actions.
+- Destructive actions are confirmed with a confirmation dialog, and delete swipes use `role: .destructive`.
+- Sheets for create and edit, with Cancel and Save in the standard placements.
+- Liquid Glass on iOS 26 arrives automatically for navigation bars, tab bars and toolbars when built with Xcode 26 or later. No custom blur or glass is used.
+
+## Animated SF Symbols
+
+Used to confirm something happened, never as decoration, and never looping where the user is reading:
+
+| Where | Effect | Why |
+|---|---|---|
+| Onboarding welcome symbol | `.breathe` (iOS 18) | Gentle, ambient, the lantern is "on" |
+| Item row category icon | `.bounce` on quantity change | Confirms "used one" |
+| Scanner chips | `.bounce` when a barcode or date lands | Confirms the camera caught it |
+| Scanner lookup | `.variableColor.iterative` while fetching | Activity without a spinner |
+| Shopping list check | `.contentTransition(.symbolEffect(.replace))` | Circle to checkmark |
+| Ready tab "covered" | `.bounce` when gaps reach zero | A small reward |
+| Onboarding finish | `.bounce` once | Done |
+
+All symbol effects respect Reduce Motion automatically.
+
+## Haptics
+
+`sensoryFeedback` only on outcomes: `.success` when an equipment check is marked done, `.impact(.light)` on "Used 1". Nothing on navigation or selection.
+
+## Typography
+
+System fonts throughout, so Dynamic Type and Bold Text work. Numbers that line up use `monospacedDigit()`.
+
+## Still open
+
+- Icon Composer `.icon` bundle for Clear mode (needs the Mac).
+- VoiceOver pass on the scanner overlay.
+- iPad layout (the app is iPhone-only for now).
+- Widgets and Live Activities for "use this week" and outage mode.

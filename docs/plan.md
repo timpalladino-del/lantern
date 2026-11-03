@@ -123,6 +123,12 @@ Ranked by how often it recurred across forums, reviews and press.
 - **Widgets and Siri.** "Hey Siri, we used a can of beans." Lock-screen widget showing items expiring this month.
 - **Smart suggestions.** "You have 40 cans of beans and no can opener in the go-bag." Rule-based, from the library.
 
+### Phase 1.5: Trusted contact (for people living alone)
+- Household gains "Who checks on you?": one or two named contacts outside the house with phone numbers.
+- Sending them the medication card and plan reuses the profile link and share sheet already built.
+- The outage check-in reminder names them ("Text Dana: where you are, that you're okay, your battery").
+- Shown on the Home tab when the household has exactly one person and no trusted contact yet.
+
 ## 7. More ideas to consider (backlog)
 
 - Receipt scan to batch-add a grocery run.
@@ -242,6 +248,13 @@ Test $9.99 and $14.99 against $12.99 in the first two months. Keep the number un
 - **More than six people, or more than one home:** still one Pro purchase per Apple ID. A person can belong to
   more than one household (a parent's house and their own) and a household can have any number of people. Multiple
   homes is a Pro feature because it is a convenience, not a safety need.
+- **Solo user:** same Free and Pro as everyone, no Solo tier. Free covers most people living alone (50 items,
+  one kit, the whole Toolkit). A Solo discount cannot be enforced without capping people, which would break the
+  readiness promise, and it muddles "one price, no matter how many people you are protecting". If solo conversion
+  is weak, the lever is a limited-time introductory price for everyone, not a solo tier. What the solo user needs
+  is product, not pricing: a named trusted contact ("Who checks on you?") who receives the medication card and
+  plan and whom the outage check-in reminder points at; and joining a Circle for free so an adult child's purchase
+  covers a parent living alone.
 - **Groups** are a separate set of products, below. Do not try to bend the household model to fit them.
 - **No subscriptions, ever,** unless we later add a service that costs us money per month (hosted alerts, SMS
   check-ins). If that day comes it is a separate optional add-on, and the one-time Pro purchase keeps every

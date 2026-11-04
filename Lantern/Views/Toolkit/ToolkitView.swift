@@ -50,8 +50,22 @@ struct ToolkitView: View {
                     NavigationLink { CompassView() } label: { Label("Compass", systemImage: "location.north.circle.fill") }
                 }
 
+                Section("Tell people you're okay") {
+                    NavigationLink { StatusTextsView() } label: {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Label("Ready-to-send texts", systemImage: "message.fill")
+                            Text("\"We're safe, power's out, phones low.\" One tap, filled in for your house.").font(.footnote).foregroundStyle(.secondary)
+                        }
+                    }
+                }
+
                 Section {
-                    NavigationLink { GamesView() } label: { Label("Dice, cards and a coin", systemImage: "dice.fill") }
+                    NavigationLink { GamesView() } label: {
+                        VStack(alignment: .leading, spacing: 3) {
+                            Label("Games for the long evening", systemImage: "dice.fill")
+                            Text("Heads up, hangman, trivia, four in a row, shadow puppets and a dozen more. One phone, no signal.").font(.footnote).foregroundStyle(.secondary)
+                        }
+                    }
                 } header: { Text("Pass the time") } footer: {
                     Text("Nothing here replaces 911 or Emergency SOS. If someone is hurt or in danger, call first.")
                 }

@@ -578,3 +578,41 @@ plan, press release and fact sheet, review reply templates, the four-week Facebo
 plan, launch lessons (CastleWise's eleven applied), social images, QR code, calendar file and the scripts
 that made them. The press page is live at kismetstudio.io/lantern/press/; the live version of the Lantern
 page waits on branch `lantern-live` of the site repo.
+
+## 22. Pass the time, done properly, and ready-to-send texts (added November 4, 2026, for 1.0.1)
+
+The TestFlight note "add as much as you can [to] pass the time" was misread as filler during the 1.0 rush,
+so 1.0 shipped with dice, a coin and a deck. 1.0.1 makes it a real section. Every game is on the phone,
+needs no signal, and most are played with one phone passed around.
+
+**Quick:** dice, cards and a coin (the deck now draws as card faces); rock, paper, scissors against the
+phone with a running score; who goes first, which spins through the household's names (plus guests) and
+can split two teams.
+
+**One phone, two players:** tic-tac-toe (loser starts the next game), four in a row (seven by six, win
+highlighted), hangman (the phone picks from its word lists with a category hint, or a friend types the
+word hidden), draw and guess (finger drawing on a canvas, three brush sizes, undo, a 90-second clock, the
+word shown only to the artist).
+
+**Everyone:** heads up (word on the forehead, tilt down for right and up for pass via CoreMotion, with
+buttons as the fallback, 30/60/90-second rounds, seven categories of 40 words); act it out (charades
+with the same lists and clock); would you rather (60 pairs, tap to vote); twenty questions (the phone
+keeps the secret, hold to peek, a 20-question counter); trivia (ten per round, half readiness facts from
+the know-how sources with a one-line note after each answer, half general knowledge for kids, 70
+questions in the bank, best score kept); story chain (30 openers, 30 twists); flashlight scavenger hunt
+(eight prompts, five-minute clock); shadow puppets (nine, step by step, with a link to the flashlight).
+
+**Just you:** memory match (6, 8 or 12 pairs of SF Symbols), repeat after me (four pads, pattern grows
+by one, best round kept), guess my number (1 to 100, fewest guesses kept).
+
+Rules kept: no amber buttons (amber only on progress bars and the spinner dot), neutral tints on game
+controls, accessibility labels on every tile and pad, no em dashes, none of the banned words. Logic for
+tic-tac-toe, four in a row, hangman, number guess, Simon and rock-paper-scissors lives in GameLogic.swift
+and is tested; the word banks are tested for size, uniqueness and banned words.
+
+**Ready-to-send texts** (Toolkit, "Tell people you're okay"): five messages ("We're safe", "We're
+leaving", "We made it", "We need a hand", "Checking on you") plus "Meet at our spot" when the plan has a
+meeting place. Each is filled from the household names, the outage start time and the plan's meeting
+spots, then Text (opens Messages with the body, you pick who), Share, or Copy. The user's own emergency
+contacts appear as a second list: tap a name, pick a message, Messages opens addressed to them. The
+message builder is a static function and tested.

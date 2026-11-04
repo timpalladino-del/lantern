@@ -8,8 +8,11 @@ struct ItemDetailView: View {
     @Bindable var item: SupplyItem
     @State private var showEdit = false
     @State private var confirmDelete = false
+    @Query private var households: [Household]
 
     private let library = ShelfLifeLibrary.shared
+
+    private var householdCaloriesPerDay: Double { households.first?.caloriesPerDay ?? 2000 }
 
     var body: some View {
         List {
@@ -73,6 +76,27 @@ struct ItemDetailView: View {
                 }
             }
 
+            if item.category == .food {
+                Section {
+                    if let n = item.nutrition {
+                        ForEach(n.rows, id: \.0) { row in
+                            LabeledContent(row.0, value: row.1)
+                        }
+                    }
+                    LabeledContent("Calories per \(item.unit)", value: item.caloriesPerUnit.map { "\(Int($0.rounded()))" } ?? "assumed \(Int(SupplyItem.assumedCaloriesPerServing)) per serving")
+                    if let s = item.servingsPerUnit { LabeledContent("Servings per \(item.unit)", value: s == s.rounded() ? "\(Int(s))" : String(format: "%.1f", s)) }
+                    LabeledContent("Calories on hand", value: "\(Int(item.totalCalories.rounded()))")
+                    if let p = item.totalProteinG { LabeledContent("Protein on hand", value: NutritionFacts.grams(p)) }
+                    Text(feedsText).font(.footnote).foregroundStyle(.secondary)
+                } header: { Text("Nutrition facts") } footer: {
+                    if let n = item.nutrition, !n.source.isEmpty {
+                        Text(n.source == "label" ? "Per serving, from the package." : "Per serving, from \(n.source). Tap Edit to correct it.")
+                    } else {
+                        Text("Tap Edit to type in the panel from the package, or scan the barcode to pull it in.")
+                    }
+                }
+            }
+
             if let entry = library.entry(for: item.shelfLifeKey) {
                 Section("Shelf life") {
                     Text(entry.name).font(.subheadline.weight(.medium))
@@ -107,6 +131,15 @@ struct ItemDetailView: View {
                 dismiss()
             }
         }
+    }
+
+    private var feedsText: String {
+        let kcal = item.totalCalories
+        guard kcal > 0 else { return "Nothing on hand to count." }
+        let perPerson = households.first.map { h in h.peopleCount > 0 ? h.caloriesPerDay / Double(h.peopleCount) : 2000 } ?? 2000
+        let one = ReadinessCalculator.formatDays(kcal / max(1, perPerson))
+        let all = ReadinessCalculator.formatDays(kcal / max(1, householdCaloriesPerDay))
+        return "About \(one) of food for one person, or \(all) for the whole household."
     }
 
     private var quantityText: String {

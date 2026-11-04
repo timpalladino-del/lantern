@@ -108,6 +108,11 @@ struct MedicationCardView: View {
                 for l in ls.dropFirst() { s += "   " + l + "\n" }
             }
             if !p.allergies.isEmpty { s += "ALLERGIES: \(p.allergies)\n" }
+            if p.bloodType != .unknown { s += "Blood type: \(p.bloodType.title)\n" }
+            if !p.conditions.isEmpty { s += "Conditions: \(p.conditions)\n" }
+            if p.mobility != .independent { s += "Mobility: \(p.mobility.title.lowercased())\n" }
+            if !p.powerDevices.isEmpty { s += "Runs on power: \(p.powerDevices.map(\.title).joined(separator: ", "))\n" }
+            if !p.emergencyContactName.isEmpty { s += "Contact: \(p.emergencyContactName) \(p.emergencyContactPhone)\n" }
         }
         s += "\nFrom Lantern, \(Date().formatted(date: .abbreviated, time: .omitted))."
         return s

@@ -71,26 +71,15 @@ struct SuppliesListView: View {
             .navigationTitle("Supplies")
             .searchable(text: $searchText, prompt: "Search supplies")
             .environment(\.editMode, $editMode)
+            .safeAreaInset(edge: .bottom) {
+                if editMode.isEditing { actionBar }
+            }
             .toolbar {
                 if editMode.isEditing {
                     ToolbarItem(placement: .topBarLeading) {
                         Button(selection.count == filtered.count ? "Deselect all" : "Select all") {
                             if selection.count == filtered.count { selection.removeAll() } else { selection = Set(filtered.map(\.persistentModelID)) }
                         }
-                    }
-                    ToolbarItemGroup(placement: .bottomBar) {
-                        Menu {
-                            ForEach(locations) { loc in
-                                Button { move(selected(), to: loc) } label: { Label(loc.name, systemImage: loc.symbol) }
-                            }
-                            Button { move(selected(), to: nil) } label: { Label("No location", systemImage: "questionmark.square.dashed") }
-                        } label: { Label("Move to…", systemImage: "folder") }
-                        .disabled(selection.isEmpty)
-                        Spacer()
-                        Text(selection.isEmpty ? "Select items" : "\(selection.count) selected").font(.footnote).foregroundStyle(.secondary)
-                        Spacer()
-                        Button(role: .destructive) { confirmDelete = true } label: { Label("Delete", systemImage: "trash") }
-                            .disabled(selection.isEmpty)
                     }
                     ToolbarItem(placement: .topBarTrailing) {
                         Button("Done") { withAnimation { editMode = .inactive; selection.removeAll() } }.fontWeight(.semibold)
@@ -180,6 +169,59 @@ struct SuppliesListView: View {
                 ForEach(filtered) { item in row(item) }
             }
         }
+    }
+
+    /// Sits above the tab bar while selecting. Everything a selection can become, in one row.
+    private var actionBar: some View {
+        VStack(spacing: 6) {
+            Text(selection.isEmpty ? "Tap items to select them" : "\(selection.count) selected")
+                .font(.caption).foregroundStyle(.secondary)
+            HStack(spacing: 8) {
+                Menu {
+                    ForEach(SupplyCategory.allCases) { c in
+                        Button { setCategory(selected(), to: c) } label: { Label(c.title, systemImage: c.symbol) }
+                    }
+                } label: { Label("Category", systemImage: "tag") }
+                Menu {
+                    ForEach(locations) { loc in
+                        Button { move(selected(), to: loc) } label: { Label(loc.name, systemImage: loc.symbol) }
+                    }
+                    Button { move(selected(), to: nil) } label: { Label("No location", systemImage: "questionmark.square.dashed") }
+                } label: { Label("Move", systemImage: "folder") }
+                if !kits.isEmpty {
+                    Menu {
+                        ForEach(kits, id: \.uuid) { kit in
+                            Button { pack(selected(), into: kit) } label: { Label(kit.name, systemImage: kit.kind.symbol) }
+                        }
+                        Button { pack(selected(), into: nil) } label: { Label("Not in a kit", systemImage: "minus.circle") }
+                    } label: { Label("Kit", systemImage: "backpack") }
+                }
+                Spacer(minLength: 0)
+                Button(role: .destructive) { confirmDelete = true } label: { Label("Delete", systemImage: "trash") }
+            }
+            .labelStyle(.titleAndIcon)
+            .font(.subheadline.weight(.medium))
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .disabled(selection.isEmpty)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity)
+        .background(.bar)
+        .overlay(alignment: .top) { Divider() }
+    }
+
+    private func setCategory(_ list: [SupplyItem], to category: SupplyCategory) {
+        for item in list { item.category = category; item.touch() }
+        try? context.save()
+        withAnimation { editMode = .inactive; selection.removeAll() }
+    }
+
+    private func pack(_ list: [SupplyItem], into kit: Kit?) {
+        for item in list { item.kit = kit; item.touch() }
+        try? context.save()
+        withAnimation { editMode = .inactive; selection.removeAll() }
     }
 
     private func selected() -> [SupplyItem] { items.filter { selection.contains($0.persistentModelID) } }

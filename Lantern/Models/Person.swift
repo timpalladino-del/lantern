@@ -50,6 +50,33 @@ final class Person {
     var sortOrder: Int = 0
     var createdAt: Date = Date()
 
+    // Contact
+    var phone: String = ""
+    var emergencyContactName: String = ""
+    var emergencyContactPhone: String = ""
+
+    // Health beyond medications
+    var bloodTypeRaw: String = ""
+    var conditions: String = ""
+    var mobilityRaw: String = Mobility.independent.rawValue
+    /// Keys from `PowerDevice.all`. Anything here goes on the outage checklist.
+    var powerDeviceKeys: [String] = []
+
+    // Wellness: what keeps this person steady when routine breaks.
+    var wellnessNotes: String = ""
+    var comfortNeeds: String = ""
+
+    // What they bring
+    /// Keys from `SkillLibrary.all`.
+    var skillKeys: [String] = []
+    var languages: String = ""
+    var canDrive: Bool = false
+    /// Their job when something happens: "grabs the dog", "shuts off the gas", "calls Aunt Pat".
+    var emergencyRole: String = ""
+
+    /// Anything else, as label/value pairs. JSON so the schema never needs another column for it.
+    var customFieldsJSON: String = ""
+
     @Relationship(deleteRule: .cascade, inverse: \Medication.person)
     var medications: [Medication] = []
 
@@ -75,6 +102,35 @@ final class Person {
         get { ActivityLevel(rawValue: activityRaw) ?? .light }
         set { activityRaw = newValue.rawValue }
     }
+
+    var bloodType: BloodType {
+        get { BloodType(rawValue: bloodTypeRaw) ?? .unknown }
+        set { bloodTypeRaw = newValue.rawValue }
+    }
+
+    var mobility: Mobility {
+        get { Mobility(rawValue: mobilityRaw) ?? .independent }
+        set { mobilityRaw = newValue.rawValue }
+    }
+
+    var customFields: [CustomField] {
+        get { CustomField.decode(customFieldsJSON) }
+        set { customFieldsJSON = CustomField.encode(newValue) }
+    }
+
+    var skills: [Skill] { skillKeys.compactMap { SkillLibrary.skill($0) } }
+    var powerDevices: [PowerDevice] { powerDeviceKeys.compactMap { PowerDevice.device($0) } }
+    var dependsOnPower: Bool { !powerDeviceKeys.isEmpty }
+
+    /// Two letters for the avatar circle.
+    var initials: String {
+        let parts = name.split(separator: " ").prefix(2)
+        let letters = parts.compactMap { $0.first }.map { String($0).uppercased() }
+        return letters.isEmpty ? "?" : letters.joined()
+    }
+
+    /// True when the profile has nothing beyond a name. The home screen nudges for details.
+    var profileIsBare: Bool { age == nil && medications.isEmpty && skillKeys.isEmpty && conditions.isEmpty && phone.isEmpty }
 
     var isInfant: Bool { (age ?? 30) < 1 }
     var isChild: Bool { (age ?? 30) < 18 }

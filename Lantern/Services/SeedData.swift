@@ -79,6 +79,18 @@ extension SeedData {
         let maria = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
         maria.allergies = "Penicillin"
         let leo = Person(name: "Leo", age: 9, sex: .male, activity: .active)
+        tim.skillKeys = ["generator", "utilities", "mechanic", "navigation"]
+        tim.phone = "(305) 555-0101"; tim.bloodType = .oPos; tim.canDrive = true
+        tim.emergencyRole = "Shuts off the gas, starts the generator"
+        maria.skillKeys = ["first_aid", "cpr", "nurse_doctor", "cooking"]
+        maria.phone = "(305) 555-0102"; maria.bloodType = .aNeg; maria.canDrive = true; maria.conditions = "Type 2 diabetes"
+        maria.powerDeviceKeys = ["insulin"]
+        maria.emergencyRole = "Grabs the medication bag and the documents box"
+        maria.emergencyContactName = "Her sister Ana"; maria.emergencyContactPhone = "(305) 555-0160"
+        maria.customFields = [CustomField(label: "Glasses", value: "-2.5 both eyes, spare pair in the go-bag")]
+        leo.conditions = "Asthma"; leo.wellnessNotes = "Gets anxious in storms. Headphones and the blue blanket help."
+        leo.emergencyRole = "Gets Biscuit into the carrier"
+        leo.skillKeys = ["swimming"]
         for (i, p) in [tim, maria, leo].enumerated() { p.sortOrder = i; p.household = household; context.insert(p) }
 
         let metformin = Medication(name: "Metformin", dose: "500 mg", dosesPerDay: 2, unitsPerDose: 1, unitsOnHand: 48)

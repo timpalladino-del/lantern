@@ -13,6 +13,7 @@ final class ProductMemory {
     var servingsPerUnit: Double?
     var caloriesPerUnit: Double?
     var litersPerUnit: Double?
+    var nutritionJSON: String = ""
     var lastUsedAt: Date = Date()
     var useCount: Int = 0
 
@@ -31,6 +32,11 @@ final class ProductMemory {
         set { categoryRaw = newValue.rawValue }
     }
 
+    var nutrition: NutritionFacts? {
+        guard let d = nutritionJSON.data(using: .utf8), let n = try? JSONDecoder().decode(NutritionFacts.self, from: d), !n.isEmpty else { return nil }
+        return n
+    }
+
     func remember(from item: SupplyItem) {
         name = item.name
         brand = item.brand
@@ -38,6 +44,7 @@ final class ProductMemory {
         unit = item.unit
         shelfLifeKey = item.shelfLifeKey
         servingsPerUnit = item.servingsPerUnit
+        nutritionJSON = item.nutrition.flatMap { try? JSONEncoder().encode($0) }.map { String(decoding: $0, as: UTF8.self) } ?? ""
         caloriesPerUnit = item.caloriesPerUnit
         litersPerUnit = item.litersPerUnit
         lastUsedAt = Date()

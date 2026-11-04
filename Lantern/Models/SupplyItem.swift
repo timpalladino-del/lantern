@@ -31,6 +31,18 @@ final class SupplyItem {
     var caloriesPerUnit: Double?
     var litersPerUnit: Double?
 
+    /// Nutrition facts per serving, as printed on the label or from the barcode lookup.
+    var servingSizeText: String = ""
+    var caloriesPerServing: Double?
+    var proteinGPerServing: Double?
+    var carbsGPerServing: Double?
+    var fatGPerServing: Double?
+    var fiberGPerServing: Double?
+    var sugarGPerServing: Double?
+    var sodiumMgPerServing: Double?
+    /// "Open Food Facts", "label" or "" when nothing was entered.
+    var nutritionSource: String = ""
+
     var notes: String = ""
     var lastCheckedAt: Date?
     var snoozedUntil: Date?
@@ -117,6 +129,32 @@ final class SupplyItem {
 
     var caloriesAreAssumed: Bool { category == .food && caloriesPerUnit == nil }
 
+    var nutrition: NutritionFacts? {
+        get {
+            let n = NutritionFacts(servingSize: servingSizeText, calories: caloriesPerServing, proteinG: proteinGPerServing,
+                                   carbsG: carbsGPerServing, fatG: fatGPerServing, fiberG: fiberGPerServing,
+                                   sugarG: sugarGPerServing, sodiumMg: sodiumMgPerServing, source: nutritionSource)
+            return n.isEmpty ? nil : n
+        }
+        set {
+            servingSizeText = newValue?.servingSize ?? ""
+            caloriesPerServing = newValue?.calories
+            proteinGPerServing = newValue?.proteinG
+            carbsGPerServing = newValue?.carbsG
+            fatGPerServing = newValue?.fatG
+            fiberGPerServing = newValue?.fiberG
+            sugarGPerServing = newValue?.sugarG
+            sodiumMgPerServing = newValue?.sodiumMg
+            nutritionSource = newValue?.source ?? ""
+        }
+    }
+
+    /// Protein on hand across the whole quantity, when the label gave a figure.
+    var totalProteinG: Double? {
+        guard category == .food, let p = proteinGPerServing else { return nil }
+        return max(0, quantity) * (servingsPerUnit ?? 1) * p
+    }
+
     /// Pet food on the shelf: anything in the pet category that reads like food.
     var isPetFood: Bool {
         guard category == .pet else { return false }
@@ -153,6 +191,45 @@ final class SupplyItem {
     }
 
     func touch() { updatedAt = Date() }
+}
+
+/// The panel on the back of the package, per serving. Everything optional; most people fill in calories only.
+struct NutritionFacts: Codable, Equatable {
+    var servingSize: String = ""
+    var calories: Double?
+    var proteinG: Double?
+    var carbsG: Double?
+    var fatG: Double?
+    var fiberG: Double?
+    var sugarG: Double?
+    var sodiumMg: Double?
+    var source: String = ""
+
+    var isEmpty: Bool {
+        servingSize.isEmpty && calories == nil && proteinG == nil && carbsG == nil && fatG == nil && fiberG == nil && sugarG == nil && sodiumMg == nil
+    }
+
+    /// Calories for a whole unit when the serving count is known.
+    func caloriesPerUnit(servings: Double?) -> Double? {
+        guard let c = calories, let s = servings, s > 0 else { return nil }
+        return (c * s).rounded()
+    }
+
+    /// Rows for a label-style panel: (name, value). Only what is known.
+    var rows: [(String, String)] {
+        var out: [(String, String)] = []
+        if !servingSize.isEmpty { out.append(("Serving size", servingSize)) }
+        if let c = calories { out.append(("Calories", "\(Int(c.rounded()))")) }
+        if let v = fatG { out.append(("Total fat", NutritionFacts.grams(v))) }
+        if let v = sodiumMg { out.append(("Sodium", "\(Int(v.rounded())) mg")) }
+        if let v = carbsG { out.append(("Total carbohydrate", NutritionFacts.grams(v))) }
+        if let v = fiberG { out.append(("Dietary fiber", NutritionFacts.grams(v))) }
+        if let v = sugarG { out.append(("Sugars", NutritionFacts.grams(v))) }
+        if let v = proteinG { out.append(("Protein", NutritionFacts.grams(v))) }
+        return out
+    }
+
+    static func grams(_ v: Double) -> String { v == v.rounded() ? "\(Int(v)) g" : String(format: "%.1f g", v) }
 }
 
 /// What the UI says about an item's date. Language stays calm for food; firm for medicine.

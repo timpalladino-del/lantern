@@ -534,3 +534,37 @@ all of it is free on every tier. No pre-written message templates (decided again
 
 Rules observed: HIG-compliant layouts, animated SF Symbols, no amber buttons, every action has an accessibility
 label, every tool works offline, nothing here needs a purchase.
+
+## 20. Dashboard, fuller profiles, nutrition facts (added November 4, 2026)
+
+**Home as a dashboard**
+- A household strip at the top: a circle per person (initials; a bolt badge when they depend on power, a pill
+  badge when they have medications, an ember dot when the profile is only a name) and per pet, plus Add. Tapping
+  a circle opens that profile. A line underneath reads "3 people · 1 pet · covering 14 days" and opens Household.
+- "Where you stand": Food, Water, Medication (shortest supply) and Pet food or Equipment tiles, then three chips:
+  items to use or check, shopping list size, gaps.
+- "Close the gaps": the first three readiness gaps with Add to shopping list. "Who can do what": power-dependent
+  people with the matching hint, anyone who needs help to leave, each person's job, every skill with the names
+  that have it, and one nudge when nobody is marked for first aid, CPR, utility shutoff or the generator.
+- Use this week and Equipment this week stay as they were.
+
+**Fuller person profile**
+- Contact (phone, who to call about them). Health (blood type, conditions, mobility). Runs on power (CPAP,
+  oxygen, insulin in the fridge, nebulizer, power wheelchair, home dialysis, pumps, hearing aids, lift, phone),
+  each with a short hint. Skills from a 30-entry list in five groups (medical, practical, outdoors,
+  communication, care), languages, can drive. Wellness (what to know, what helps). In an emergency (their job
+  and anything else). More: "Add a field" for label/value pairs the app did not think to ask for.
+- All of it travels in the profile link (card version 2, old cards still decode) and the health lines go on the
+  medication card.
+
+**Nutrition facts**
+- Food items carry the label panel per serving: serving size, calories, fat, sodium, carbohydrate, fiber,
+  sugars, protein, with the source (label or Open Food Facts). The barcode lookup now pulls the per-serving
+  figures, scaling from per-100 g when the serving size is known. The editor has a Nutrition facts toggle and a
+  one-tap "use N calories per unit for readiness"; the detail screen shows the panel, calories and protein on
+  hand, and how long the item feeds one person or the house.
+- Product memory remembers the panel so the second scan is one tap.
+
+**Supplies selection**
+- The action bar while selecting now sits above the tab bar (it was a toolbar the tab bar hid): Category, Move,
+  Kit (when kits exist) and Delete. Every item has a category; the bar changes it in bulk.

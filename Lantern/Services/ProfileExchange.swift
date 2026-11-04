@@ -41,6 +41,21 @@ struct ProfileCard: Codable, Equatable {
     var createdAt: Date = Date()
     /// The household this profile was requested by. Empty for profiles shared without an invitation.
     var householdToken: String = ""
+    // Version 2 fields. Optional so a card from an older build still decodes.
+    var phone: String?
+    var emergencyContactName: String?
+    var emergencyContactPhone: String?
+    var bloodType: String?
+    var conditions: String?
+    var mobility: String?
+    var powerDeviceKeys: [String]?
+    var wellnessNotes: String?
+    var comfortNeeds: String?
+    var skillKeys: [String]?
+    var languages: String?
+    var canDrive: Bool?
+    var emergencyRole: String?
+    var customFieldsJSON: String?
 
     init(person p: Person, sentBy: String = "", householdToken: String = "") {
         name = p.name
@@ -62,6 +77,21 @@ struct ProfileCard: Codable, Equatable {
         self.sentBy = sentBy
         self.createdAt = Date()
         self.householdToken = householdToken
+        version = 2
+        phone = p.phone
+        emergencyContactName = p.emergencyContactName
+        emergencyContactPhone = p.emergencyContactPhone
+        bloodType = p.bloodTypeRaw
+        conditions = p.conditions
+        mobility = p.mobilityRaw
+        powerDeviceKeys = p.powerDeviceKeys
+        wellnessNotes = p.wellnessNotes
+        comfortNeeds = p.comfortNeeds
+        skillKeys = p.skillKeys
+        languages = p.languages
+        canDrive = p.canDrive
+        emergencyRole = p.emergencyRole
+        customFieldsJSON = p.customFieldsJSON
     }
 
     /// Writes the card onto a person. Medications are replaced, not merged: the card is the newer truth.
@@ -75,6 +105,20 @@ struct ProfileCard: Codable, Equatable {
         p.allergies = allergies
         p.dietaryNotes = dietaryNotes
         p.notes = notes
+        if let v = phone { p.phone = v }
+        if let v = emergencyContactName { p.emergencyContactName = v }
+        if let v = emergencyContactPhone { p.emergencyContactPhone = v }
+        if let v = bloodType { p.bloodTypeRaw = v }
+        if let v = conditions { p.conditions = v }
+        if let v = mobility { p.mobilityRaw = v }
+        if let v = powerDeviceKeys { p.powerDeviceKeys = v }
+        if let v = wellnessNotes { p.wellnessNotes = v }
+        if let v = comfortNeeds { p.comfortNeeds = v }
+        if let v = skillKeys { p.skillKeys = v }
+        if let v = languages { p.languages = v }
+        if let v = canDrive { p.canDrive = v }
+        if let v = emergencyRole { p.emergencyRole = v }
+        if let v = customFieldsJSON { p.customFieldsJSON = v }
         for old in p.medications { context.delete(old) }
         for c in medications {
             let m = Medication(name: c.name, dose: c.dose, dosesPerDay: c.dosesPerDay, unitsPerDose: c.unitsPerDose, unitsOnHand: c.unitsOnHand, isCritical: c.isCritical)
@@ -100,6 +144,8 @@ struct ProfileCard: Codable, Equatable {
         if let a = age { parts.append("\(a) years old") }
         parts.append(medications.isEmpty ? "no medications" : (medications.count == 1 ? "1 medication" : "\(medications.count) medications"))
         if !allergies.isEmpty { parts.append("allergies: \(allergies)") }
+        if let k = skillKeys, !k.isEmpty { parts.append(k.count == 1 ? "1 skill" : "\(k.count) skills") }
+        if let d = powerDeviceKeys, !d.isEmpty { parts.append("needs power") }
         return parts.joined(separator: " · ")
     }
 }

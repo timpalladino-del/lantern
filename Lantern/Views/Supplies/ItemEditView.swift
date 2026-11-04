@@ -16,6 +16,7 @@ struct ItemDraft {
     var caloriesPerUnit: Double?
     var litersPerUnit: Double?
     var location: StorageLocation?
+    var nutrition: NutritionFacts?
 }
 
 struct ItemEditView: View {
@@ -50,6 +51,8 @@ struct ItemEditView: View {
     @State private var servingsPerUnit: Double?
     @State private var caloriesPerUnit: Double?
     @State private var litersPerUnit: Double?
+    @State private var nutrition: NutritionFacts
+    @State private var showNutrition: Bool
     @State private var notes: String
     @State private var photoData: Data?
     @State private var showShelfLifePicker = false
@@ -81,6 +84,9 @@ struct ItemEditView: View {
         _servingsPerUnit = State(initialValue: item?.servingsPerUnit ?? draft.servingsPerUnit)
         _caloriesPerUnit = State(initialValue: item?.caloriesPerUnit ?? draft.caloriesPerUnit)
         _litersPerUnit = State(initialValue: item?.litersPerUnit ?? draft.litersPerUnit)
+        let facts = item?.nutrition ?? draft.nutrition
+        _nutrition = State(initialValue: facts ?? NutritionFacts())
+        _showNutrition = State(initialValue: facts != nil)
         _notes = State(initialValue: item?.notes ?? "")
         _photoData = State(initialValue: item?.photoData)
     }
@@ -168,6 +174,31 @@ struct ItemEditView: View {
                             TextField("3.785", value: $litersPerUnit, format: .number)
                                 .keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 90)
                         }
+                    }
+                }
+
+                if category == .food {
+                    Section {
+                        Toggle("Nutrition facts", isOn: $showNutrition.animation())
+                        if showNutrition {
+                            LabeledContent("Serving size") {
+                                TextField("1 cup (240 g)", text: $nutrition.servingSize).multilineTextAlignment(.trailing)
+                            }
+                            NutritionField(label: "Calories", unit: "", value: $nutrition.calories)
+                            NutritionField(label: "Total fat", unit: "g", value: $nutrition.fatG)
+                            NutritionField(label: "Sodium", unit: "mg", value: $nutrition.sodiumMg)
+                            NutritionField(label: "Total carbohydrate", unit: "g", value: $nutrition.carbsG)
+                            NutritionField(label: "Dietary fiber", unit: "g", value: $nutrition.fiberG)
+                            NutritionField(label: "Sugars", unit: "g", value: $nutrition.sugarG)
+                            NutritionField(label: "Protein", unit: "g", value: $nutrition.proteinG)
+                            if let perUnit = nutrition.caloriesPerUnit(servings: servingsPerUnit), caloriesPerUnit != perUnit {
+                                Button("Use \(Int(perUnit)) calories per \(unit) for readiness") { caloriesPerUnit = perUnit }
+                            }
+                        }
+                    } footer: {
+                        Text(nutrition.source.isEmpty
+                             ? "Per serving, from the panel on the package. Calories × servings gives the readiness figure."
+                             : "Per serving, from \(nutrition.source). Check it against the package; contributors make mistakes.")
                     }
                 }
 
@@ -303,6 +334,14 @@ struct ItemEditView: View {
         item.shelfLifeKey = shelfLifeKey
         item.servingsPerUnit = category == .food ? servingsPerUnit : nil
         item.caloriesPerUnit = (category == .food || category == .pet) ? caloriesPerUnit : nil
+        if category == .food, showNutrition, !nutrition.isEmpty {
+            var facts = nutrition
+            if facts.source.isEmpty { facts.source = "label" }
+            item.nutrition = facts
+            if item.caloriesPerUnit == nil { item.caloriesPerUnit = facts.caloriesPerUnit(servings: servingsPerUnit) }
+        } else {
+            item.nutrition = nil
+        }
         item.litersPerUnit = category == .water ? (litersPerUnit ?? CommonUnit(rawValue: unit)?.litersPerUnit) : nil
         item.notes = notes
         item.photoData = photoData
@@ -323,5 +362,22 @@ struct ItemEditView: View {
         try? context.save()
         onSaved?(item)
         dismiss()
+    }
+}
+
+/// One line of the nutrition panel: label on the left, number and unit on the right.
+struct NutritionField: View {
+    let label: String
+    let unit: String
+    @Binding var value: Double?
+
+    var body: some View {
+        HStack {
+            Text(label)
+            Spacer()
+            TextField("–", value: $value, format: .number)
+                .keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
+            if !unit.isEmpty { Text(unit).foregroundStyle(.secondary).frame(width: 28, alignment: .leading) }
+        }
     }
 }

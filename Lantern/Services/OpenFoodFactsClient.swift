@@ -11,6 +11,8 @@ struct ProductInfo: Equatable {
     let caloriesPerPackage: Double?
     /// Servings in the package when the label's serving size and the package size are both known.
     let servingsPerPackage: Double?
+    /// The label panel, per serving, when Open Food Facts has it.
+    let nutrition: NutritionFacts?
 }
 
 final class OpenFoodFactsClient {
@@ -32,10 +34,32 @@ final class OpenFoodFactsClient {
             let quantity: String?
             let product_quantity: LenientNumber?
             let serving_quantity: LenientNumber?
+            let serving_size: String?
             let nutriments: Nutriments?
             struct Nutriments: Decodable {
                 let energyKcal100g: LenientNumber?
-                enum CodingKeys: String, CodingKey { case energyKcal100g = "energy-kcal_100g" }
+                let energyKcalServing: LenientNumber?
+                let proteins100g: LenientNumber?
+                let proteinsServing: LenientNumber?
+                let carbohydrates100g: LenientNumber?
+                let carbohydratesServing: LenientNumber?
+                let fat100g: LenientNumber?
+                let fatServing: LenientNumber?
+                let fiber100g: LenientNumber?
+                let fiberServing: LenientNumber?
+                let sugars100g: LenientNumber?
+                let sugarsServing: LenientNumber?
+                let sodium100g: LenientNumber?
+                let sodiumServing: LenientNumber?
+                enum CodingKeys: String, CodingKey {
+                    case energyKcal100g = "energy-kcal_100g", energyKcalServing = "energy-kcal_serving"
+                    case proteins100g = "proteins_100g", proteinsServing = "proteins_serving"
+                    case carbohydrates100g = "carbohydrates_100g", carbohydratesServing = "carbohydrates_serving"
+                    case fat100g = "fat_100g", fatServing = "fat_serving"
+                    case fiber100g = "fiber_100g", fiberServing = "fiber_serving"
+                    case sugars100g = "sugars_100g", sugarsServing = "sugars_serving"
+                    case sodium100g = "sodium_100g", sodiumServing = "sodium_serving"
+                }
             }
         }
         /// Open Food Facts sends numbers as numbers or as strings depending on who entered them.
@@ -56,7 +80,7 @@ final class OpenFoodFactsClient {
         let clean = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty, clean.allSatisfy(\.isNumber) else { return nil }
         var comps = URLComponents(string: "https://world.openfoodfacts.org/api/v2/product/\(clean).json")!
-        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity,product_quantity,serving_quantity,nutriments")]
+        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity,product_quantity,serving_quantity,serving_size,nutriments")]
         var req = URLRequest(url: comps.url!)
         req.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         req.timeoutInterval = 8
@@ -74,6 +98,26 @@ final class OpenFoodFactsClient {
         if let grams = p.product_quantity?.value, let serving = p.serving_quantity?.value, serving > 0, grams > 0 {
             servings = (grams / serving * 10).rounded() / 10
         }
-        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal, servingsPerPackage: servings)
+        let nutrition = Self.nutrition(from: p.nutriments, servingGrams: p.serving_quantity?.value, servingSize: p.serving_size ?? "")
+        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal, servingsPerPackage: servings, nutrition: nutrition)
+    }
+
+    /// Per-serving figures straight from the record, or scaled from per-100 g when the serving size is known.
+    private static func nutrition(from n: Response.Product.Nutriments?, servingGrams: Double?, servingSize: String) -> NutritionFacts? {
+        guard let n else { return nil }
+        func per(_ serving: Response.LenientNumber?, _ per100: Response.LenientNumber?) -> Double? {
+            if let v = serving?.value { return v }
+            if let v = per100?.value, let g = servingGrams, g > 0 { return (v * g / 100 * 10).rounded() / 10 }
+            return nil
+        }
+        var facts = NutritionFacts(servingSize: servingSize, source: "Open Food Facts")
+        facts.calories = per(n.energyKcalServing, n.energyKcal100g).map { $0.rounded() }
+        facts.proteinG = per(n.proteinsServing, n.proteins100g)
+        facts.carbsG = per(n.carbohydratesServing, n.carbohydrates100g)
+        facts.fatG = per(n.fatServing, n.fat100g)
+        facts.fiberG = per(n.fiberServing, n.fiber100g)
+        facts.sugarG = per(n.sugarsServing, n.sugars100g)
+        facts.sodiumMg = per(n.sodiumServing, n.sodium100g).map { ($0 * 1000).rounded() }   // OFF stores sodium in grams
+        return facts.isEmpty ? nil : facts
     }
 }

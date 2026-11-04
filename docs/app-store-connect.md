@@ -70,6 +70,21 @@ page on the site.
 `xcodebuild -scheme Lantern -configuration Release archive` then upload with Xcode Organizer or Transporter. Both
 need the Apple ID signed in on the Mac; nothing in the repo blocks it once the App Store Connect record exists.
 
+## State on November 4, 2026 (done through the API)
+
+- App record 6830418364 "Lantern: Household Readiness", bundle ID record RLY753X48D with Associated Domains.
+- Subscription group 22542888 "Lantern Plan": family6 6830418767, family10 6830418569, group50 6830418741.
+  All three READY_TO_SUBMIT: en-US localizations, Family Sharing, prices in 175 territories from the US tier,
+  7-day free trial in every territory, review screenshot (the paywall).
+- Version 1.0 in PREPARE_FOR_SUBMISSION with build 1 attached, export compliance set, description, keywords,
+  promo text, support and marketing URLs, privacy URL, subtitle, categories (Lifestyle / Utilities), age rating
+  (medical info infrequent/mild, everything else none), copyright, manual release, nine 6.9-inch screenshots.
+- TestFlight: build 1 processed, "what to test" set, internal group "Kismet internal" created.
+- Scripts that did it live on the Mac in ~/.appstoreconnect (asc.py is the client; the rest are one-shot passes).
+
+Left for a person: add yourself as an internal tester in the TestFlight tab, accept the updated Program License
+Agreement, App Review contact phone number, then Submit for Review.
+
 ## Checklist
 
 - [ ] App record created with the bundle ID above

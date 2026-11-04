@@ -37,7 +37,16 @@ struct EquipmentDetailView: View {
                 }
                 if let loc = equipment.location { LabeledContent("Location", value: loc.name) }
                 if !equipment.serial.isEmpty { LabeledContent("Serial", value: equipment.serial) }
-                if !equipment.fuelType.isEmpty { LabeledContent("Fuel", value: equipment.fuelType) }
+                ForEach(EquipmentProfile.profile(for: equipment.kindRaw).questions) { q in
+                    if let v = equipment.details[q.key], !v.isEmpty {
+                        if case .toggle = q.kind {
+                            if v == "yes" { LabeledContent(q.label, value: "Yes") }
+                        } else {
+                            LabeledContent(q.label, value: v)
+                        }
+                    }
+                }
+                if !equipment.fuelType.isEmpty, equipment.details["fuel"] == nil { LabeledContent("Fuel", value: equipment.fuelType) }
                 if !equipment.batteryType.isEmpty { LabeledContent("Batteries", value: "\(equipment.batteryCount) × \(equipment.batteryType)") }
                 if let replace = equipment.replaceBy(lifetimeYears: library.kind(equipment.kindRaw)?.lifetimeYears) {
                     LabeledContent("Replace by", value: replace.formatted(date: .abbreviated, time: .omitted))

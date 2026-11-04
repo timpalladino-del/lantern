@@ -25,6 +25,7 @@ struct EquipmentEditView: View {
     @State private var notes: String
     @State private var photoData: Data?
     @State private var addDefaultTasks = true
+    @State private var details: [String: String]
 
     init(equipment: Equipment? = nil) {
         existing = equipment
@@ -44,15 +45,21 @@ struct EquipmentEditView: View {
         _batteryCount = State(initialValue: equipment?.batteryCount ?? 0)
         _notes = State(initialValue: equipment?.notes ?? "")
         _photoData = State(initialValue: equipment?.photoData)
+        _details = State(initialValue: equipment?.details ?? [:])
     }
 
     private var kindInfo: EquipmentKind? { library.kind(kind) }
+    private var profile: EquipmentProfile { EquipmentProfile.profile(for: kind) }
+
+    private func binding(_ q: EquipmentQuestion) -> Binding<String> {
+        Binding(get: { details[q.key] ?? "" }, set: { details[q.key] = $0 })
+    }
 
     var body: some View {
         NavigationStack {
             Form {
                 Section {
-                    TextField("Name (e.g. Garage generator)", text: $name)
+                    TextField(profile.namePlaceholder, text: $name)
                     Picker("Kind", selection: $kind) {
                         ForEach(library.kinds) { k in Label(k.name, systemImage: k.symbol).tag(k.kind) }
                     }
@@ -65,23 +72,57 @@ struct EquipmentEditView: View {
                     }
                 }
 
-                Section("Details") {
-                    TextField("Brand", text: $brand)
-                    TextField("Model", text: $model)
-                    TextField("Serial number", text: $serial)
-                    TextField("Fuel (gas, propane, none)", text: $fuelType)
-                    TextField("Battery type (AA, 9V, CR123)", text: $batteryType)
-                    Stepper("Batteries needed: \(batteryCount)", value: $batteryCount, in: 0...48)
+                if !profile.questions.isEmpty || profile.hint != nil {
+                    Section {
+                        if let hint = profile.hint {
+                            Text(hint).font(.footnote).foregroundStyle(.secondary)
+                        }
+                        ForEach(profile.questions) { q in
+                            switch q.kind {
+                            case .text:
+                                LabeledContent(q.label) { TextField(q.placeholder, text: binding(q)).multilineTextAlignment(.trailing) }
+                            case .number:
+                                LabeledContent(q.label) { TextField(q.placeholder, text: binding(q)).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(maxWidth: 120) }
+                            case .toggle:
+                                Toggle(q.label, isOn: Binding(get: { details[q.key] == "yes" }, set: { details[q.key] = $0 ? "yes" : "no" }))
+                            case .choice(let options):
+                                Picker(q.label, selection: binding(q)) {
+                                    Text("Not set").tag("")
+                                    ForEach(options, id: \.self) { Text($0).tag($0) }
+                                }
+                            }
+                        }
+                    } header: { Text("About this \(kindInfo?.name.lowercased() ?? "equipment")") }
                 }
 
-                Section("Dates") {
-                    Toggle("Purchase date", isOn: $hasPurchaseDate)
-                    if hasPurchaseDate { DatePicker("Bought", selection: $purchaseDate, displayedComponents: .date) }
-                    Toggle("Manufacture date", isOn: $hasManufactureDate)
-                    if hasManufactureDate { DatePicker("Made", selection: $manufactureDate, displayedComponents: .date) }
-                    if let years = kindInfo?.lifetimeYears {
-                        Text("\(kindInfo?.name ?? "This") should be replaced \(years) years after the manufacture date. It is usually printed on the back.")
-                            .font(.footnote).foregroundStyle(.secondary)
+                let f = profile.fields
+                if !f.isDisjoint(with: [.brand, .model, .serial, .batteries]) || kind == "other" {
+                    Section("Details") {
+                        if f.contains(.brand) { TextField("Brand", text: $brand) }
+                        if f.contains(.model) { TextField("Model", text: $model) }
+                        if f.contains(.serial) { TextField("Serial number", text: $serial) }
+                        if kind == "other" { TextField("Fuel (gas, propane, none)", text: $fuelType) }
+                        if f.contains(.batteries) {
+                            TextField("Battery type (AA, 9V, CR123)", text: $batteryType)
+                            Stepper("Batteries needed: \(batteryCount)", value: $batteryCount, in: 0...48)
+                        }
+                    }
+                }
+
+                if f.contains(.purchaseDate) || f.contains(.manufactureDate) {
+                    Section("Dates") {
+                        if f.contains(.purchaseDate) {
+                            Toggle("Purchase date", isOn: $hasPurchaseDate)
+                            if hasPurchaseDate { DatePicker("Bought", selection: $purchaseDate, displayedComponents: .date) }
+                        }
+                        if f.contains(.manufactureDate) {
+                            Toggle("Manufacture date", isOn: $hasManufactureDate)
+                            if hasManufactureDate { DatePicker("Made", selection: $manufactureDate, displayedComponents: .date) }
+                            if let years = kindInfo?.lifetimeYears {
+                                Text("\(kindInfo?.name ?? "This") should be replaced \(years) years after the manufacture date. It is usually printed on the back.")
+                                    .font(.footnote).foregroundStyle(.secondary)
+                            }
+                        }
                     }
                 }
 
@@ -98,7 +139,7 @@ struct EquipmentEditView: View {
                 }
 
                 Section("Notes") {
-                    TextField("Oil type, fuel stabilizer, where the key is…", text: $notes, axis: .vertical).lineLimit(2...6)
+                    TextField(profile.notesPlaceholder, text: $notes, axis: .vertical).lineLimit(2...6)
                     PhotoPickerButton(photoData: $photoData)
                 }
             }
@@ -123,9 +164,10 @@ struct EquipmentEditView: View {
         e.location = location
         e.purchaseDate = hasPurchaseDate ? purchaseDate : nil
         e.manufactureDate = hasManufactureDate ? manufactureDate : nil
-        e.fuelType = fuelType
+        e.fuelType = details["fuel"].map { $0.isEmpty ? fuelType : $0 } ?? fuelType
         e.batteryType = batteryType
         e.batteryCount = batteryCount
+        e.details = details.filter { !$0.value.isEmpty }
         e.notes = notes
         e.photoData = photoData
         if existing == nil {

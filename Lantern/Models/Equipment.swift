@@ -17,6 +17,8 @@ final class Equipment {
     var batteryType: String = ""
     var batteryCount: Int = 0
     var notes: String = ""
+    /// Answers to the kind-specific questions (see EquipmentProfiles), keyed by question key.
+    var details: [String: String] = [:]
 
     @Attribute(.externalStorage)
     var photoData: Data?

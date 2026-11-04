@@ -24,10 +24,10 @@ struct PersonEditView: View {
     @State private var editingMedication: Medication?
     @State private var showNewMedication = false
 
-    init(household: Household, person: Person? = nil) {
+    init(household: Household, person: Person? = nil, initialName: String = "") {
         self.household = household
         self.existing = person
-        _name = State(initialValue: person?.name ?? "")
+        _name = State(initialValue: person?.name ?? initialName)
         _hasAge = State(initialValue: person?.age != nil)
         _age = State(initialValue: person?.age ?? 35)
         _sex = State(initialValue: person?.sex ?? .unspecified)

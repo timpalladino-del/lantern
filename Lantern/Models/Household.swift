@@ -12,6 +12,8 @@ final class Household {
     var targetDays: Int = 14
     var region: String = ""
     var createdAt: Date = Date()
+    /// The person who sends invitations and whose name appears on them. Defaults to the first person.
+    var adminPersonUUID: UUID?
 
     @Relationship(deleteRule: .cascade, inverse: \Person.household)
     var people: [Person] = []
@@ -28,6 +30,11 @@ final class Household {
     }
 
     var hasPeople: Bool { !people.isEmpty }
+
+    var admin: Person? {
+        if let id = adminPersonUUID, let p = people.first(where: { $0.uuid == id }) { return p }
+        return sortedPeople.first
+    }
 
     /// Headcount for water math: real people when listed, otherwise the placeholder counts.
     var peopleCount: Int {

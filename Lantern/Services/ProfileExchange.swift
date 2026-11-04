@@ -108,17 +108,22 @@ enum ProfileExchange {
     static let webPath = "/lantern/p"
 
     enum Route: Equatable {
-        case newProfile(requestedBy: String)
+        case newProfile(requestedBy: String, forName: String)
         case importProfile(ProfileCard)
     }
 
     /// `https://kismetstudio.io/lantern/p/new?from=Tim`: opens the profile builder on the family member's phone.
-    static func requestURL(from requester: String) -> URL {
+    /// Where to get the app. Live once Lantern is on the App Store; until then the site page explains.
+    static let appStoreURL = URL(string: "https://apps.apple.com/app/id6830418364")!
+
+    static func requestURL(from requester: String, forName: String = "") -> URL {
         var c = URLComponents()
         c.scheme = "https"
         c.host = webHost
         c.path = webPath + "/new"
-        c.queryItems = [URLQueryItem(name: "from", value: requester)]
+        var items = [URLQueryItem(name: "from", value: requester)]
+        if !forName.isEmpty { items.append(URLQueryItem(name: "for", value: forName)) }
+        c.queryItems = items
         return c.url!
     }
 
@@ -149,7 +154,7 @@ enum ProfileExchange {
         let q = Dictionary(uniqueKeysWithValues: (comps.queryItems ?? []).map { ($0.name, $0.value ?? "") })
         switch action.hasSuffix("/") ? String(action.dropLast()) : action {
         case "/new":
-            return .newProfile(requestedBy: q["from"] ?? "")
+            return .newProfile(requestedBy: q["from"] ?? "", forName: q["for"] ?? "")
         case "/import":
             guard let d = q["d"], let data = fromBase64url(d) else { return nil }
             let dec = JSONDecoder()
@@ -162,15 +167,18 @@ enum ProfileExchange {
     }
 
     /// What the owner sends. Plain text so it works in Messages, WhatsApp, email, anything.
-    static func requestMessage(from requester: String) -> String {
-        """
-        \(requester) is setting up Lantern for the household and needs your details: age, any medications \
-        (dose and when you take them), and allergies. It all stays on your phones; nothing goes to a server.
+    static func requestMessage(from requester: String, forName: String = "") -> String {
+        let who = forName.isEmpty ? "you" : forName
+        let greeting = forName.isEmpty ? "" : "Hi \(forName), "
+        return """
+        \(greeting)\(requester) is setting up Lantern, our household emergency app, and needs a few details from \(who): age, any medications (dose and when you take them), and allergies.
 
-        Tap this on your iPhone to fill in your own profile:
-        \(requestURL(from: requester).absoluteString)
+        1. Get Lantern on your iPhone: \(appStoreURL.absoluteString)
+        2. Open it once and tap Next through the welcome.
+        3. Come back here and tap your link: \(requestURL(from: requester, forName: forName).absoluteString)
+        4. Fill in your profile and tap "Send to \(requester)".
 
-        Don't have Lantern yet? The link explains where to get it.
+        Everything stays on our phones. Nothing goes to a server.
         """
     }
 

@@ -44,9 +44,13 @@ final class ProfileExchangeTests: XCTestCase {
 
     func testRequestURLRoutesToBuilder() {
         let url = ProfileExchange.requestURL(from: "Tim")
-        XCTAssertEqual(ProfileExchange.route(for: url), .newProfile(requestedBy: "Tim"))
-        XCTAssertEqual(ProfileExchange.route(for: URL(string: "lantern://profile/new?from=Tim")!), .newProfile(requestedBy: "Tim"))
-        XCTAssertEqual(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/p/new/?from=Tim")!), .newProfile(requestedBy: "Tim"))
+        XCTAssertEqual(ProfileExchange.route(for: url), .newProfile(requestedBy: "Tim", forName: ""))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "lantern://profile/new?from=Tim")!), .newProfile(requestedBy: "Tim", forName: ""))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/p/new/?from=Tim&for=Leo")!), .newProfile(requestedBy: "Tim", forName: "Leo"))
+        let msg = ProfileExchange.requestMessage(from: "Tim", forName: "Leo")
+        XCTAssertTrue(msg.contains("1. Get Lantern"))
+        XCTAssertTrue(msg.contains("apps.apple.com"))
+        XCTAssertTrue(msg.contains("for=Leo"))
         XCTAssertNil(ProfileExchange.route(for: URL(string: "lantern://profile/import?d=not-json")!))
         XCTAssertNil(ProfileExchange.route(for: URL(string: "https://example.com/lantern/p/new")!))
         XCTAssertNil(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/privacy/")!))

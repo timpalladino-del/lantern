@@ -12,11 +12,11 @@ struct HouseholdView: View {
     @State private var showNewPerson = false
     @State private var editingPet: Pet?
     @State private var showNewPet = false
+    @State private var showInvite = false
 
     private let targets = [3, 7, 14, 30]
 
-    /// The first person is usually whoever set the app up; the request reads "Tim asked for your profile".
-    private var requesterName: String { household.sortedPeople.first?.name ?? "Your household" }
+    private var requesterName: String { household.admin?.name ?? "Your household" }
 
     var body: some View {
         List {
@@ -29,10 +29,8 @@ struct HouseholdView: View {
                         }
                 }
                 Button { showNewPerson = true } label: { Label("Add a person", systemImage: "person.badge.plus") }
-                if PlanStore.shared.covers(peopleCount: household.people.count + 1) {
-                    ShareLink(item: ProfileExchange.requestMessage(from: requesterName), subject: Text("Add yourself to our Lantern household")) {
-                        Label("Ask someone to add themselves", systemImage: "paperplane")
-                    }
+                if PlanStore.shared.covers(peopleCount: household.people.count + 1) || household.people.contains(where: { $0.medications.isEmpty && $0.age == nil }) {
+                    Button { showInvite = true } label: { Label("Invite someone to fill in their profile", systemImage: "paperplane") }
                 } else {
                     LockedRow(title: "Ask someone to add themselves", reason: .secondPerson(coveredDays: nil))
                 }
@@ -63,6 +61,16 @@ struct HouseholdView: View {
                 Button { showNewPet = true } label: { Label("Add a pet", systemImage: "plus") }
             } header: { Text("Pets") }
 
+            if household.people.count > 1 {
+                Section {
+                    Picker("Managed by", selection: Binding(get: { household.admin?.uuid ?? UUID() }, set: { household.adminPersonUUID = $0 })) {
+                        ForEach(household.sortedPeople, id: \.uuid) { p in Text(p.name).tag(p.uuid) }
+                    }
+                } footer: {
+                    Text("Invitations go out in this person's name and profiles come back to this phone.")
+                }
+            }
+
             if let plan = plans.first {
                 TrustedContactSection(plan: plan, people: household.sortedPeople)
             }
@@ -81,6 +89,7 @@ struct HouseholdView: View {
         .sheet(isPresented: $showNewPerson) { PersonEditView(household: household) }
         .sheet(item: $editingPet) { p in PetEditView(household: household, pet: p) }
         .sheet(isPresented: $showNewPet) { PetEditView(household: household) }
+        .sheet(isPresented: $showInvite) { InviteSheet(household: household) }
     }
 }
 
@@ -147,6 +156,60 @@ struct TrustedContactSection: View {
             Text(people.count <= 1
                  ? "Someone outside the house who knows your medications and your plan, and who you'll text during an outage. For a person living alone, this is the most important line in the app."
                  : "Someone outside the house who holds the medication card and the plan. The outage check-in reminder names them.")
+        }
+    }
+}
+
+/// Who the invitation is for (an existing person whose details are missing, or someone new) and the
+/// message that goes out, with the steps written in.
+struct InviteSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let household: Household
+    @State private var target: String = ""      // uuid string of an existing person, or "" for new
+    @State private var newName = ""
+
+    private var requester: String { household.admin?.name ?? "Your household" }
+    private var forName: String {
+        if let p = household.people.first(where: { $0.uuid.uuidString == target }) { return p.name }
+        return newName.trimmingCharacters(in: .whitespaces)
+    }
+    private var message: String { ProfileExchange.requestMessage(from: requester, forName: forName) }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section {
+                    Picker("This invitation is for", selection: $target) {
+                        Text("Someone new").tag("")
+                        ForEach(household.sortedPeople.filter { $0.uuid != household.admin?.uuid }, id: \.uuid) { p in
+                            Text(p.name).tag(p.uuid.uuidString)
+                        }
+                    }
+                    if target.isEmpty {
+                        TextField("Their first name (optional)", text: $newName)
+                    }
+                } footer: {
+                    Text(target.isEmpty
+                         ? "A new person is added when their profile comes back."
+                         : "Their reply updates \(forName)'s profile here instead of adding a second \(forName).")
+                }
+                Section("From") {
+                    LabeledContent("Sent by", value: requester)
+                }
+                Section {
+                    Text(message).font(.footnote).foregroundStyle(.secondary).textSelection(.enabled)
+                } header: { Text("What they'll get") } footer: {
+                    Text("Steps are in the message: get the app, open it once, tap their link, fill in, send back. The App Store link works once Lantern is live; TestFlight testers already have the app.")
+                }
+                Section {
+                    ShareLink(item: message, subject: Text("Add yourself to our Lantern household")) {
+                        Label("Send invitation", systemImage: "paperplane.fill").font(.headline)
+                    }
+                }
+            }
+            .navigationTitle("Invite")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } } }
         }
     }
 }

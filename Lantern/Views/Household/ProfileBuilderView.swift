@@ -5,12 +5,13 @@ import SwiftData
 /// in a scratch store (so it never touches their own household), then send it back as a link.
 struct ProfileBuilderView: View {
     let requestedBy: String
+    var forName: String = ""
     @Environment(\.dismiss) private var dismiss
     @State private var scratch: ModelContainer? = try? AppSchema.container(inMemory: true)
 
     var body: some View {
         if let scratch {
-            ProfileBuilderBody(requestedBy: requestedBy, onDone: { dismiss() })
+            ProfileBuilderBody(requestedBy: requestedBy, forName: forName, onDone: { dismiss() })
                 .modelContainer(scratch)
         } else {
             ContentUnavailableView("Couldn't start", systemImage: "exclamationmark.triangle", description: Text("Try again from the link."))
@@ -20,6 +21,7 @@ struct ProfileBuilderView: View {
 
 private struct ProfileBuilderBody: View {
     let requestedBy: String
+    let forName: String
     let onDone: () -> Void
     @Environment(\.modelContext) private var context
     @Query private var households: [Household]
@@ -43,7 +45,7 @@ private struct ProfileBuilderBody: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Image(systemName: "person.crop.circle.badge.plus").font(.largeTitle).foregroundStyle(Color.glow)
                             .symbolEffect(.bounce, options: .nonRepeating)
-                        Text("\(requester) asked for your profile").font(.title3.weight(.semibold))
+                        Text(forName.isEmpty ? "\(requester) asked for your profile" : "\(requester) asked for \(forName)'s profile").font(.title3.weight(.semibold))
                         Text("Your age and size set how much food the household plans for. Medications and allergies go on the household's medication card so whoever is helping knows. Nothing leaves your phone until you tap Send.")
                             .font(.subheadline).foregroundStyle(.secondary)
                     }
@@ -76,7 +78,7 @@ private struct ProfileBuilderBody: View {
             .navigationTitle("Your profile")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Done") { onDone() } } }
-            .sheet(isPresented: $showEditor) { PersonEditView(household: household) }
+            .sheet(isPresented: $showEditor) { PersonEditView(household: household, initialName: forName) }
             .sheet(item: $editing) { p in PersonEditView(household: household, person: p) }
         }
     }

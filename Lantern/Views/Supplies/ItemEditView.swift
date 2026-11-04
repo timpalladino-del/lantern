@@ -151,6 +151,16 @@ struct ItemEditView: View {
                                 .font(.footnote).foregroundStyle(.secondary)
                         }
                     }
+                    if category == .pet {
+                        HStack {
+                            Text("Calories per \(unit)")
+                            Spacer()
+                            TextField("\(Int(SupplyItem.assumedPetFoodCalories(unit: unit)))", value: $caloriesPerUnit, format: .number)
+                                .keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 110)
+                        }
+                        Text("For pet food. Dry is about 1,600 calories a pound; a 13 oz can about 400. The bag's label says kcal/kg or kcal/cup.")
+                            .font(.footnote).foregroundStyle(.secondary)
+                    }
                     if category == .water {
                         HStack {
                             Text("Litres per \(unit)")
@@ -292,7 +302,7 @@ struct ItemEditView: View {
         item.fillDate = (category == .water && hasFillDate) ? fillDate : nil
         item.shelfLifeKey = shelfLifeKey
         item.servingsPerUnit = category == .food ? servingsPerUnit : nil
-        item.caloriesPerUnit = category == .food ? caloriesPerUnit : nil
+        item.caloriesPerUnit = (category == .food || category == .pet) ? caloriesPerUnit : nil
         item.litersPerUnit = category == .water ? (litersPerUnit ?? CommonUnit(rawValue: unit)?.litersPerUnit) : nil
         item.notes = notes
         item.photoData = photoData

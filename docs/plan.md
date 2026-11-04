@@ -141,6 +141,15 @@ Ranked by how often it recurred across forums, reviews and press.
 - `Lantern/AppIcon.icon` is an Icon Composer package: a navy fill with the lit disc and lantern as one layer,
   so iOS 26 derives the Clear and Tinted appearances itself. The asset-catalog AppIcon stays as the iOS 18 fallback.
 
+### Pet food and the medication list — built November 4, 2026
+- Pets carry cups of dry and cans of wet food a day (350 and 400 kcal), brand, and a prescription-diet flag;
+  otherwise needs are estimated from weight (70 × kg^0.75 × 1.6 dogs / 1.2 cats). Pet-category items that read
+  like food count toward it with label calories or typical values (1,600 kcal/lb dry, 400 per can). Ready shows
+  a Pet food bar and the gap list suggests pounds to buy.
+- `medications.json`: 190-plus common US medicines (generic, brands, strengths, purpose, form, label
+  instructions, can't-miss flag). The medication form has "Find it in the list" plus inline suggestions as
+  you type; search tolerates misspellings (edit distance) and matches brand or purpose.
+
 ### Universal links — built November 3, 2026
 - Profile links are now `https://kismetstudio.io/lantern/p/new` and `/lantern/p/import`, served by the site with
   `/.well-known/apple-app-site-association` and the `applinks:kismetstudio.io` entitlement. Without the app the

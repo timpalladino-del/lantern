@@ -12,6 +12,10 @@ struct PetEditView: View {
     @State private var weightLb: Double?
     @State private var medications: String
     @State private var notes: String
+    @State private var cups: Double?
+    @State private var cans: Double?
+    @State private var foodBrand: String
+    @State private var prescriptionDiet: Bool
 
     init(household: Household, pet: Pet? = nil) {
         self.household = household
@@ -21,6 +25,18 @@ struct PetEditView: View {
         _weightLb = State(initialValue: pet?.weightKg.map { ($0 * 2.20462).rounded() })
         _medications = State(initialValue: pet?.medications ?? "")
         _notes = State(initialValue: pet?.notes ?? "")
+        _cups = State(initialValue: pet?.foodCupsPerDay)
+        _cans = State(initialValue: pet?.foodCansPerDay)
+        _foodBrand = State(initialValue: pet?.foodBrand ?? "")
+        _prescriptionDiet = State(initialValue: pet?.prescriptionDiet ?? false)
+    }
+
+    private var previewKcal: Double {
+        let fed = (cups ?? 0) * Pet.kcalPerCupDry + (cans ?? 0) * Pet.kcalPerCanWet
+        if fed > 0 { return fed }
+        let kg = (weightLb ?? species.defaultWeightKg * 2.20462) / 2.20462
+        let rer = 70 * pow(max(0.5, kg), 0.75)
+        return rer * (species == .dog ? 1.6 : species == .cat ? 1.2 : 1.4)
     }
 
     var body: some View {
@@ -37,6 +53,25 @@ struct PetEditView: View {
                     }
                 } footer: {
                     Text("Weight sets the water estimate: about an ounce per pound per day.")
+                }
+                Section {
+                    HStack {
+                        Text("Dry food, cups a day")
+                        Spacer()
+                        TextField("2", value: $cups, format: .number).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
+                    }
+                    HStack {
+                        Text("Wet food, cans a day")
+                        Spacer()
+                        TextField("0", value: $cans, format: .number).keyboardType(.decimalPad).multilineTextAlignment(.trailing).frame(width: 80)
+                    }
+                    TextField("Brand and flavor (so you buy the right one)", text: $foodBrand)
+                    Toggle("Prescription or special diet", isOn: $prescriptionDiet)
+                    LabeledContent("About", value: "\(Int(previewKcal.rounded())) calories a day")
+                } header: { Text("Food") } footer: {
+                    Text(((cups ?? 0) + (cans ?? 0)) > 0
+                         ? "A cup of dry food is about 350 calories, a 13 oz can about 400. Pet food in Supplies is counted against this."
+                         : "Estimated from weight until you enter cups or cans. Pet food in Supplies is counted against this.")
                 }
                 Section("Notes") {
                     TextField("Medications", text: $medications, axis: .vertical)
@@ -61,6 +96,10 @@ struct PetEditView: View {
         p.weightKg = weightLb.map { $0 / 2.20462 }
         p.medications = medications
         p.notes = notes
+        p.foodCupsPerDay = cups
+        p.foodCansPerDay = cans
+        p.foodBrand = foodBrand
+        p.prescriptionDiet = prescriptionDiet
         if existing == nil {
             p.household = household
             context.insert(p)

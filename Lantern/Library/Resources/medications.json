@@ -1,0 +1,3139 @@
+{
+ "version": 1,
+ "medications": [
+  {
+   "generic": "Acetaminophen",
+   "brands": [
+    "Tylenol"
+   ],
+   "strengths": [
+    "325 mg",
+    "500 mg",
+    "650 mg ER"
+   ],
+   "purpose": "Pain, fever",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Ibuprofen",
+   "brands": [
+    "Advil",
+    "Motrin"
+   ],
+   "strengths": [
+    "200 mg",
+    "400 mg",
+    "600 mg",
+    "800 mg"
+   ],
+   "purpose": "Pain, inflammation",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Naproxen",
+   "brands": [
+    "Aleve",
+    "Naprosyn"
+   ],
+   "strengths": [
+    "220 mg",
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Pain, inflammation",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Aspirin",
+   "brands": [
+    "Bayer",
+    "Ecotrin"
+   ],
+   "strengths": [
+    "81 mg",
+    "325 mg"
+   ],
+   "purpose": "Heart protection, pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "bleedingRisk"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Diphenhydramine",
+   "brands": [
+    "Benadryl"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg"
+   ],
+   "purpose": "Allergy, sleep",
+   "form": "capsule",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Cetirizine",
+   "brands": [
+    "Zyrtec"
+   ],
+   "strengths": [
+    "10 mg"
+   ],
+   "purpose": "Allergy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Loratadine",
+   "brands": [
+    "Claritin"
+   ],
+   "strengths": [
+    "10 mg"
+   ],
+   "purpose": "Allergy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Fexofenadine",
+   "brands": [
+    "Allegra"
+   ],
+   "strengths": [
+    "60 mg",
+    "180 mg"
+   ],
+   "purpose": "Allergy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Famotidine",
+   "brands": [
+    "Pepcid"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Heartburn, reflux",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Omeprazole",
+   "brands": [
+    "Prilosec"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Reflux, ulcers",
+   "form": "capsule",
+   "instructionKeys": [
+    "emptyStomach"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Pantoprazole",
+   "brands": [
+    "Protonix"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Reflux",
+   "form": "tablet",
+   "instructionKeys": [
+    "emptyStomach",
+    "doNotCrush"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Esomeprazole",
+   "brands": [
+    "Nexium"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Reflux",
+   "form": "capsule",
+   "instructionKeys": [
+    "emptyStomach"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Loperamide",
+   "brands": [
+    "Imodium"
+   ],
+   "strengths": [
+    "2 mg"
+   ],
+   "purpose": "Diarrhea",
+   "form": "capsule",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Ondansetron",
+   "brands": [
+    "Zofran"
+   ],
+   "strengths": [
+    "4 mg",
+    "8 mg"
+   ],
+   "purpose": "Nausea",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Meclizine",
+   "brands": [
+    "Antivert",
+    "Dramamine Less Drowsy"
+   ],
+   "strengths": [
+    "12.5 mg",
+    "25 mg"
+   ],
+   "purpose": "Dizziness, motion sickness",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Guaifenesin",
+   "brands": [
+    "Mucinex"
+   ],
+   "strengths": [
+    "400 mg",
+    "600 mg ER",
+    "1200 mg ER"
+   ],
+   "purpose": "Chest congestion",
+   "form": "tablet",
+   "instructionKeys": [
+    "fullGlassWater"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Pseudoephedrine",
+   "brands": [
+    "Sudafed"
+   ],
+   "strengths": [
+    "30 mg",
+    "60 mg",
+    "120 mg ER"
+   ],
+   "purpose": "Nasal congestion",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Atorvastatin",
+   "brands": [
+    "Lipitor"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg",
+    "80 mg"
+   ],
+   "purpose": "Cholesterol",
+   "form": "tablet",
+   "instructionKeys": [
+    "noGrapefruit"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Simvastatin",
+   "brands": [
+    "Zocor"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Cholesterol",
+   "form": "tablet",
+   "instructionKeys": [
+    "noGrapefruit"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Rosuvastatin",
+   "brands": [
+    "Crestor"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Cholesterol",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Pravastatin",
+   "brands": [
+    "Pravachol"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg",
+    "80 mg"
+   ],
+   "purpose": "Cholesterol",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Ezetimibe",
+   "brands": [
+    "Zetia"
+   ],
+   "strengths": [
+    "10 mg"
+   ],
+   "purpose": "Cholesterol",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Lisinopril",
+   "brands": [
+    "Zestril",
+    "Prinivil"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily",
+    "noNSAIDs"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Losartan",
+   "brands": [
+    "Cozaar"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Valsartan",
+   "brands": [
+    "Diovan"
+   ],
+   "strengths": [
+    "40 mg",
+    "80 mg",
+    "160 mg",
+    "320 mg"
+   ],
+   "purpose": "Blood pressure, heart failure",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Olmesartan",
+   "brands": [
+    "Benicar"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Amlodipine",
+   "brands": [
+    "Norvasc"
+   ],
+   "strengths": [
+    "2.5 mg",
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Metoprolol",
+   "brands": [
+    "Lopressor",
+    "Toprol-XL"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Blood pressure, heart",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Atenolol",
+   "brands": [
+    "Tenormin"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Blood pressure, heart",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Carvedilol",
+   "brands": [
+    "Coreg"
+   ],
+   "strengths": [
+    "3.125 mg",
+    "6.25 mg",
+    "12.5 mg",
+    "25 mg"
+   ],
+   "purpose": "Heart failure, blood pressure",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Propranolol",
+   "brands": [
+    "Inderal"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg",
+    "80 mg"
+   ],
+   "purpose": "Blood pressure, tremor, migraine",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Hydrochlorothiazide",
+   "brands": [
+    "Microzide",
+    "HCTZ"
+   ],
+   "strengths": [
+    "12.5 mg",
+    "25 mg"
+   ],
+   "purpose": "Blood pressure, fluid",
+   "form": "tablet",
+   "instructionKeys": [
+    "avoidSun"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Furosemide",
+   "brands": [
+    "Lasix"
+   ],
+   "strengths": [
+    "20 mg",
+    "40 mg",
+    "80 mg"
+   ],
+   "purpose": "Fluid, heart failure",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Spironolactone",
+   "brands": [
+    "Aldactone"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Heart failure, fluid",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Clonidine",
+   "brands": [
+    "Catapres"
+   ],
+   "strengths": [
+    "0.1 mg",
+    "0.2 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Hydralazine",
+   "brands": [
+    "Apresoline"
+   ],
+   "strengths": [
+    "10 mg",
+    "25 mg",
+    "50 mg"
+   ],
+   "purpose": "Blood pressure",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Diltiazem",
+   "brands": [
+    "Cardizem"
+   ],
+   "strengths": [
+    "120 mg",
+    "180 mg",
+    "240 mg"
+   ],
+   "purpose": "Blood pressure, heart rhythm",
+   "form": "capsule",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Nifedipine",
+   "brands": [
+    "Procardia"
+   ],
+   "strengths": [
+    "30 mg",
+    "60 mg",
+    "90 mg"
+   ],
+   "purpose": "Blood pressure, chest pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Isosorbide mononitrate",
+   "brands": [
+    "Imdur"
+   ],
+   "strengths": [
+    "30 mg",
+    "60 mg"
+   ],
+   "purpose": "Chest pain (angina)",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Nitroglycerin",
+   "brands": [
+    "Nitrostat"
+   ],
+   "strengths": [
+    "0.4 mg"
+   ],
+   "purpose": "Chest pain, as needed",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Digoxin",
+   "brands": [
+    "Lanoxin"
+   ],
+   "strengths": [
+    "0.125 mg",
+    "0.25 mg"
+   ],
+   "purpose": "Heart rhythm, heart failure",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Amiodarone",
+   "brands": [
+    "Pacerone"
+   ],
+   "strengths": [
+    "200 mg"
+   ],
+   "purpose": "Heart rhythm",
+   "form": "tablet",
+   "instructionKeys": [
+    "noGrapefruit",
+    "avoidSun"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Warfarin",
+   "brands": [
+    "Coumadin",
+    "Jantoven"
+   ],
+   "strengths": [
+    "1 mg",
+    "2 mg",
+    "2.5 mg",
+    "5 mg"
+   ],
+   "purpose": "Blood thinner",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily",
+    "bleedingRisk"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Apixaban",
+   "brands": [
+    "Eliquis"
+   ],
+   "strengths": [
+    "2.5 mg",
+    "5 mg"
+   ],
+   "purpose": "Blood thinner",
+   "form": "tablet",
+   "instructionKeys": [
+    "bleedingRisk"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Rivaroxaban",
+   "brands": [
+    "Xarelto"
+   ],
+   "strengths": [
+    "10 mg",
+    "15 mg",
+    "20 mg"
+   ],
+   "purpose": "Blood thinner",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "bleedingRisk"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Clopidogrel",
+   "brands": [
+    "Plavix"
+   ],
+   "strengths": [
+    "75 mg"
+   ],
+   "purpose": "Blood thinner (stents)",
+   "form": "tablet",
+   "instructionKeys": [
+    "bleedingRisk"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Metformin",
+   "brands": [
+    "Glucophage"
+   ],
+   "strengths": [
+    "500 mg",
+    "850 mg",
+    "1000 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "noAlcohol",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Glipizide",
+   "brands": [
+    "Glucotrol"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Glimepiride",
+   "brands": [
+    "Amaryl"
+   ],
+   "strengths": [
+    "1 mg",
+    "2 mg",
+    "4 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Sitagliptin",
+   "brands": [
+    "Januvia"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Empagliflozin",
+   "brands": [
+    "Jardiance"
+   ],
+   "strengths": [
+    "10 mg",
+    "25 mg"
+   ],
+   "purpose": "Type 2 diabetes, heart",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Dapagliflozin",
+   "brands": [
+    "Farxiga"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Type 2 diabetes, heart, kidney",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Pioglitazone",
+   "brands": [
+    "Actos"
+   ],
+   "strengths": [
+    "15 mg",
+    "30 mg",
+    "45 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Semaglutide",
+   "brands": [
+    "Ozempic",
+    "Wegovy"
+   ],
+   "strengths": [
+    "0.25 mg",
+    "0.5 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Diabetes, weight",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Tirzepatide",
+   "brands": [
+    "Mounjaro",
+    "Zepbound"
+   ],
+   "strengths": [
+    "2.5 mg",
+    "5 mg",
+    "7.5 mg",
+    "10 mg",
+    "12.5 mg",
+    "15 mg"
+   ],
+   "purpose": "Diabetes, weight",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Dulaglutide",
+   "brands": [
+    "Trulicity"
+   ],
+   "strengths": [
+    "0.75 mg",
+    "1.5 mg"
+   ],
+   "purpose": "Type 2 diabetes",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Insulin glargine",
+   "brands": [
+    "Lantus",
+    "Basaglar",
+    "Toujeo"
+   ],
+   "strengths": [
+    "100 units/mL"
+   ],
+   "purpose": "Diabetes (long-acting)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Insulin lispro",
+   "brands": [
+    "Humalog",
+    "Admelog"
+   ],
+   "strengths": [
+    "100 units/mL"
+   ],
+   "purpose": "Diabetes (mealtime)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Insulin aspart",
+   "brands": [
+    "Novolog",
+    "Fiasp"
+   ],
+   "strengths": [
+    "100 units/mL"
+   ],
+   "purpose": "Diabetes (mealtime)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Insulin detemir",
+   "brands": [
+    "Levemir"
+   ],
+   "strengths": [
+    "100 units/mL"
+   ],
+   "purpose": "Diabetes (long-acting)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Insulin degludec",
+   "brands": [
+    "Tresiba"
+   ],
+   "strengths": [
+    "100 units/mL"
+   ],
+   "purpose": "Diabetes (long-acting)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate",
+    "lowSugar"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Levothyroxine",
+   "brands": [
+    "Synthroid",
+    "Levoxyl"
+   ],
+   "strengths": [
+    "25 mcg",
+    "50 mcg",
+    "75 mcg",
+    "88 mcg",
+    "100 mcg",
+    "112 mcg",
+    "125 mcg",
+    "150 mcg"
+   ],
+   "purpose": "Thyroid",
+   "form": "tablet",
+   "instructionKeys": [
+    "emptyStomach",
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Liothyronine",
+   "brands": [
+    "Cytomel"
+   ],
+   "strengths": [
+    "5 mcg",
+    "25 mcg"
+   ],
+   "purpose": "Thyroid",
+   "form": "tablet",
+   "instructionKeys": [
+    "emptyStomach"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Prednisone",
+   "brands": [
+    "Deltasone"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg"
+   ],
+   "purpose": "Inflammation, immune",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Methylprednisolone",
+   "brands": [
+    "Medrol"
+   ],
+   "strengths": [
+    "4 mg",
+    "16 mg"
+   ],
+   "purpose": "Inflammation",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Dexamethasone",
+   "brands": [
+    "Decadron"
+   ],
+   "strengths": [
+    "0.5 mg",
+    "4 mg"
+   ],
+   "purpose": "Inflammation",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Hydrocortisone",
+   "brands": [
+    "Cortef"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg"
+   ],
+   "purpose": "Adrenal insufficiency",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Albuterol inhaler",
+   "brands": [
+    "ProAir",
+    "Ventolin",
+    "Proventil"
+   ],
+   "strengths": [
+    "90 mcg/puff"
+   ],
+   "purpose": "Asthma, COPD rescue",
+   "form": "inhaler",
+   "instructionKeys": [
+    "shakeWell"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Budesonide/formoterol",
+   "brands": [
+    "Symbicort"
+   ],
+   "strengths": [
+    "80/4.5 mcg",
+    "160/4.5 mcg"
+   ],
+   "purpose": "Asthma, COPD",
+   "form": "inhaler",
+   "instructionKeys": [
+    "shakeWell"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Fluticasone/salmeterol",
+   "brands": [
+    "Advair"
+   ],
+   "strengths": [
+    "100/50 mcg",
+    "250/50 mcg",
+    "500/50 mcg"
+   ],
+   "purpose": "Asthma, COPD",
+   "form": "inhaler",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Fluticasone inhaler",
+   "brands": [
+    "Flovent"
+   ],
+   "strengths": [
+    "44 mcg",
+    "110 mcg",
+    "220 mcg"
+   ],
+   "purpose": "Asthma",
+   "form": "inhaler",
+   "instructionKeys": [
+    "shakeWell"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Tiotropium",
+   "brands": [
+    "Spiriva"
+   ],
+   "strengths": [
+    "18 mcg",
+    "2.5 mcg"
+   ],
+   "purpose": "COPD",
+   "form": "inhaler",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Montelukast",
+   "brands": [
+    "Singulair"
+   ],
+   "strengths": [
+    "4 mg",
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Asthma, allergy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Fluticasone nasal",
+   "brands": [
+    "Flonase"
+   ],
+   "strengths": [
+    "50 mcg/spray"
+   ],
+   "purpose": "Allergy",
+   "form": "drops",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Epinephrine auto-injector",
+   "brands": [
+    "EpiPen",
+    "Auvi-Q"
+   ],
+   "strengths": [
+    "0.3 mg",
+    "0.15 mg"
+   ],
+   "purpose": "Severe allergy (anaphylaxis)",
+   "form": "injection",
+   "instructionKeys": [
+    "keepDry"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Sertraline",
+   "brands": [
+    "Zoloft"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Depression, anxiety",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Escitalopram",
+   "brands": [
+    "Lexapro"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg"
+   ],
+   "purpose": "Depression, anxiety",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Citalopram",
+   "brands": [
+    "Celexa"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Depression",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Fluoxetine",
+   "brands": [
+    "Prozac"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Depression, anxiety",
+   "form": "capsule",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Paroxetine",
+   "brands": [
+    "Paxil"
+   ],
+   "strengths": [
+    "10 mg",
+    "20 mg",
+    "40 mg"
+   ],
+   "purpose": "Depression, anxiety",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Venlafaxine",
+   "brands": [
+    "Effexor XR"
+   ],
+   "strengths": [
+    "37.5 mg",
+    "75 mg",
+    "150 mg"
+   ],
+   "purpose": "Depression, anxiety",
+   "form": "capsule",
+   "instructionKeys": [
+    "withFood",
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Duloxetine",
+   "brands": [
+    "Cymbalta"
+   ],
+   "strengths": [
+    "20 mg",
+    "30 mg",
+    "60 mg"
+   ],
+   "purpose": "Depression, nerve pain",
+   "form": "capsule",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Bupropion",
+   "brands": [
+    "Wellbutrin",
+    "Zyban"
+   ],
+   "strengths": [
+    "75 mg",
+    "100 mg",
+    "150 mg XL",
+    "300 mg XL"
+   ],
+   "purpose": "Depression, quitting smoking",
+   "form": "tablet",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Trazodone",
+   "brands": [
+    "Desyrel"
+   ],
+   "strengths": [
+    "50 mg",
+    "100 mg",
+    "150 mg"
+   ],
+   "purpose": "Sleep, depression",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Mirtazapine",
+   "brands": [
+    "Remeron"
+   ],
+   "strengths": [
+    "7.5 mg",
+    "15 mg",
+    "30 mg"
+   ],
+   "purpose": "Depression, sleep",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Buspirone",
+   "brands": [
+    "Buspar"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "15 mg"
+   ],
+   "purpose": "Anxiety",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Hydroxyzine",
+   "brands": [
+    "Atarax",
+    "Vistaril"
+   ],
+   "strengths": [
+    "10 mg",
+    "25 mg",
+    "50 mg"
+   ],
+   "purpose": "Anxiety, itch",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Alprazolam",
+   "brands": [
+    "Xanax"
+   ],
+   "strengths": [
+    "0.25 mg",
+    "0.5 mg",
+    "1 mg"
+   ],
+   "purpose": "Anxiety",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Lorazepam",
+   "brands": [
+    "Ativan"
+   ],
+   "strengths": [
+    "0.5 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Anxiety",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Clonazepam",
+   "brands": [
+    "Klonopin"
+   ],
+   "strengths": [
+    "0.5 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Anxiety, seizures",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Diazepam",
+   "brands": [
+    "Valium"
+   ],
+   "strengths": [
+    "2 mg",
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Anxiety, muscle spasm",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Zolpidem",
+   "brands": [
+    "Ambien"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Sleep",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Quetiapine",
+   "brands": [
+    "Seroquel"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg",
+    "200 mg",
+    "300 mg"
+   ],
+   "purpose": "Mood, sleep",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Aripiprazole",
+   "brands": [
+    "Abilify"
+   ],
+   "strengths": [
+    "2 mg",
+    "5 mg",
+    "10 mg",
+    "15 mg"
+   ],
+   "purpose": "Mood",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Risperidone",
+   "brands": [
+    "Risperdal"
+   ],
+   "strengths": [
+    "0.5 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Mood",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Olanzapine",
+   "brands": [
+    "Zyprexa"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "15 mg"
+   ],
+   "purpose": "Mood",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Lithium",
+   "brands": [
+    "Lithobid"
+   ],
+   "strengths": [
+    "300 mg",
+    "450 mg ER"
+   ],
+   "purpose": "Mood",
+   "form": "tablet",
+   "instructionKeys": [
+    "fullGlassWater"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Lamotrigine",
+   "brands": [
+    "Lamictal"
+   ],
+   "strengths": [
+    "25 mg",
+    "100 mg",
+    "150 mg",
+    "200 mg"
+   ],
+   "purpose": "Seizures, mood",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Levetiracetam",
+   "brands": [
+    "Keppra"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg",
+    "750 mg",
+    "1000 mg"
+   ],
+   "purpose": "Seizures",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Topiramate",
+   "brands": [
+    "Topamax"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Seizures, migraine",
+   "form": "tablet",
+   "instructionKeys": [
+    "fullGlassWater"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Carbamazepine",
+   "brands": [
+    "Tegretol"
+   ],
+   "strengths": [
+    "200 mg",
+    "400 mg ER"
+   ],
+   "purpose": "Seizures, nerve pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Valproate / divalproex",
+   "brands": [
+    "Depakote"
+   ],
+   "strengths": [
+    "125 mg",
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Seizures, mood",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Phenytoin",
+   "brands": [
+    "Dilantin"
+   ],
+   "strengths": [
+    "100 mg"
+   ],
+   "purpose": "Seizures",
+   "form": "capsule",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Gabapentin",
+   "brands": [
+    "Neurontin"
+   ],
+   "strengths": [
+    "100 mg",
+    "300 mg",
+    "400 mg",
+    "600 mg",
+    "800 mg"
+   ],
+   "purpose": "Nerve pain, seizures",
+   "form": "capsule",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Pregabalin",
+   "brands": [
+    "Lyrica"
+   ],
+   "strengths": [
+    "50 mg",
+    "75 mg",
+    "150 mg"
+   ],
+   "purpose": "Nerve pain",
+   "form": "capsule",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Methylphenidate",
+   "brands": [
+    "Ritalin",
+    "Concerta"
+   ],
+   "strengths": [
+    "10 mg",
+    "18 mg",
+    "27 mg",
+    "36 mg",
+    "54 mg"
+   ],
+   "purpose": "ADHD",
+   "form": "tablet",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Amphetamine/dextroamphetamine",
+   "brands": [
+    "Adderall"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg",
+    "30 mg"
+   ],
+   "purpose": "ADHD",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Lisdexamfetamine",
+   "brands": [
+    "Vyvanse"
+   ],
+   "strengths": [
+    "20 mg",
+    "30 mg",
+    "40 mg",
+    "50 mg",
+    "70 mg"
+   ],
+   "purpose": "ADHD",
+   "form": "capsule",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Atomoxetine",
+   "brands": [
+    "Strattera"
+   ],
+   "strengths": [
+    "18 mg",
+    "25 mg",
+    "40 mg",
+    "60 mg"
+   ],
+   "purpose": "ADHD",
+   "form": "capsule",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Donepezil",
+   "brands": [
+    "Aricept"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Memory (Alzheimer's)",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Memantine",
+   "brands": [
+    "Namenda"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Memory (Alzheimer's)",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Carbidopa/levodopa",
+   "brands": [
+    "Sinemet"
+   ],
+   "strengths": [
+    "25/100 mg",
+    "25/250 mg"
+   ],
+   "purpose": "Parkinson's",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Ropinirole",
+   "brands": [
+    "Requip"
+   ],
+   "strengths": [
+    "0.25 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Parkinson's, restless legs",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Pramipexole",
+   "brands": [
+    "Mirapex"
+   ],
+   "strengths": [
+    "0.125 mg",
+    "0.25 mg",
+    "0.5 mg"
+   ],
+   "purpose": "Parkinson's, restless legs",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Sumatriptan",
+   "brands": [
+    "Imitrex"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Migraine, as needed",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Rizatriptan",
+   "brands": [
+    "Maxalt"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Migraine, as needed",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Cyclobenzaprine",
+   "brands": [
+    "Flexeril"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg"
+   ],
+   "purpose": "Muscle spasm",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Methocarbamol",
+   "brands": [
+    "Robaxin"
+   ],
+   "strengths": [
+    "500 mg",
+    "750 mg"
+   ],
+   "purpose": "Muscle spasm",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Tizanidine",
+   "brands": [
+    "Zanaflex"
+   ],
+   "strengths": [
+    "2 mg",
+    "4 mg"
+   ],
+   "purpose": "Muscle spasm",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Meloxicam",
+   "brands": [
+    "Mobic"
+   ],
+   "strengths": [
+    "7.5 mg",
+    "15 mg"
+   ],
+   "purpose": "Arthritis pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Celecoxib",
+   "brands": [
+    "Celebrex"
+   ],
+   "strengths": [
+    "100 mg",
+    "200 mg"
+   ],
+   "purpose": "Arthritis pain",
+   "form": "capsule",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Diclofenac",
+   "brands": [
+    "Voltaren"
+   ],
+   "strengths": [
+    "50 mg",
+    "75 mg"
+   ],
+   "purpose": "Arthritis pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Tramadol",
+   "brands": [
+    "Ultram"
+   ],
+   "strengths": [
+    "50 mg",
+    "100 mg ER"
+   ],
+   "purpose": "Pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Hydrocodone/acetaminophen",
+   "brands": [
+    "Norco",
+    "Vicodin"
+   ],
+   "strengths": [
+    "5/325 mg",
+    "7.5/325 mg",
+    "10/325 mg"
+   ],
+   "purpose": "Pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Oxycodone",
+   "brands": [
+    "Roxicodone",
+    "OxyContin"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "15 mg",
+    "20 mg ER"
+   ],
+   "purpose": "Pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Oxycodone/acetaminophen",
+   "brands": [
+    "Percocet"
+   ],
+   "strengths": [
+    "5/325 mg",
+    "10/325 mg"
+   ],
+   "purpose": "Pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Morphine",
+   "brands": [
+    "MS Contin"
+   ],
+   "strengths": [
+    "15 mg",
+    "30 mg",
+    "60 mg ER"
+   ],
+   "purpose": "Pain",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving",
+    "noAlcohol",
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Buprenorphine/naloxone",
+   "brands": [
+    "Suboxone"
+   ],
+   "strengths": [
+    "2/0.5 mg",
+    "8/2 mg"
+   ],
+   "purpose": "Opioid dependence",
+   "form": "other",
+   "instructionKeys": [
+    "noAlcohol",
+    "drowsy"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Naloxone",
+   "brands": [
+    "Narcan"
+   ],
+   "strengths": [
+    "4 mg nasal"
+   ],
+   "purpose": "Opioid overdose rescue",
+   "form": "drops",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Methotrexate",
+   "brands": [
+    "Trexall",
+    "Otrexup"
+   ],
+   "strengths": [
+    "2.5 mg"
+   ],
+   "purpose": "Rheumatoid arthritis, psoriasis (weekly)",
+   "form": "tablet",
+   "instructionKeys": [
+    "noAlcohol",
+    "avoidSun"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Hydroxychloroquine",
+   "brands": [
+    "Plaquenil"
+   ],
+   "strengths": [
+    "200 mg"
+   ],
+   "purpose": "Lupus, rheumatoid arthritis",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Adalimumab",
+   "brands": [
+    "Humira"
+   ],
+   "strengths": [
+    "40 mg"
+   ],
+   "purpose": "Autoimmune (injection every 2 weeks)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Etanercept",
+   "brands": [
+    "Enbrel"
+   ],
+   "strengths": [
+    "50 mg"
+   ],
+   "purpose": "Autoimmune (weekly injection)",
+   "form": "injection",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Allopurinol",
+   "brands": [
+    "Zyloprim"
+   ],
+   "strengths": [
+    "100 mg",
+    "300 mg"
+   ],
+   "purpose": "Gout",
+   "form": "tablet",
+   "instructionKeys": [
+    "fullGlassWater"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Colchicine",
+   "brands": [
+    "Colcrys"
+   ],
+   "strengths": [
+    "0.6 mg"
+   ],
+   "purpose": "Gout flare",
+   "form": "tablet",
+   "instructionKeys": [
+    "noGrapefruit"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Tamsulosin",
+   "brands": [
+    "Flomax"
+   ],
+   "strengths": [
+    "0.4 mg"
+   ],
+   "purpose": "Prostate, urination",
+   "form": "capsule",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Finasteride",
+   "brands": [
+    "Proscar",
+    "Propecia"
+   ],
+   "strengths": [
+    "1 mg",
+    "5 mg"
+   ],
+   "purpose": "Prostate, hair",
+   "form": "tablet",
+   "instructionKeys": [
+    "pregnancy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Oxybutynin",
+   "brands": [
+    "Ditropan"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg ER"
+   ],
+   "purpose": "Overactive bladder",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Mirabegron",
+   "brands": [
+    "Myrbetriq"
+   ],
+   "strengths": [
+    "25 mg",
+    "50 mg"
+   ],
+   "purpose": "Overactive bladder",
+   "form": "tablet",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Sildenafil",
+   "brands": [
+    "Viagra",
+    "Revatio"
+   ],
+   "strengths": [
+    "20 mg",
+    "25 mg",
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Erectile dysfunction, as needed",
+   "form": "tablet",
+   "instructionKeys": [
+    "noGrapefruit"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Tadalafil",
+   "brands": [
+    "Cialis"
+   ],
+   "strengths": [
+    "5 mg",
+    "10 mg",
+    "20 mg"
+   ],
+   "purpose": "Erectile dysfunction, prostate",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Estradiol",
+   "brands": [
+    "Estrace"
+   ],
+   "strengths": [
+    "0.5 mg",
+    "1 mg",
+    "2 mg"
+   ],
+   "purpose": "Hormone therapy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Progesterone",
+   "brands": [
+    "Prometrium"
+   ],
+   "strengths": [
+    "100 mg",
+    "200 mg"
+   ],
+   "purpose": "Hormone therapy",
+   "form": "capsule",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Norethindrone/ethinyl estradiol",
+   "brands": [
+    "Loestrin",
+    "Junel"
+   ],
+   "strengths": [
+    "1/20",
+    "1.5/30"
+   ],
+   "purpose": "Birth control",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Levonorgestrel/ethinyl estradiol",
+   "brands": [
+    "Seasonique",
+    "Levora"
+   ],
+   "strengths": [
+    "0.15/30 mcg"
+   ],
+   "purpose": "Birth control",
+   "form": "tablet",
+   "instructionKeys": [
+    "sameTimeDaily"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Testosterone cypionate",
+   "brands": [
+    "Depo-Testosterone"
+   ],
+   "strengths": [
+    "200 mg/mL"
+   ],
+   "purpose": "Hormone therapy",
+   "form": "injection",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Alendronate",
+   "brands": [
+    "Fosamax"
+   ],
+   "strengths": [
+    "70 mg weekly"
+   ],
+   "purpose": "Osteoporosis",
+   "form": "tablet",
+   "instructionKeys": [
+    "emptyStomach",
+    "fullGlassWater"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Vitamin D3",
+   "brands": [
+    "cholecalciferol"
+   ],
+   "strengths": [
+    "1000 IU",
+    "2000 IU",
+    "5000 IU"
+   ],
+   "purpose": "Supplement",
+   "form": "capsule",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Potassium chloride",
+   "brands": [
+    "Klor-Con"
+   ],
+   "strengths": [
+    "10 mEq",
+    "20 mEq"
+   ],
+   "purpose": "Low potassium",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "fullGlassWater",
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Ferrous sulfate",
+   "brands": [
+    "iron"
+   ],
+   "strengths": [
+    "325 mg"
+   ],
+   "purpose": "Iron deficiency",
+   "form": "tablet",
+   "instructionKeys": [
+    "emptyStomach",
+    "noDairy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Folic acid",
+   "brands": [
+    "Folate"
+   ],
+   "strengths": [
+    "400 mcg",
+    "1 mg"
+   ],
+   "purpose": "Supplement, pregnancy",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Prenatal vitamin",
+   "brands": [
+    "Prenatal"
+   ],
+   "strengths": [
+    "1 tablet"
+   ],
+   "purpose": "Pregnancy",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Amoxicillin",
+   "brands": [
+    "Amoxil"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg",
+    "875 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "capsule",
+   "instructionKeys": [
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Amoxicillin/clavulanate",
+   "brands": [
+    "Augmentin"
+   ],
+   "strengths": [
+    "500/125 mg",
+    "875/125 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "withFood",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Azithromycin",
+   "brands": [
+    "Zithromax",
+    "Z-Pak"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Doxycycline",
+   "brands": [
+    "Vibramycin"
+   ],
+   "strengths": [
+    "50 mg",
+    "100 mg"
+   ],
+   "purpose": "Antibiotic, acne",
+   "form": "capsule",
+   "instructionKeys": [
+    "fullGlassWater",
+    "avoidSun",
+    "noDairy",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Cephalexin",
+   "brands": [
+    "Keflex"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "capsule",
+   "instructionKeys": [
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Ciprofloxacin",
+   "brands": [
+    "Cipro"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "noDairy",
+    "avoidSun",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Levofloxacin",
+   "brands": [
+    "Levaquin"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg",
+    "750 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "avoidSun",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Sulfamethoxazole/trimethoprim",
+   "brands": [
+    "Bactrim",
+    "Septra"
+   ],
+   "strengths": [
+    "400/80 mg",
+    "800/160 mg DS"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "fullGlassWater",
+    "avoidSun",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Nitrofurantoin",
+   "brands": [
+    "Macrobid"
+   ],
+   "strengths": [
+    "100 mg"
+   ],
+   "purpose": "Urinary infection",
+   "form": "capsule",
+   "instructionKeys": [
+    "withFood",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Metronidazole",
+   "brands": [
+    "Flagyl"
+   ],
+   "strengths": [
+    "250 mg",
+    "500 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "tablet",
+   "instructionKeys": [
+    "noAlcohol",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Clindamycin",
+   "brands": [
+    "Cleocin"
+   ],
+   "strengths": [
+    "150 mg",
+    "300 mg"
+   ],
+   "purpose": "Antibiotic",
+   "form": "capsule",
+   "instructionKeys": [
+    "fullGlassWater",
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Fluconazole",
+   "brands": [
+    "Diflucan"
+   ],
+   "strengths": [
+    "150 mg"
+   ],
+   "purpose": "Yeast infection",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Valacyclovir",
+   "brands": [
+    "Valtrex"
+   ],
+   "strengths": [
+    "500 mg",
+    "1 g"
+   ],
+   "purpose": "Cold sores, shingles",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Acyclovir",
+   "brands": [
+    "Zovirax"
+   ],
+   "strengths": [
+    "400 mg",
+    "800 mg"
+   ],
+   "purpose": "Herpes, shingles",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Oseltamivir",
+   "brands": [
+    "Tamiflu"
+   ],
+   "strengths": [
+    "30 mg",
+    "45 mg",
+    "75 mg"
+   ],
+   "purpose": "Flu",
+   "form": "capsule",
+   "instructionKeys": [
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Nirmatrelvir/ritonavir",
+   "brands": [
+    "Paxlovid"
+   ],
+   "strengths": [
+    "300/100 mg"
+   ],
+   "purpose": "COVID-19",
+   "form": "tablet",
+   "instructionKeys": [
+    "finishCourse"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Mesalamine",
+   "brands": [
+    "Lialda",
+    "Asacol"
+   ],
+   "strengths": [
+    "1.2 g",
+    "800 mg"
+   ],
+   "purpose": "Ulcerative colitis",
+   "form": "tablet",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Polyethylene glycol 3350",
+   "brands": [
+    "Miralax"
+   ],
+   "strengths": [
+    "17 g"
+   ],
+   "purpose": "Constipation",
+   "form": "other",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Docusate",
+   "brands": [
+    "Colace"
+   ],
+   "strengths": [
+    "100 mg"
+   ],
+   "purpose": "Stool softener",
+   "form": "capsule",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Bisacodyl",
+   "brands": [
+    "Dulcolax"
+   ],
+   "strengths": [
+    "5 mg"
+   ],
+   "purpose": "Constipation",
+   "form": "tablet",
+   "instructionKeys": [
+    "noDairy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Latanoprost",
+   "brands": [
+    "Xalatan"
+   ],
+   "strengths": [
+    "0.005%"
+   ],
+   "purpose": "Glaucoma eye drops",
+   "form": "drops",
+   "instructionKeys": [
+    "refrigerate"
+   ],
+   "critical": true
+  },
+  {
+   "generic": "Timolol eye drops",
+   "brands": [
+    "Timoptic"
+   ],
+   "strengths": [
+    "0.25%",
+    "0.5%"
+   ],
+   "purpose": "Glaucoma eye drops",
+   "form": "drops",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Artificial tears",
+   "brands": [
+    "Refresh",
+    "Systane"
+   ],
+   "strengths": [
+    "as needed"
+   ],
+   "purpose": "Dry eyes",
+   "form": "drops",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Nicotine patch",
+   "brands": [
+    "Nicoderm"
+   ],
+   "strengths": [
+    "7 mg",
+    "14 mg",
+    "21 mg"
+   ],
+   "purpose": "Quitting smoking",
+   "form": "patch",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Scopolamine patch",
+   "brands": [
+    "Transderm Scop"
+   ],
+   "strengths": [
+    "1 mg/3 days"
+   ],
+   "purpose": "Motion sickness",
+   "form": "patch",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Lidocaine patch",
+   "brands": [
+    "Lidoderm"
+   ],
+   "strengths": [
+    "4%",
+    "5%"
+   ],
+   "purpose": "Local pain",
+   "form": "patch",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Hydrocortisone cream",
+   "brands": [
+    "Cortizone"
+   ],
+   "strengths": [
+    "1%"
+   ],
+   "purpose": "Itch, rash",
+   "form": "cream",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Triamcinolone cream",
+   "brands": [
+    "Kenalog"
+   ],
+   "strengths": [
+    "0.1%"
+   ],
+   "purpose": "Eczema, rash",
+   "form": "cream",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Mupirocin",
+   "brands": [
+    "Bactroban"
+   ],
+   "strengths": [
+    "2%"
+   ],
+   "purpose": "Skin infection",
+   "form": "cream",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Clotrimazole",
+   "brands": [
+    "Lotrimin"
+   ],
+   "strengths": [
+    "1%"
+   ],
+   "purpose": "Athlete's foot, fungal",
+   "form": "cream",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Levocetirizine",
+   "brands": [
+    "Xyzal"
+   ],
+   "strengths": [
+    "5 mg"
+   ],
+   "purpose": "Allergy",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Promethazine",
+   "brands": [
+    "Phenergan"
+   ],
+   "strengths": [
+    "12.5 mg",
+    "25 mg"
+   ],
+   "purpose": "Nausea, allergy",
+   "form": "tablet",
+   "instructionKeys": [
+    "drowsy",
+    "noDriving"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Benzonatate",
+   "brands": [
+    "Tessalon"
+   ],
+   "strengths": [
+    "100 mg",
+    "200 mg"
+   ],
+   "purpose": "Cough",
+   "form": "capsule",
+   "instructionKeys": [
+    "doNotCrush"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Dextromethorphan",
+   "brands": [
+    "Delsym",
+    "Robitussin DM"
+   ],
+   "strengths": [
+    "30 mg"
+   ],
+   "purpose": "Cough",
+   "form": "liquid",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Oral rehydration salts",
+   "brands": [
+    "Pedialyte",
+    "DripDrop"
+   ],
+   "strengths": [
+    "1 packet"
+   ],
+   "purpose": "Dehydration",
+   "form": "other",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Glucose tablets",
+   "brands": [
+    "Dex4"
+   ],
+   "strengths": [
+    "4 g"
+   ],
+   "purpose": "Low blood sugar rescue",
+   "form": "tablet",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Glucagon",
+   "brands": [
+    "Gvoke",
+    "Baqsimi"
+   ],
+   "strengths": [
+    "1 mg",
+    "3 mg nasal"
+   ],
+   "purpose": "Severe low blood sugar rescue",
+   "form": "injection",
+   "instructionKeys": [],
+   "critical": true
+  },
+  {
+   "generic": "Prednisolone (children)",
+   "brands": [
+    "Orapred"
+   ],
+   "strengths": [
+    "15 mg/5 mL"
+   ],
+   "purpose": "Asthma flare, inflammation",
+   "form": "liquid",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Children's ibuprofen",
+   "brands": [
+    "Motrin Children's"
+   ],
+   "strengths": [
+    "100 mg/5 mL"
+   ],
+   "purpose": "Child fever, pain",
+   "form": "liquid",
+   "instructionKeys": [
+    "withFood"
+   ],
+   "critical": false
+  },
+  {
+   "generic": "Children's acetaminophen",
+   "brands": [
+    "Tylenol Children's"
+   ],
+   "strengths": [
+    "160 mg/5 mL"
+   ],
+   "purpose": "Child fever, pain",
+   "form": "liquid",
+   "instructionKeys": [],
+   "critical": false
+  },
+  {
+   "generic": "Infant formula",
+   "brands": [
+    "Similac",
+    "Enfamil"
+   ],
+   "strengths": [
+    "per can"
+   ],
+   "purpose": "Infant feeding",
+   "form": "other",
+   "instructionKeys": [
+    "keepDry"
+   ],
+   "critical": true
+  }
+ ]
+}

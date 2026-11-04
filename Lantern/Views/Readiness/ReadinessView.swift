@@ -42,6 +42,12 @@ struct ReadinessView: View {
                                 + (report.foodIsAssumed ? " Some items have no calorie figure, so 250 per serving is assumed." : ""))
                 ReadinessBar(title: "Water", value: ReadinessCalculator.formatDays(report.waterDays), fraction: report.waterFraction,
                              detail: String(format: "%.0f litres on hand, %.1f needed a day. One gallon per person, plus pets.", report.waterLiters, report.waterLitersPerDay))
+                if report.petFoodKcalPerDay > 0 {
+                    ReadinessBar(title: "Pet food", value: ReadinessCalculator.formatDays(report.petFoodDays), fraction: report.petFoodFraction,
+                                 detail: "\(Int(report.petFoodCalories.rounded())) calories of pet food on hand, \(Int(report.petFoodKcalPerDay.rounded())) needed a day."
+                                    + (report.petFoodIsEstimated ? " Pet needs estimated from weight; set cups or cans a day on each pet for a better number." : "")
+                                    + (report.petFoodIsAssumed ? " Some pet food has no calorie figure, so typical values are assumed." : ""))
+                }
                 if let d = report.medicineDays {
                     ReadinessBar(title: "Medication", value: ReadinessCalculator.formatDays(d), fraction: report.medicineFraction,
                                  detail: "Shortest supply across \(report.medications.count) tracked medication\(report.medications.count == 1 ? "" : "s").")

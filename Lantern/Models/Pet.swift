@@ -27,6 +27,12 @@ final class Pet {
     var speciesRaw: String = PetSpecies.dog.rawValue
     var weightKg: Double?
     var foodGramsPerDay: Double?
+    /// What they eat, so pet food on the shelf can be turned into days. Cups of dry (about 350 kcal) and
+    /// cans of wet (about 400 kcal) per day; blank means estimate from weight.
+    var foodCupsPerDay: Double?
+    var foodCansPerDay: Double?
+    var foodBrand: String = ""
+    var prescriptionDiet: Bool = false
     var medications: String = ""
     var notes: String = ""
     var createdAt: Date = Date()
@@ -50,4 +56,24 @@ final class Pet {
     var waterLitersPerDay: Double {
         (weightKg ?? species.defaultWeightKg) * 0.06
     }
+
+    static let kcalPerCupDry: Double = 350
+    static let kcalPerCanWet: Double = 400
+
+    /// Calories a day. What the owner says they feed wins; otherwise resting energy (70 × kg^0.75) times a
+    /// typical adult factor (WSAVA: about 1.6 for dogs, 1.2 for cats).
+    var foodKcalPerDay: Double {
+        let fed = (foodCupsPerDay ?? 0) * Pet.kcalPerCupDry + (foodCansPerDay ?? 0) * Pet.kcalPerCanWet
+        if fed > 0 { return fed }
+        if let g = foodGramsPerDay, g > 0 { return g * 3.5 }
+        let kg = weightKg ?? species.defaultWeightKg
+        let rer = 70 * pow(kg, 0.75)
+        switch species {
+        case .dog: return rer * 1.6
+        case .cat: return rer * 1.2
+        case .other: return rer * 1.4
+        }
+    }
+
+    var foodIsEstimated: Bool { (foodCupsPerDay ?? 0) + (foodCansPerDay ?? 0) == 0 && (foodGramsPerDay ?? 0) == 0 }
 }

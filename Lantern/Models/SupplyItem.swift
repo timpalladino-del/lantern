@@ -117,6 +117,35 @@ final class SupplyItem {
 
     var caloriesAreAssumed: Bool { category == .food && caloriesPerUnit == nil }
 
+    /// Pet food on the shelf: anything in the pet category that reads like food.
+    var isPetFood: Bool {
+        guard category == .pet else { return false }
+        if let k = shelfLifeKey, k.hasPrefix("pet_food") { return true }
+        let n = name.lowercased()
+        return n.contains("food") || n.contains("kibble") || n.contains("chow") || n.contains("formula")
+    }
+
+    /// Typical calories per unit for pet food when the bag's own number is not entered.
+    static func assumedPetFoodCalories(unit: String) -> Double {
+        switch unit {
+        case "lb": return 1600
+        case "kg": return 3500
+        case "oz": return 100
+        case "can": return 400
+        case "cup": return 350
+        case "bag": return 24000   // a 15 lb bag
+        case "pouch": return 100
+        default: return 400
+        }
+    }
+
+    var totalPetFoodCalories: Double {
+        guard isPetFood else { return 0 }
+        let per = caloriesPerUnit ?? SupplyItem.assumedPetFoodCalories(unit: unit)
+        return max(0, quantity) * per
+    }
+    var petFoodCaloriesAreAssumed: Bool { isPetFood && caloriesPerUnit == nil }
+
     var totalLiters: Double {
         guard category == .water else { return 0 }
         let perUnit = litersPerUnit ?? CommonUnit(rawValue: unit)?.litersPerUnit ?? 0

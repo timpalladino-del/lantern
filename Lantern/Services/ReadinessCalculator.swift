@@ -28,6 +28,12 @@ struct ReadinessReport: Equatable {
     let foodDays: Double
     let foodIsAssumed: Bool          // true when any food item has no calorie figure
     let waterLitersPerDay: Double
+    var petFoodKcalPerDay: Double = 0
+    var petFoodCalories: Double = 0
+    var petFoodDays: Double = 0
+    var petFoodIsAssumed: Bool = false
+    var petFoodIsEstimated: Bool = false
+    var petFoodFraction: Double { targetDays == 0 ? 1 : min(1, petFoodDays / Double(targetDays)) }
     let waterLiters: Double
     let waterDays: Double
 
@@ -156,13 +162,33 @@ enum ReadinessCalculator {
                 shoppingUnit: CommonUnit.kit.rawValue))
         }
 
-        return ReadinessReport(
+        // Pet food
+        let petKcalPerDay = household.petList.reduce(0.0) { $0 + $1.foodKcalPerDay }
+        let petFood = usable.reduce(0.0) { $0 + $1.totalPetFoodCalories }
+        let petFoodDays = petKcalPerDay > 0 ? petFood / petKcalPerDay : 0
+        if petKcalPerDay > 0 {
+            let short = petKcalPerDay * Double(target) - petFood
+            if short > 0 {
+                let pounds = Int((short / 1600).rounded(.up))
+                gaps.append(.init(id: "petfood", title: "Pet food: \(formatDays(petFoodDays)) of \(target) days",
+                                  detail: "About \(pounds) more pounds of dry food, or the equivalent in cans. Shelters often take pets only with food and records.",
+                                  shoppingName: "Pet food", shoppingQuantity: Double(pounds), shoppingUnit: "lb"))
+            }
+        }
+
+        var report = ReadinessReport(
             targetDays: target, people: people, pets: pets,
             caloriesPerDay: caloriesPerDay, caloriesOnHand: calories, foodDays: foodDays, foodIsAssumed: assumed,
             waterLitersPerDay: litersPerDay, waterLiters: liters, waterDays: waterDays,
             medications: medStatuses, medicineItemsNeedingAttention: medicineAttention,
             itemsNeedingAttention: attention, tasksDue: due, infantCount: infants,
             gaps: gaps)
+        report.petFoodKcalPerDay = petKcalPerDay
+        report.petFoodCalories = petFood
+        report.petFoodDays = petFoodDays
+        report.petFoodIsAssumed = usable.contains { $0.petFoodCaloriesAreAssumed }
+        report.petFoodIsEstimated = household.petList.contains { $0.foodIsEstimated }
+        return report
     }
 
     static func formatDays(_ days: Double) -> String {

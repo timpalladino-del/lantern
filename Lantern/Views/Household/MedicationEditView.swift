@@ -30,6 +30,8 @@ struct MedicationEditView: View {
     @State private var rxNumber: String
     @State private var remindersEnabled: Bool
     @State private var showInstructionPicker = false
+    @State private var showSearch = false
+    private let library = MedicationLibrary.shared
     /// Screenshot aid only: open scrolled to a section id ("instructions" or "notes").
     private let scrollTarget: String?
 
@@ -70,13 +72,28 @@ struct MedicationEditView: View {
         NavigationStack {
             ScrollViewReader { proxy in
             Form {
-                Section("What") {
+                Section {
+                    Button { showSearch = true } label: { Label("Find it in the list", systemImage: "magnifyingglass") }
                     TextField("Name (e.g. Metformin)", text: $name)
+                    if name.count >= 3, !library.search(name, limit: 1).contains(where: { $0.generic.lowercased() == name.lowercased() || $0.displayName.lowercased() == name.lowercased() }) {
+                        ForEach(library.search(name, limit: 3)) { e in
+                            Button { apply(e) } label: {
+                                HStack {
+                                    Image(systemName: "arrow.turn.down.right").foregroundStyle(.secondary)
+                                    Text(e.displayName).foregroundStyle(.primary)
+                                    Spacer()
+                                    Text(e.purpose).font(.caption).foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
                     TextField("Strength (e.g. 500 mg, 1 puff)", text: $dose)
                     Picker("Form", selection: $form) {
                         ForEach(MedicationForm.allCases) { f in Text(f.title).tag(f) }
                     }
                     TextField("What it is for (e.g. blood pressure)", text: $purpose)
+                } header: { Text("What") } footer: {
+                    Text("Search by name, brand or what it's for. Spelling doesn't have to be right.")
                 }
 
                 Section {
@@ -167,7 +184,21 @@ struct MedicationEditView: View {
             .sheet(isPresented: $showInstructionPicker) {
                 InstructionPicker(selected: $instructionKeys)
             }
+            .sheet(isPresented: $showSearch) {
+                MedicationSearchView { apply($0) }
+            }
         }
+    }
+
+    /// Fill the form from a library entry. Keeps anything the person already typed for dose and purpose.
+    private func apply(_ e: MedicationEntry) {
+        name = e.displayName
+        if dose.isEmpty, let first = e.strengths.first, first != "as needed" { dose = first }
+        if purpose.isEmpty { purpose = e.purpose }
+        form = e.medicationForm
+        for k in e.instructionKeys { instructionKeys.insert(k) }
+        if existing == nil, e.critical { isCritical = true }
+        if e.purpose.lowercased().contains("as needed") || e.strengths == ["as needed"] { dosesPerDay = 0 }
     }
 
     private func addTime() {

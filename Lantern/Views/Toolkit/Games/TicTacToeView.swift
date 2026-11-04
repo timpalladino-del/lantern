@@ -23,11 +23,13 @@ struct TicTacToeView: View {
                         if game.play(i) { moves += 1 }
                         if game.winner == .x { scoreX += 1 } else if game.winner == .o { scoreO += 1 } else if game.isDraw { draws += 1 }
                     } label: {
-                        Text(game.cells[i]?.rawValue ?? "")
-                            .font(.system(size: 48, weight: .bold, design: .rounded))
-                            .frame(maxWidth: .infinity).aspectRatio(1, contentMode: .fit)
-                            .background(cellColor(i), in: RoundedRectangle(cornerRadius: 14))
-                            .foregroundStyle(game.cells[i] == .x ? Color.accentColor : Color.primary)
+                        RoundedRectangle(cornerRadius: 14).fill(cellColor(i))
+                            .aspectRatio(1, contentMode: .fit)
+                            .overlay(
+                                Text(game.cells[i]?.rawValue ?? "")
+                                    .font(.system(size: 48, weight: .bold, design: .rounded))
+                                    .foregroundStyle(game.cells[i] == .x ? Color.accentColor : Color.primary)
+                            )
                     }
                     .buttonStyle(.plain)
                     .disabled(game.cells[i] != nil || game.isOver)

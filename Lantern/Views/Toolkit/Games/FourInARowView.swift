@@ -2,7 +2,8 @@ import SwiftUI
 
 struct FourInARowView: View {
     @State private var game = FourInARow()
-    @State private var scoreA = 0, scoreB = 0
+    @State private var scoreA = 0
+    @State private var scoreB = 0
     @State private var drops = 0
 
     private var status: String {

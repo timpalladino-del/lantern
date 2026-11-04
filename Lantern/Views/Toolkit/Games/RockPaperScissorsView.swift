@@ -3,7 +3,9 @@ import SwiftUI
 struct RockPaperScissorsView: View {
     @State private var mine: RPS?
     @State private var phone: RPS?
-    @State private var wins = 0, losses = 0, ties = 0
+    @State private var wins = 0
+    @State private var losses = 0
+    @State private var ties = 0
     @State private var rounds = 0
 
     private var outcome: String {

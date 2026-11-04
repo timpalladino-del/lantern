@@ -3,7 +3,8 @@ import SwiftUI
 struct WouldYouRatherView: View {
     @State private var order: [Int] = Array(GamesLibrary.wouldYouRather.indices).shuffled()
     @State private var index = 0
-    @State private var votesA = 0, votesB = 0
+    @State private var votesA = 0
+    @State private var votesB = 0
     @State private var taps = 0
 
     private var pair: (String, String) { GamesLibrary.wouldYouRather[order[index]] }

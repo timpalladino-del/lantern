@@ -2,7 +2,9 @@ import SwiftUI
 
 struct TicTacToeView: View {
     @State private var game = TicTacToe()
-    @State private var scoreX = 0, scoreO = 0, draws = 0
+    @State private var scoreX = 0
+    @State private var scoreO = 0
+    @State private var draws = 0
     @State private var moves = 0
 
     private var status: String {

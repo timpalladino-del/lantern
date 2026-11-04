@@ -135,3 +135,11 @@ Agreement, App Review contact phone number, then Submit for Review.
   group, Family 6, Family 10), all READY_FOR_REVIEW. Family 6 and Family 10 are WAITING_FOR_REVIEW,
   Group 50 stays READY_TO_SUBMIT, version 1.0 WAITING_FOR_REVIEW.
 - Cost: the queue position from 04:50 UTC. Submitted again at 18:05 UTC.
+
+## 1.0.1, build 7 (November 4, 2026, 18:32 UTC)
+
+- Uploaded to TestFlight while 1.0 (build 6) sits in review. A new version's build does not touch the
+  review. Delivery ceaa2295-f9ea-471a-a62c-efc8dcead444. The internal group receives it automatically.
+- What's in it: the games section built out (twenty games) and ready-to-send status texts. See plan.md §22.
+- Do not attach build 7 to version 1.0. When 1.0 is approved and released, create version 1.0.1 in App
+  Store Connect, attach build 7 (or a later one), and submit.

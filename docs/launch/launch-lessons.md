@@ -89,6 +89,11 @@ See pricing-plan.md. Nothing decided until 100 downloads and 30 days.
 
 ## Log
 
+- 2026-11-04, 18:32 UTC: a tester note from October ("add as much as you can [to] pass the time") was
+  misread during the 1.0 push and the games screen shipped with three things on it. 1.0.1 (build 7) has
+  twenty. Lesson: when a tester's sentence is ambiguous, ask them, and keep a list of every tester
+  sentence with a checkbox next to it so none get lost in a summary.
+
 - 2026-11-04, 18:05 UTC: third submission. The first two carried only the version; Family 6 and Family 10
   were never in them. The API has no way to add a subscription to a review submission, so it was done
   in the web UI through a scripted Chrome: group, then each subscription, "Add for Review" → the draft,

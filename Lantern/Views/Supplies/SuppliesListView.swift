@@ -207,7 +207,9 @@ struct SuppliesListView: View {
                 }
                 Spacer(minLength: 0)
                 Button(role: .destructive) { confirmDelete = true } label: { Label("Delete", systemImage: "trash") }
+                    .tint(.red)
             }
+            .tint(Color(uiColor: .label))
             .labelStyle(.titleAndIcon)
             .font(.subheadline.weight(.medium))
             .buttonStyle(.bordered)

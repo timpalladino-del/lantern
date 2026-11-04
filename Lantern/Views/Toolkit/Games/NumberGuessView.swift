@@ -27,6 +27,7 @@ struct NumberGuessView: View {
             if let best { Text("Fewest guesses so far: \(best)").font(.caption).foregroundStyle(.secondary) }
             Spacer()
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Guess my number")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear { focused = true }

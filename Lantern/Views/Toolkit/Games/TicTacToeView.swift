@@ -27,7 +27,7 @@ struct TicTacToeView: View {
                             .font(.system(size: 48, weight: .bold, design: .rounded))
                             .frame(maxWidth: .infinity).aspectRatio(1, contentMode: .fit)
                             .background(cellColor(i), in: RoundedRectangle(cornerRadius: 14))
-                            .foregroundStyle(game.cells[i] == .x ? Color.slate : Color.primary)
+                            .foregroundStyle(game.cells[i] == .x ? Color.accentColor : Color.primary)
                     }
                     .buttonStyle(.plain)
                     .disabled(game.cells[i] != nil || game.isOver)
@@ -48,6 +48,7 @@ struct TicTacToeView: View {
             .padding(.horizontal, 24)
             Spacer()
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Tic-tac-toe")
         .navigationBarTitleDisplayMode(.inline)
     }

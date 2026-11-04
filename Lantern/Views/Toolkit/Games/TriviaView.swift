@@ -15,6 +15,7 @@ struct TriviaView: View {
         Group {
             if done { summary } else { question }
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Trivia")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.impact(weight: .light), trigger: taps)

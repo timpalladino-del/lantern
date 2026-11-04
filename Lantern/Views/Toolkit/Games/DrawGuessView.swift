@@ -67,6 +67,7 @@ struct DrawGuessView: View {
             }
             .padding(.horizontal).padding(.bottom, 8)
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Draw and guess")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Time's up", isPresented: $timeUp) {

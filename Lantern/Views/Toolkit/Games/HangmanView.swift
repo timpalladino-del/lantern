@@ -19,6 +19,7 @@ struct HangmanView: View {
                 setup
             }
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Hangman")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.impact(weight: .light), trigger: guesses)

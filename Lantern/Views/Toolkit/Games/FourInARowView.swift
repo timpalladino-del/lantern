@@ -13,7 +13,7 @@ struct FourInARowView: View {
     }
 
     private func color(_ p: FourInARow.Piece?) -> Color {
-        switch p { case .a: return Color.slate; case .b: return Color.moss; case nil: return Color(uiColor: .tertiarySystemFill) }
+        switch p { case .a: return Color.accentColor; case .b: return Color.moss; case nil: return Color(uiColor: .tertiarySystemFill) }
     }
 
     var body: some View {
@@ -56,7 +56,7 @@ struct FourInARowView: View {
             .sensoryFeedback(.impact(weight: .medium), trigger: drops)
 
             HStack(spacing: 28) {
-                stat("Blue", scoreA, Color.slate); stat("Green", scoreB, Color.moss)
+                stat("Blue", scoreA, Color.accentColor); stat("Green", scoreB, Color.moss)
             }
             GameUI.bigButton(game.winner != nil || game.isFull ? "Play again" : "Start over", symbol: "arrow.counterclockwise") {
                 var next = FourInARow()
@@ -66,6 +66,7 @@ struct FourInARowView: View {
             .padding(.horizontal, 24)
             Spacer()
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Four in a row")
         .navigationBarTitleDisplayMode(.inline)
     }

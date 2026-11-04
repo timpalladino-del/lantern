@@ -49,6 +49,7 @@ struct TwentyQuestionsView: View {
             if asked >= 20 && !revealed { Text("That's twenty. Last guess, then reveal.").foregroundStyle(Color.signal).font(.footnote) }
             Spacer()
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Twenty questions")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.selection, trigger: taps)

@@ -46,6 +46,7 @@ struct StoryChainView: View {
             }
             .padding(.horizontal)
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Story chain")
         .navigationBarTitleDisplayMode(.inline)
         .sensoryFeedback(.selection, trigger: taps)

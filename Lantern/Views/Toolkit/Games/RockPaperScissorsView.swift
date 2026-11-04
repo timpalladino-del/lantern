@@ -57,6 +57,7 @@ struct RockPaperScissorsView: View {
                 .font(.footnote).foregroundStyle(.secondary)
             Spacer()
         }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Rock, paper, scissors")
         .navigationBarTitleDisplayMode(.inline)
     }

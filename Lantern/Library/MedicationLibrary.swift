@@ -50,26 +50,34 @@ final class MedicationLibrary {
                 let s = MedicationLibrary.score(query: q, against: n.lowercased())
                 best = max(best, s)
             }
-            if e.purpose.lowercased().contains(q) { best = max(best, 2) }
+            if e.purpose.lowercased().contains(q) { best = max(best, MedicationLibrary.purposeScore) }
             return best > 0 ? (e, best) : nil
         }
         return scored.sorted { a, b in a.1 != b.1 ? a.1 > b.1 : a.0.generic < b.0.generic }.prefix(limit).map { $0.0 }
     }
 
-    /// 5 prefix of the whole name, 4 prefix of any word, 3 contains, 2 close spelling, 0 no match.
+    /// 50 prefix of the whole name, 40 prefix of any word, 30 contains, 20 minus the edit distance for a
+    /// close spelling (so the nearest spelling wins), 0 no match. Purpose matches score 10.
+    static let purposeScore = 10
+
     static func score(query q: String, against name: String) -> Int {
-        if name.hasPrefix(q) { return 5 }
+        if name.hasPrefix(q) { return 50 }
         let words = name.split(whereSeparator: { !$0.isLetter && !$0.isNumber }).map(String.init)
-        if words.contains(where: { $0.hasPrefix(q) }) { return 4 }
-        if name.contains(q) { return 3 }
+        if words.contains(where: { $0.hasPrefix(q) }) { return 40 }
+        if name.contains(q) { return 30 }
         guard q.count >= 4 else { return 0 }
         let tolerance = q.count >= 8 ? 3 : 2
+        var best = 0
         for w in words where abs(w.count - q.count) <= tolerance {
-            if levenshtein(q, w) <= tolerance { return 2 }
+            let d = levenshtein(q, w)
+            if d <= tolerance { best = max(best, 20 - d) }
             // also compare against the first q.count letters of the word (typing a misspelled start)
-            if w.count > q.count, levenshtein(q, String(w.prefix(q.count))) <= tolerance - 1 { return 2 }
+            if w.count > q.count {
+                let dp = levenshtein(q, String(w.prefix(q.count)))
+                if dp <= tolerance - 1 { best = max(best, 20 - dp - 1) }
+            }
         }
-        return 0
+        return best
     }
 
     static func levenshtein(_ a: String, _ b: String) -> Int {

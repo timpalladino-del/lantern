@@ -173,7 +173,7 @@ struct InviteSheet: View {
         if let p = household.people.first(where: { $0.uuid.uuidString == target }) { return p.name }
         return newName.trimmingCharacters(in: .whitespaces)
     }
-    private var message: String { ProfileExchange.requestMessage(from: requester, forName: forName) }
+    private var message: String { ProfileExchange.requestMessage(from: requester, forName: forName, householdToken: household.inviteToken) }
 
     var body: some View {
         NavigationStack {

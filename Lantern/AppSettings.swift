@@ -9,4 +9,7 @@ enum AppSettings {
     static let hasSeenWelcome = "settings.hasSeenWelcome"
     static let checkInHours = "settings.checkInHours"
     static let checkInEnabled = "settings.checkInEnabled"
+    /// Set on a family member's phone after they answer an invitation: which household they belong to.
+    static let memberOfHouseholdToken = "settings.memberOfHouseholdToken"
+    static let memberOfHouseholdName = "settings.memberOfHouseholdName"
 }

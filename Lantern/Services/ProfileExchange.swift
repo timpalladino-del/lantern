@@ -39,8 +39,10 @@ struct ProfileCard: Codable, Equatable {
     var medications: [MedicationCard]
     var sentBy: String = ""
     var createdAt: Date = Date()
+    /// The household this profile was requested by. Empty for profiles shared without an invitation.
+    var householdToken: String = ""
 
-    init(person p: Person, sentBy: String = "") {
+    init(person p: Person, sentBy: String = "", householdToken: String = "") {
         name = p.name
         age = p.age
         weightKg = p.weightKg
@@ -59,6 +61,7 @@ struct ProfileCard: Codable, Equatable {
         }
         self.sentBy = sentBy
         self.createdAt = Date()
+        self.householdToken = householdToken
     }
 
     /// Writes the card onto a person. Medications are replaced, not merged: the card is the newer truth.
@@ -108,7 +111,7 @@ enum ProfileExchange {
     static let webPath = "/lantern/p"
 
     enum Route: Equatable {
-        case newProfile(requestedBy: String, forName: String)
+        case newProfile(requestedBy: String, forName: String, householdToken: String)
         case importProfile(ProfileCard)
     }
 
@@ -116,13 +119,14 @@ enum ProfileExchange {
     /// Where to get the app. Live once Lantern is on the App Store; until then the site page explains.
     static let appStoreURL = URL(string: "https://apps.apple.com/app/id6830418364")!
 
-    static func requestURL(from requester: String, forName: String = "") -> URL {
+    static func requestURL(from requester: String, forName: String = "", householdToken: String = "") -> URL {
         var c = URLComponents()
         c.scheme = "https"
         c.host = webHost
         c.path = webPath + "/new"
         var items = [URLQueryItem(name: "from", value: requester)]
         if !forName.isEmpty { items.append(URLQueryItem(name: "for", value: forName)) }
+        if !householdToken.isEmpty { items.append(URLQueryItem(name: "h", value: householdToken)) }
         c.queryItems = items
         return c.url!
     }
@@ -154,7 +158,7 @@ enum ProfileExchange {
         let q = Dictionary(uniqueKeysWithValues: (comps.queryItems ?? []).map { ($0.name, $0.value ?? "") })
         switch action.hasSuffix("/") ? String(action.dropLast()) : action {
         case "/new":
-            return .newProfile(requestedBy: q["from"] ?? "", forName: q["for"] ?? "")
+            return .newProfile(requestedBy: q["from"] ?? "", forName: q["for"] ?? "", householdToken: q["h"] ?? "")
         case "/import":
             guard let d = q["d"], let data = fromBase64url(d) else { return nil }
             let dec = JSONDecoder()
@@ -167,7 +171,7 @@ enum ProfileExchange {
     }
 
     /// What the owner sends. Plain text so it works in Messages, WhatsApp, email, anything.
-    static func requestMessage(from requester: String, forName: String = "") -> String {
+    static func requestMessage(from requester: String, forName: String = "", householdToken: String = "") -> String {
         let who = forName.isEmpty ? "you" : forName
         let greeting = forName.isEmpty ? "" : "Hi \(forName), "
         return """
@@ -175,7 +179,7 @@ enum ProfileExchange {
 
         1. Get Lantern on your iPhone: \(appStoreURL.absoluteString)
         2. Open it once and tap Next through the welcome.
-        3. Come back here and tap your link: \(requestURL(from: requester, forName: forName).absoluteString)
+        3. Come back here and tap your link: \(requestURL(from: requester, forName: forName, householdToken: householdToken).absoluteString)
         4. Fill in your profile and tap "Send to \(requester)".
 
         Everything stays on our phones. Nothing goes to a server.

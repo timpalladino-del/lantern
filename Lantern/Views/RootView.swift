@@ -27,10 +27,10 @@ struct RootView: View {
     @State private var screenshotScrollTarget: String?
 
     enum IncomingRoute: Identifiable, Equatable {
-        case newProfile(String, String), importProfile(ProfileCard)
+        case newProfile(String, String, String), importProfile(ProfileCard)
         var id: String {
             switch self {
-            case .newProfile(let s, let f): return "new-\(s)-\(f)"
+            case .newProfile(let s, let f, let h): return "new-\(s)-\(f)-\(h)"
             case .importProfile(let c): return "import-\(c.name)-\(c.createdAt.timeIntervalSince1970)"
             }
         }
@@ -67,13 +67,13 @@ struct RootView: View {
             guard let route = ProfileExchange.route(for: url) else { return }
             showOnboarding = false
             switch route {
-            case .newProfile(let by, let f): incomingRoute = .newProfile(by, f)
+            case .newProfile(let by, let f, let h): incomingRoute = .newProfile(by, f, h)
             case .importProfile(let card): incomingRoute = .importProfile(card)
             }
         }
         .sheet(item: $incomingRoute) { route in
             switch route {
-            case .newProfile(let by, let f): ProfileBuilderView(requestedBy: by, forName: f).tint(Color.accentColor)
+            case .newProfile(let by, let f, let h): ProfileBuilderView(requestedBy: by, forName: f, householdToken: h).tint(Color.accentColor)
             case .importProfile(let card): ProfileImportView(card: card).tint(Color.accentColor)
             }
         }
@@ -130,7 +130,7 @@ struct RootView: View {
         if let o = args.firstIndex(of: "-open"), o + 1 < args.count, let url = URL(string: args[o + 1]), let route = ProfileExchange.route(for: url) {
             showOnboarding = false
             switch route {
-            case .newProfile(let by, let f): incomingRoute = .newProfile(by, f)
+            case .newProfile(let by, let f, let h): incomingRoute = .newProfile(by, f, h)
             case .importProfile(let card): incomingRoute = .importProfile(card)
             }
         }

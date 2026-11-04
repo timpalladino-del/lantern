@@ -17,13 +17,14 @@ final class ProfileExchangeTests: XCTestCase {
         m.person = p
         context.insert(m)
 
-        let card = ProfileCard(person: p, sentBy: "Maria")
+        let card = ProfileCard(person: p, sentBy: "Maria", householdToken: "tok42")
         let url = try XCTUnwrap(ProfileExchange.importURL(for: card))
         XCTAssertEqual(url.scheme, "https")
         XCTAssertEqual(url.host, "kismetstudio.io")
         XCTAssertTrue(url.path.hasPrefix("/lantern/p/import"))
         guard case .importProfile(let decoded)? = ProfileExchange.route(for: url) else { return XCTFail("no import route") }
         XCTAssertEqual(decoded.name, "Maria")
+        XCTAssertEqual(decoded.householdToken, "tok42")
         XCTAssertEqual(decoded.age, 42)
         XCTAssertEqual(decoded.allergies, "Penicillin")
         XCTAssertEqual(decoded.medications.count, 1)
@@ -44,10 +45,11 @@ final class ProfileExchangeTests: XCTestCase {
 
     func testRequestURLRoutesToBuilder() {
         let url = ProfileExchange.requestURL(from: "Tim")
-        XCTAssertEqual(ProfileExchange.route(for: url), .newProfile(requestedBy: "Tim", forName: ""))
-        XCTAssertEqual(ProfileExchange.route(for: URL(string: "lantern://profile/new?from=Tim")!), .newProfile(requestedBy: "Tim", forName: ""))
-        XCTAssertEqual(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/p/new/?from=Tim&for=Leo")!), .newProfile(requestedBy: "Tim", forName: "Leo"))
-        let msg = ProfileExchange.requestMessage(from: "Tim", forName: "Leo")
+        XCTAssertEqual(ProfileExchange.route(for: url), .newProfile(requestedBy: "Tim", forName: "", householdToken: ""))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "lantern://profile/new?from=Tim")!), .newProfile(requestedBy: "Tim", forName: "", householdToken: ""))
+        XCTAssertEqual(ProfileExchange.route(for: URL(string: "https://kismetstudio.io/lantern/p/new/?from=Tim&for=Leo&h=abc123")!), .newProfile(requestedBy: "Tim", forName: "Leo", householdToken: "abc123"))
+        let msg = ProfileExchange.requestMessage(from: "Tim", forName: "Leo", householdToken: "abc123")
+        XCTAssertTrue(msg.contains("h=abc123"))
         XCTAssertTrue(msg.contains("1. Get Lantern"))
         XCTAssertTrue(msg.contains("apps.apple.com"))
         XCTAssertTrue(msg.contains("for=Leo"))

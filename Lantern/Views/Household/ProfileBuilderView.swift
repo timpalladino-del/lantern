@@ -6,12 +6,13 @@ import SwiftData
 struct ProfileBuilderView: View {
     let requestedBy: String
     var forName: String = ""
+    var householdToken: String = ""
     @Environment(\.dismiss) private var dismiss
     @State private var scratch: ModelContainer? = try? AppSchema.container(inMemory: true)
 
     var body: some View {
         if let scratch {
-            ProfileBuilderBody(requestedBy: requestedBy, forName: forName, onDone: { dismiss() })
+            ProfileBuilderBody(requestedBy: requestedBy, forName: forName, householdToken: householdToken, onDone: { dismiss() })
                 .modelContainer(scratch)
         } else {
             ContentUnavailableView("Couldn't start", systemImage: "exclamationmark.triangle", description: Text("Try again from the link."))
@@ -22,7 +23,10 @@ struct ProfileBuilderView: View {
 private struct ProfileBuilderBody: View {
     let requestedBy: String
     let forName: String
+    let householdToken: String
     let onDone: () -> Void
+    @AppStorage(AppSettings.memberOfHouseholdToken) private var memberOfToken = ""
+    @AppStorage(AppSettings.memberOfHouseholdName) private var memberOfName = ""
     @Environment(\.modelContext) private var context
     @Query private var households: [Household]
     @Query private var people: [Person]
@@ -61,10 +65,13 @@ private struct ProfileBuilderBody: View {
                         Button { editing = me } label: { Label("Edit or add medications", systemImage: "pencil") }
                     }
                     Section {
-                        if let text = ProfileExchange.replyMessage(for: ProfileCard(person: me, sentBy: me.name)) {
+                        if let text = ProfileExchange.replyMessage(for: ProfileCard(person: me, sentBy: me.name, householdToken: householdToken)) {
                             ShareLink(item: text, subject: Text("My Lantern profile")) {
                                 Label("Send to \(requester)", systemImage: "paperplane.fill").font(.headline)
                             }
+                            .simultaneousGesture(TapGesture().onEnded {
+                                if !householdToken.isEmpty { memberOfToken = householdToken; memberOfName = requester }
+                            })
                         }
                     } footer: {
                         Text("Sends a link back by Messages, email or any app. \(requester) taps it and you appear in their household.")
@@ -91,6 +98,11 @@ struct ProfileImportView: View {
     @Environment(\.dismiss) private var dismiss
     @Query private var households: [Household]
 
+    private var tokenMismatch: Bool {
+        guard let h = households.first, !card.householdToken.isEmpty else { return false }
+        return card.householdToken != h.inviteToken
+    }
+
     private var existingMatch: Person? {
         households.first?.people.first { $0.name.trimmingCharacters(in: .whitespaces).caseInsensitiveCompare(card.name.trimmingCharacters(in: .whitespaces)) == .orderedSame }
     }
@@ -116,6 +128,12 @@ struct ProfileImportView: View {
                                 Text(times.isEmpty ? "\(Int(m.dosesPerDay)) a day" : times).font(.caption).foregroundStyle(.secondary)
                             }
                         }
+                    }
+                }
+                if tokenMismatch {
+                    Section {
+                        Label("This profile was sent to a different Lantern household", systemImage: "exclamationmark.triangle.fill").foregroundStyle(Color.ember)
+                        Text("It was filled in from someone else's invitation. You can still add it, but check with \(card.name) that it was meant for you.").font(.footnote).foregroundStyle(.secondary)
                     }
                 }
                 Section {

@@ -14,6 +14,8 @@ final class Household {
     var createdAt: Date = Date()
     /// The person who sends invitations and whose name appears on them. Defaults to the first person.
     var adminPersonUUID: UUID?
+    /// Ties invitations and replies to this household. Travels in the link, never anywhere else.
+    var inviteToken: String = UUID().uuidString.lowercased().replacingOccurrences(of: "-", with: "").prefix(12).description
 
     @Relationship(deleteRule: .cascade, inverse: \Person.household)
     var people: [Person] = []

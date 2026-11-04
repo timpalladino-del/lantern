@@ -26,9 +26,11 @@ on each, before launch:
    reviews and testers. Accepted.
 8. **Direct App Store link everywhere; nothing says "search for it".** Done in every file in this kit.
    The direct link resolved minutes after CastleWise's release; search took 30 hours.
-9. **Attach the IAP to the version; confirm "Items Submitted" before submitting.** Done differently: the
-   three subscriptions were READY_TO_SUBMIT in the group and the version submission picked them up.
-   Verify in the approval email that Family 6 and Family 10 read Approved.
+9. **Attach the IAP to the version; confirm "Items Submitted" before submitting.** Nearly missed again.
+   The API submission takes only the version; the subscriptions stayed "Prepare for Submission" through
+   two submissions. Fixed the third time by adding the group and both subscriptions to the draft in the
+   web UI: "4 Items Submitted". The rule for next time: the submission is not done until the sheet says
+   the IAP count, and the API cannot do that part. See app-store-connect.md.
 10. **A released version cannot take a new build; plan version numbers assuming 1.0 is final.** The next
     build goes to 1.0.1, not 1.0.
 11. **Only build from one copy of the project.** The Mac copy is the only one that archives. The container
@@ -86,6 +88,12 @@ Two new ones Lantern added:
 See pricing-plan.md. Nothing decided until 100 downloads and 30 days.
 
 ## Log
+
+- 2026-11-04, 18:05 UTC: third submission. The first two carried only the version; Family 6 and Family 10
+  were never in them. The API has no way to add a subscription to a review submission, so it was done
+  in the web UI through a scripted Chrome: group, then each subscription, "Add for Review" → the draft,
+  then Submit. Submission f28461ea, 4 items. Lesson: the API path is not the whole path. Count the items
+  on the sheet before clicking Submit; the number must be 1 + the IAPs.
 
 - 2026-11-04: 1.0 (build 6) submitted. App Privacy was the last blocker and took a person. Launch kit
   written. Screenshot 8 showed a price; the submission was pulled an hour later, the screenshot deleted,

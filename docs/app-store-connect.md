@@ -111,3 +111,27 @@ Agreement, App Review contact phone number, then Submit for Review.
 - Deleted 08-paywall.png (showed prices) and the old 01-home.png; uploaded a new 01-home.png of the
   dashboard captured with `-demo -tab Home -plan family6` (no trial banner). Eight screenshots, reordered.
 - New review submission 27817508-257f-4715-a9a7-7fcd7a726ce8 with the version item, submitted → WAITING_FOR_REVIEW.
+
+## Third submission, with the subscriptions (November 4, 2026, 18:05 UTC)
+
+- Both earlier submissions held only the version item. Family 6 and Family 10 stayed READY_TO_SUBMIT
+  ("Prepare for Submission" in the UI), which is the CastleWise 2.1(b) gap: the app would have shipped
+  with subscriptions that are not approved. The API cannot fix it. `reviewSubmissionItems` has no
+  `subscription`, `inAppPurchaseV2` or `subscriptionGroup` relationship (all three return
+  "unknown relationship"), so the subscriptions have to be attached in the web UI.
+- Done in a Chrome launched with a remote-debugging port, driven with a 60-line CDP script
+  (`~/.appstoreconnect/browser/cdp.js`: `goto`, `shot`, `eval`, `click`, `type`). The React rows need
+  real mouse events (Input.dispatchMouseEvent); element `.click()` does nothing.
+- Steps: cancel 27817508 (PATCH canceled=true), version → DEVELOPER_REJECTED. On the version page click
+  "Add for Review": a Draft Submission appears with iOS App 1.0. On the subscription group page
+  (`/distribution/subscription-groups/22542888`) "Add for Review" is a dropdown: pick "Draft iOS
+  Submission". The draft then says "Unable to Submit: new subscription groups must be submitted with an
+  auto-renewable subscription from within that group." On each subscription page
+  (`/distribution/subscriptions/6830418767`, `/6830418569`) the same dropdown → the draft. Group 50 left
+  out. "Submit for Review" → "4 Items Submitted".
+- Quirk: after a page navigation the first mouse click on "Add for Review" only focuses the page; the
+  second opens the menu (`aria-expanded` goes true).
+- Result: review submission f28461ea-3ecc-4d41-b9a9-6e96910294ed, WAITING_FOR_REVIEW, 4 items (version,
+  group, Family 6, Family 10), all READY_FOR_REVIEW. Family 6 and Family 10 are WAITING_FOR_REVIEW,
+  Group 50 stays READY_TO_SUBMIT, version 1.0 WAITING_FOR_REVIEW.
+- Cost: the queue position from 04:50 UTC. Submitted again at 18:05 UTC.

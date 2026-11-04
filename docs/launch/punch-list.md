@@ -8,7 +8,8 @@ Screenshot 8 showed "$12.99 per year" and "Start 7-day free trial", the CastleWi
 submission was pulled, that screenshot deleted, the stale Home screenshot replaced with the new dashboard
 (captured with the Family plan active so no trial banner shows), and 1.0 resubmitted with eight
 screenshots. New review submission 27817508-257f-4715-a9a7-7fcd7a726ce8, Waiting for Review again at
-04:50 UTC. Cost: about an hour of queue position.
+04:50 UTC. Then cancelled a third time at 18:05 UTC to add the subscriptions (they were never in the
+first two). Submission f28461ea, 4 items. Cost: the day's queue position, twice.
 
 ## 2. The coming-soon post said "no subscription"
 
@@ -26,8 +27,9 @@ family tracking is what the plan pays for.
 - Small Business Program: enroll the day Paid Apps goes Active. 85 percent instead of 70, and it is not
   retroactive.
 - Distribution, 1.0: confirm Manually release this version (it is set; glance at it).
-- Monetization, Subscriptions: Family 6 and Family 10 must read Approved after review, with the 7-day
-  trial attached in all territories. Group 50 is in the group but not on the paywall; leave it.
+- Monetization, Subscriptions: Family 6 and Family 10 read Waiting for Review since 18:05 UTC (third
+  submission, f28461ea, 4 items). They must read Approved after review, with the 7-day trial attached in
+  all territories. Group 50 is in the group but not on the paywall; leave it.
 - Offer codes for Family 6: one-time use, free, 1 year, 100 codes. See beta-tester-thankyou.txt.
 
 ## 4. Site swap, ready to flip (tonight)

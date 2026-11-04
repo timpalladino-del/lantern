@@ -21,6 +21,9 @@ struct SuppliesListView: View {
     @State private var showShopping = false
     @State private var showOut = true
     @State private var usedCount = 0
+    @State private var editMode: EditMode = .inactive
+    @State private var selection: Set<PersistentIdentifier> = []
+    @State private var confirmDelete = false
 
     private var now: Date { Date() }
 
@@ -67,11 +70,38 @@ struct SuppliesListView: View {
             }
             .navigationTitle("Supplies")
             .searchable(text: $searchText, prompt: "Search supplies")
+            .environment(\.editMode, $editMode)
             .toolbar {
+                if editMode.isEditing {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(selection.count == filtered.count ? "Deselect all" : "Select all") {
+                            if selection.count == filtered.count { selection.removeAll() } else { selection = Set(filtered.map(\.persistentModelID)) }
+                        }
+                    }
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Menu {
+                            ForEach(locations) { loc in
+                                Button { move(selected(), to: loc) } label: { Label(loc.name, systemImage: loc.symbol) }
+                            }
+                            Button { move(selected(), to: nil) } label: { Label("No location", systemImage: "questionmark.square.dashed") }
+                        } label: { Label("Move to…", systemImage: "folder") }
+                        .disabled(selection.isEmpty)
+                        Spacer()
+                        Text(selection.isEmpty ? "Select items" : "\(selection.count) selected").font(.footnote).foregroundStyle(.secondary)
+                        Spacer()
+                        Button(role: .destructive) { confirmDelete = true } label: { Label("Delete", systemImage: "trash") }
+                            .disabled(selection.isEmpty)
+                    }
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Done") { withAnimation { editMode = .inactive; selection.removeAll() } }.fontWeight(.semibold)
+                    }
+                }
                 ToolbarItemGroup(placement: .topBarTrailing) {
+                    if !editMode.isEditing {
                     Button { showScanner = true } label: { Image(systemName: "barcode.viewfinder") }
                         .accessibilityLabel("Scan a barcode")
                     Menu {
+                        Button { withAnimation { editMode = .active } } label: { Label("Select items", systemImage: "checkmark.circle") }
                         Button { showAdd = true } label: { Label("Add by hand", systemImage: "plus") }
                         Button { showPacks = true } label: { Label("Add a starter pack", systemImage: "list.bullet.rectangle") }
                         NavigationLink { KitsView() } label: { Label("Kits and go-bags", systemImage: "backpack") }
@@ -83,8 +113,10 @@ struct SuppliesListView: View {
                         Toggle("Show used-up items", isOn: $showOut)
                     } label: { Image(systemName: "ellipsis.circle") }
                     .accessibilityLabel("More options")
+                    }
                 }
                 ToolbarItem(placement: .topBarLeading) {
+                    if !editMode.isEditing {
                     Menu {
                         Button("All categories") { category = nil }
                         ForEach(SupplyCategory.allCases) { c in
@@ -93,7 +125,13 @@ struct SuppliesListView: View {
                     } label: {
                         Label(category?.title ?? "All", systemImage: category?.symbol ?? "line.3.horizontal.decrease.circle")
                     }
+                    }
                 }
+            }
+            .confirmationDialog("Delete \(selection.count) item\(selection.count == 1 ? "" : "s")?", isPresented: $confirmDelete, titleVisibility: .visible) {
+                Button("Delete", role: .destructive) { deleteSelected() }
+            } message: {
+                Text("They come off readiness and the shopping list is not touched.")
             }
             .sheet(isPresented: $showScanner) { ScanSheet() }
             .sheet(isPresented: $showAdd) { ItemEditView() }
@@ -121,8 +159,8 @@ struct SuppliesListView: View {
     }
 
     private var list: some View {
-        List {
-            if !kits.isEmpty {
+        List(selection: $selection) {
+            if !kits.isEmpty, !editMode.isEditing {
                 Section {
                     ForEach(kits.prefix(3), id: \.uuid) { kit in
                         NavigationLink { KitDetailView(kit: kit) } label: { KitRow(kit: kit) }
@@ -144,8 +182,23 @@ struct SuppliesListView: View {
         }
     }
 
+    private func selected() -> [SupplyItem] { items.filter { selection.contains($0.persistentModelID) } }
+
+    private func move(_ list: [SupplyItem], to location: StorageLocation?) {
+        for item in list { item.location = location; item.touch() }
+        try? context.save()
+        withAnimation { editMode = .inactive; selection.removeAll() }
+    }
+
+    private func deleteSelected() {
+        for item in selected() { context.delete(item) }
+        try? context.save()
+        withAnimation { editMode = .inactive; selection.removeAll() }
+    }
+
     private func row(_ item: SupplyItem) -> some View {
         NavigationLink { ItemDetailView(item: item) } label: { ItemRow(item: item) }
+            .tag(item.persistentModelID)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button { useOne(item) } label: { Label("Used 1", systemImage: "minus.circle") }
                     .tint(Color.accentColor)

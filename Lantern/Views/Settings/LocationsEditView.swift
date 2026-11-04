@@ -8,6 +8,7 @@ struct LocationsEditView: View {
     @State private var newName = ""
     @State private var renaming: StorageLocation?
     @State private var renameText = ""
+    @State private var addingTo: StorageLocation?
 
     private let symbols = ["cabinet.fill", "shippingbox.fill", "backpack.fill", "car.fill", "cross.case.fill", "house.fill", "snowflake", "archivebox.fill", "building.2.fill", "tent.fill"]
 
@@ -32,10 +33,14 @@ struct LocationsEditView: View {
                         Text(loc.name)
                         Spacer()
                         Text("\(loc.items.count)").foregroundStyle(.secondary)
+                        Button { addingTo = loc } label: { Image(systemName: "plus.circle") }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel("Add a supply to \(loc.name)")
                     }
                     .swipeActions {
                         Button(role: .destructive) { context.delete(loc); try? context.save() } label: { Label("Delete", systemImage: "trash") }
                         Button { renaming = loc; renameText = loc.name } label: { Label("Rename", systemImage: "pencil") }
+                        Button { addingTo = loc } label: { Label("Add supply", systemImage: "plus") }.tint(Color.accentColor)
                     }
                 }
                 .onMove { from, to in
@@ -45,9 +50,10 @@ struct LocationsEditView: View {
                     try? context.save()
                 }
             } footer: {
-                Text("Deleting a location keeps its items; they just lose the label.")
+                Text("Tap + to add a supply straight into a location. Deleting a location keeps its items; they just lose the label.")
             }
         }
+        .sheet(item: $addingTo) { loc in ItemEditView(draft: ItemDraft(location: loc)) }
         .navigationTitle("Locations")
         .toolbar { EditButton() }
         .alert("Rename", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {

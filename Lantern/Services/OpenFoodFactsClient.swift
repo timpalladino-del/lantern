@@ -9,6 +9,8 @@ struct ProductInfo: Equatable {
     let quantityText: String
     /// kcal for the whole package when Open Food Facts knows both energy per 100 g and the package size.
     let caloriesPerPackage: Double?
+    /// Servings in the package when the label's serving size and the package size are both known.
+    let servingsPerPackage: Double?
 }
 
 final class OpenFoodFactsClient {
@@ -29,6 +31,7 @@ final class OpenFoodFactsClient {
             let brands: String?
             let quantity: String?
             let product_quantity: LenientNumber?
+            let serving_quantity: LenientNumber?
             let nutriments: Nutriments?
             struct Nutriments: Decodable {
                 let energyKcal100g: LenientNumber?
@@ -53,7 +56,7 @@ final class OpenFoodFactsClient {
         let clean = barcode.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !clean.isEmpty, clean.allSatisfy(\.isNumber) else { return nil }
         var comps = URLComponents(string: "https://world.openfoodfacts.org/api/v2/product/\(clean).json")!
-        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity,product_quantity,nutriments")]
+        comps.queryItems = [URLQueryItem(name: "fields", value: "product_name,product_name_en,brands,quantity,product_quantity,serving_quantity,nutriments")]
         var req = URLRequest(url: comps.url!)
         req.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         req.timeoutInterval = 8
@@ -67,6 +70,10 @@ final class OpenFoodFactsClient {
         if let per100 = p.nutriments?.energyKcal100g?.value, let grams = p.product_quantity?.value, grams > 0 {
             kcal = (per100 * grams / 100).rounded()
         }
-        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal)
+        var servings: Double? = nil
+        if let grams = p.product_quantity?.value, let serving = p.serving_quantity?.value, serving > 0, grams > 0 {
+            servings = (grams / serving * 10).rounded() / 10
+        }
+        return ProductInfo(barcode: clean, name: name, brand: p.brands ?? "", quantityText: p.quantity ?? "", caloriesPerPackage: kcal, servingsPerPackage: servings)
     }
 }

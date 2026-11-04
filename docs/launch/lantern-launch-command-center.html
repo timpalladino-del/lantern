@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lantern Launch Command Center</title>
+<style>
+  :root { --ink:#1A2232; --ink2:#4a596f; --ink3:#7b889c; --paper:#F2F4F7; --card:#fff; --line:rgba(26,34,50,.1); --glow:#F5B041; --glowdeep:#D98E1F; --moss:#3F7D57; --ember:#C4602F; --night:#141B2B; }
+  @media (prefers-color-scheme: dark) { :root { --ink:#eef3fa; --ink2:#b6c2d4; --ink3:#8593a8; --paper:#141B2B; --card:#1C2436; --line:rgba(255,255,255,.1); } }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:"Nunito Sans","Helvetica Neue",Arial,sans-serif; background:var(--paper); color:var(--ink); font-size:15px; line-height:1.55; }
+  header { background:var(--night); color:#F2F4F7; padding:18px 24px; display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+  header h1 { margin:0; font-size:18px; letter-spacing:.14em; text-transform:uppercase; }
+  header h1 span { color:var(--glow); }
+  header .meta { color:#9AA5B5; font-size:13px; }
+  header label { font-size:13px; color:#9AA5B5; display:flex; align-items:center; gap:8px; margin-left:auto; }
+  header input[type=date] { font:inherit; padding:6px 8px; border-radius:8px; border:1px solid #2b3650; background:#1C2436; color:#F2F4F7; }
+  nav { display:flex; gap:4px; padding:10px 24px 0; border-bottom:1px solid var(--line); background:var(--card); position:sticky; top:0; z-index:5; overflow-x:auto; }
+  nav button { font:inherit; font-weight:700; font-size:13.5px; padding:10px 14px; border:0; background:transparent; color:var(--ink3); border-bottom:3px solid transparent; cursor:pointer; white-space:nowrap; }
+  nav button.on { color:var(--ink); border-bottom-color:var(--glow); }
+  main { max-width:1040px; margin:0 auto; padding:24px; }
+  .tab { display:none; } .tab.on { display:block; }
+  h2 { font-size:26px; margin:0 0 6px; letter-spacing:-.01em; }
+  h3 { font-size:17px; margin:0 0 6px; }
+  p.lede { color:var(--ink2); margin:0 0 20px; max-width:62em; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:16px; }
+  .card h3 { display:flex; align-items:baseline; gap:10px; }
+  .chip { font-size:11px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3); font-weight:700; }
+  .chip.red { color:var(--ember); } .chip.green { color:var(--moss); }
+  .task { display:flex; gap:12px; align-items:flex-start; padding:9px 0; border-top:1px solid var(--line); }
+  .task:first-of-type { border-top:0; }
+  .task input { margin-top:4px; width:18px; height:18px; accent-color:var(--glowdeep); flex:none; }
+  .task .t { flex:1; }
+  .task.done .t { color:var(--ink3); text-decoration:line-through; }
+  .task .h { display:none; color:var(--ink2); font-size:13.5px; margin-top:6px; }
+  .task.open .h { display:block; }
+  .task .how { background:none; border:0; color:var(--glowdeep); font:inherit; font-size:12.5px; cursor:pointer; padding:0; margin-left:8px; }
+  ol, ul { padding-left:22px; } li { margin:4px 0; }
+  table { width:100%; border-collapse:collapse; font-size:14px; }
+  th, td { text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--ink3); font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+  td input { width:100%; font:inherit; padding:5px 6px; border:1px solid var(--line); border-radius:6px; background:var(--paper); color:var(--ink); }
+  .copy { position:relative; background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:14px 16px; white-space:pre-wrap; font-size:14px; margin:8px 0 14px; }
+  .copy button { position:absolute; top:8px; right:8px; font:inherit; font-size:12px; font-weight:700; padding:5px 10px; border-radius:999px; border:0; background:var(--ink); color:var(--paper); cursor:pointer; }
+  .copy button.ok { background:var(--moss); }
+  .pct { font-size:13px; color:var(--ink3); }
+  .warn { border-left:3px solid var(--ember); padding-left:12px; color:var(--ink2); }
+  .ok { border-left:3px solid var(--moss); padding-left:12px; color:var(--ink2); }
+  code { font-family:"IBM Plex Mono",Menlo,monospace; font-size:13px; background:var(--paper); padding:1px 5px; border-radius:5px; }
+  .day { margin-bottom:10px; }
+  .day h3 .date { color:var(--ink3); font-weight:500; font-size:14px; }
+  @media (max-width:640px) { main { padding:16px; } header { padding:14px 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <h1><span>Lantern</span> launch</h1>
+  <div class="meta"><span id="pct">0% of tasks done</span> · <span id="saved">ready</span></div>
+  <label>Launch date (Day 1) <input type="date" id="launch"></label>
+</header>
+<nav>
+  <button data-tab="tonight" class="on">Tonight</button>
+  <button data-tab="plan">The Plan</button>
+  <button data-tab="playbooks">Playbooks</button>
+  <button data-tab="reddit">Reddit</button>
+  <button data-tab="copy">Post Copy</button>
+  <button data-tab="tracker">Tracker</button>
+</nav>
+<main>
+
+<!-- ============ TONIGHT ============ -->
+<section class="tab on" id="tab-tonight">
+  <h2>Before release. Then release morning, in order.</h2>
+  <p class="lede">1.0 is in review, set to manual release. Everything on this page is done before you press the button. Set the launch date above once you know it; every day in The Plan takes its real date.</p>
+
+  <div class="card">
+    <h3><span class="chip red">Decide first</span> The paywall screenshot shows a price</h3>
+    <p class="warn">Screenshot 8 of 9 shows "$12.99 per year" and "Start 7-day free trial". CastleWise was rejected under 2.3.7 for exactly this. Pull it now (remove from review, delete the screenshot, resubmit; costs about a day of queue) or let it ride and fix it on rejection (costs one to three days only if it happens). Recommendation: pull it. The session can do it in two API calls.</p>
+    <div id="t-decide"></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip">Block 1 · 10 minutes</span> App Store Connect pre-flight</h3>
+    <div id="t-asc"></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip">Block 2 · 10 minutes</span> Offer codes</h3>
+    <p class="lede" style="margin-bottom:8px">Lantern's paid tier is a subscription, so testers get offer codes, not promo codes.</p>
+    <div id="t-codes"></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip">Block 3 · 25 minutes</span> Reddit Ads, built and Scheduled for Day 15</h3>
+    <div id="t-reddit"></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip">Block 4 · 20 minutes</span> Reddit warm-up and the site</h3>
+    <div id="t-warm"></div>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip">Cannot be done before release</span> Apple Ads and campaign links</h3>
+    <p class="ok">Apple Ads only finds apps that are live. Build both campaigns on release morning (Playbook 4). Campaign links need a day of download data; make them Day 2 or 3 (Playbook 2). On Day 1 use the direct link everywhere: only one thing is running, so attribution costs nothing.</p>
+  </div>
+
+  <div class="card">
+    <h3><span class="chip green">Release morning</span> In order. Do not post anything until step 3 passes.</h3>
+    <div id="t-morning"></div>
+  </div>
+
+  <div class="card">
+    <h3>What you are aiming at · Day 30</h3>
+    <table>
+      <tr><th>Target</th><th>Number</th></tr>
+      <tr><td>Downloads</td><td>400</td></tr>
+      <tr><td>Family trial starts</td><td>40 (10 per 100 downloads)</td></tr>
+      <tr><td>Trial to paid</td><td>25 percent of the first cohort</td></tr>
+      <tr><td>Ratings at 4.6 or higher</td><td>15</td></tr>
+      <tr><td>Apple Ads cost per install</td><td>under $2.50</td></tr>
+      <tr><td>Reddit posts over 50 upvotes</td><td>3</td></tr>
+    </table>
+    <p class="lede" style="margin-top:12px">Budget: $300. Apple Ads $200 (Day 3 to 30), Reddit Ads $60 (Day 15 to 24), $40 reserve to the winner from Day 22. The number that matters is trial-to-paid: if a quarter of trials convert, every future ad dollar has a known return.</p>
+  </div>
+</section>
+
+<!-- ============ PLAN ============ -->
+<section class="tab" id="tab-plan">
+  <h2>Thirty days. One page. Check the boxes.</h2>
+  <p class="lede">Day 1 is the morning you press Release. Tap a box when it is done; this page remembers. Tap "exactly how" under a task for the click path.</p>
+  <div id="plan"></div>
+  <div class="card">
+    <h3>Standing rules · every day</h3>
+    <ul>
+      <li>Nine helpful Reddit contributions for every one app mention.</li>
+      <li>Home, parenting and caregiver subs: links in comments only, and only when asked. Builder subs (r/SideProject, r/iosapps, r/iOSProgramming, r/AppHookup) expect direct links.</li>
+      <li>r/preppers: read, answer shelf-life questions, never post the app. The audience wants a bunker app and the sub's self-promotion rule is strict.</li>
+      <li>Apple Ads: pause any keyword over $2.50 per install once it has 30 taps. Readouts every Tuesday and Friday.</li>
+      <li>Never your job or employer. Never prepper, survival, bug out, tactical, threat, doomsday. Never a price, "free" or "buy" in a headline.</li>
+      <li>No em dashes in any copy.</li>
+      <li>The direct App Store link, never "search for it".</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ PLAYBOOKS ============ -->
+<section class="tab" id="tab-playbooks">
+  <h2>Playbooks</h2>
+  <p class="lede">Every recurring job, written plainly. Nothing here assumes you have done it before.</p>
+
+  <div class="card"><h3><span class="chip">Playbook 1</span> Press the release button</h3>
+    <ol>
+      <li>appstoreconnect.apple.com on a computer. Apps, then Lantern: Household Readiness.</li>
+      <li>The left side shows 1.0 with a green "Pending Developer Release" badge.</li>
+      <li>Top right: Release This Version, confirm.</li>
+      <li>It goes live worldwide over the next 1 to 24 hours, usually under an hour in the US. The direct link <code>https://apps.apple.com/us/app/id6830418364</code> resolves within minutes; search can take a day. Check with <code>https://itunes.apple.com/search?term=lantern+household&amp;entity=software</code> rather than refreshing the store.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 2</span> Campaign links (so you know where downloads come from)</h3>
+    <ol>
+      <li>App Store Connect, Analytics at the top, then Lantern. The Campaigns section and its + button appear only after about a day of downloads from five or more people.</li>
+      <li>Make six, named exactly: <code>fb-launch</code>, <code>fb-post</code>, <code>reddit-maker</code>, <code>reddit-home</code>, <code>reddit-ads</code>, <code>web</code>.</li>
+      <li>The link form is <code>https://apps.apple.com/app/apple-store/id6830418364?pt=PROVIDER&amp;ct=TOKEN&amp;mt=8</code>. Apple fills in the pt value; copy it from the first link it gives you. (CastleWise's was 129222714 and the same developer account normally keeps it. Confirm.)</li>
+      <li>Swap the matching link into the Facebook first comment, the Reddit ad destination and the site badge. Results appear under Analytics, Acquisition, within a day or two.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 3</span> Offer codes for Family</h3>
+    <ol>
+      <li>App Store Connect, Lantern, Monetization, Subscriptions, Family 6.</li>
+      <li>Offer Codes, create. Name: <code>beta-2026</code>. Type: one-time use codes. Offer: Free, duration 1 year. Eligibility: new and existing subscribers. Territories: all. Quantity: 100. Expiry: a month out; write the date down.</li>
+      <li>Download the .txt. Paste into a sheet with columns: code, who, sent, redeemed.</li>
+      <li>People redeem on iPhone at <code>https://apps.apple.com/redeem?ctx=offercodes&amp;id=6830418364&amp;code=CODE</code> or App Store app, their picture top right, Redeem Gift Card or Code, Enter Code Manually. They must download Lantern first.</li>
+      <li>A tester who already started the 7-day trial cannot stack the code until the trial lapses. Tell them to cancel in Settings, Apple ID, Subscriptions, and redeem after.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 4</span> Apple Ads, click by click (release morning)</h3>
+    <ol>
+      <li>ads.apple.com, developer Apple ID, Advanced experience (not Basic).</li>
+      <li>Billing: add a card.</li>
+      <li>Create Campaign, Search results, United States. Name: <code>Brand</code>. Daily $1. One ad group, exact match, the ten brand keywords from apple-ads-keywords.md at $0.30. Search Match OFF. Devices iPhone. Turn it ON the moment the app is live.</li>
+      <li>Create Campaign: <code>Exact Match Core</code>, daily $8. Ad group A "Problems" at $2.00, ad group B "Category" at $1.50, keywords from the file, each as Exact Match. Negatives on both. Search Match OFF. Leave PAUSED until Day 3.</li>
+      <li>Keyword bids override the ad group default; set each keyword's bid, not just the group.</li>
+      <li>Three rules: pause over $2.50 per install at 30 taps; +$0.10 under $1.50 per install; never raise the daily budget to chase a day.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 5</span> The Tuesday/Friday readout (10 minutes)</h3>
+    <ol>
+      <li>Downloads, page views, conversion: App Store Connect, Analytics, Overview, date range since last readout. The headline tiles are for the date range shown, so set it on purpose.</li>
+      <li>Ratings: the app's Ratings and Reviews page. Reply to every written review.</li>
+      <li>Trials and paid: App Store Connect, Trends, filter to the subscriptions; or Sales and Trends, Subscriptions.</li>
+      <li>Ads: ads.apple.com, same date range: spend, taps, installs, cost per install per keyword. Reddit: ads.reddit.com, cost per click by creative.</li>
+      <li>Write the numbers into the Tracker tab. Apply the three mechanical rules. Done.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 6</span> Posting on Reddit without getting removed</h3>
+    <ol>
+      <li>Read the sub's rules in the sidebar before every post. Every sub is different.</li>
+      <li>Post from your established account, never a fresh one. Weekend mornings for home and parenting subs; any weekday for builder subs.</li>
+      <li>Reply to every comment in the first two hours. Early replies decide whether anyone else sees it.</li>
+      <li>Never the same post to two subs on the same day.</li>
+      <li>If a post is removed, message the mods politely and ask what would have been acceptable.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 7</span> The "Outage first" custom product page (Day 10)</h3>
+    <ol>
+      <li>App Store Connect, Lantern, Custom Product Pages, plus. Name: Outage first.</li>
+      <li>Reorder so Outage mode is first and the medication card second (real mouse drag only). Promotional text: "When the power goes, start the clocks. Fridge, freezer, generator, and the medication card you can hand to anyone."</li>
+      <li>Submit (quick review). In Apple Ads, edit ad group A and choose this page as the destination.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 8</span> In-App Event (Day 28, free App Store placement)</h3>
+    <ol>
+      <li>App Store Connect, Lantern, In-App Events, create. Name by season: "Winter outage weekend" or "Hurricane season wrap-up".</li>
+      <li>Short description about the pantry audit. Badge: Special Event. Dates: now through two weeks.</li>
+      <li>Event card 1080x1920 (the Story image works with the text moved up). Submit.</li>
+    </ol>
+  </div>
+
+  <div class="card"><h3><span class="chip">Playbook 9</span> If things go sideways</h3>
+    <ul>
+      <li>Downloads fine, trial starts near zero: the paywall moment is wrong, not the price. Note where people hit it (reviews, testers). Fix the screen on 1.0.1. No discount in month one.</li>
+      <li>Page views high, downloads low (under 20 percent): fix the listing before buying traffic. Screenshots and first reviews are the usual culprits; reshooting the set to show the new dashboard is already on the list.</li>
+      <li>Every Apple keyword over $2.50: kill the category group, keep the problem group, shift to Reddit.</li>
+      <li>A post takes off (300+ upvotes): drop the day's schedule and live in that thread.</li>
+      <li>A bad review lands early: reply publicly, calm and specific, fix fast. Never argue.</li>
+      <li>Rejected for the screenshot: delete 08-paywall.png from the 6.9-inch set, resubmit. Same-day turnaround for metadata.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ REDDIT ============ -->
+<section class="tab" id="tab-reddit">
+  <h2>Reddit, all of it</h2>
+  <p class="lede">What CastleWise proved, where Lantern posts, what each sub allows, and when the ad runs.</p>
+
+  <div class="card"><h3>What the first launch proved</h3>
+    <ul>
+      <li>A feeling beats a feature list. "Your house didn't come with a manual" won; "every filter size and paint code" lost. Lantern's control is the feeling: <b>Most houses already have a week of food. Nobody has the list.</b></li>
+      <li>Reddit traffic converts at about one download per seven clicks, against one in three for organic store search. Normal for cold social traffic. It still beat Apple Ads by a factor of five on cost per download.</li>
+      <li>One control plus one challenger. Three creatives on a small budget bought two negative results.</li>
+      <li>Promote a post that already earned upvotes. It costs a fraction of a cold ad. That is why the ad starts Day 15.</li>
+      <li>iOS-only targeting must be set before the ad group is saved. Comments on and answered twice a day, or off.</li>
+    </ul>
+  </div>
+
+  <div class="card"><h3>Creatives, all built from the control</h3>
+    <table>
+      <tr><th>ID</th><th>Headline</th><th>Why it exists</th></tr>
+      <tr><td>A1</td><td>Most houses already have a week of food. Nobody has the list.</td><td>The control. Everything is measured against it.</td></tr>
+      <tr><td>A2</td><td>I spent a year building the app I wished we'd had the night the power went out. It's on the App Store.</td><td>A plus a reason to act now. Launch week only.</td></tr>
+      <tr><td>A3</td><td>The flashlight, the fridge clock and the medication card are free for everyone. The rest is for families.</td><td>Tests whether the free toolkit carries a headline.</td></tr>
+      <tr><td>A4</td><td>Nine prescriptions, four times a day, one that lives in the fridge. One card the whole family can read.</td><td>Caregivers. Nothing in the beta pointed at them and the medication card is the feature people talk about.</td></tr>
+    </table>
+    <p class="lede" style="margin-top:10px">Run A1 alone for five days. Add one challenger on Day 20 only if A1 is under 1.2 percent click rate.</p>
+  </div>
+
+  <div class="card"><h3>Where, and what each sub allows</h3>
+    <table>
+      <tr><th>Sub</th><th>Rule</th><th>What works there</th></tr>
+      <tr><td>r/SideProject, r/iosapps, r/iOSProgramming</td><td>Links welcome</td><td>Build story with real numbers. Technical lessons.</td></tr>
+      <tr><td>r/AppHookup</td><td>Links welcome</td><td>Family code giveaway, Day 16.</td></tr>
+      <tr><td>r/apple weekly thread</td><td>That thread only</td><td>Two lines, no pitch.</td></tr>
+      <tr><td>r/homeowners</td><td>No links in posts</td><td>The twenty-minute pantry audit as text. Link only if asked.</td></tr>
+      <tr><td>r/firsttimehomebuyer</td><td>No links</td><td>"Find and photograph in your first week" list.</td></tr>
+      <tr><td>r/Parenting</td><td>No links, no promo</td><td>The one card every babysitter should have.</td></tr>
+      <tr><td>r/CaregiverSupport, r/AgingParents</td><td>Modmail first</td><td>The nine-prescriptions system. Be a person first.</td></tr>
+      <tr><td>r/florida, r/hurricane</td><td>No promo</td><td>Post-flood kitchen: keep, toss, next time. Only while it is news.</td></tr>
+      <tr><td>r/preppers, r/HomeImprovement, r/DIY</td><td>Excluded</td><td>Read and answer. Never post the app. Fastest route to a ban that costs the other subs.</td></tr>
+    </table>
+  </div>
+
+  <div class="card"><h3>When</h3>
+    <table id="redditcal">
+      <tr><th>Day</th><th>Where</th><th>What</th></tr>
+    </table>
+    <p class="lede" style="margin-top:10px">The copy is in Post Copy and in reddit-posts.md. The ad build is reddit-build-sheet.txt, every field in UI order.</p>
+  </div>
+
+  <div class="card"><h3>Paid · the settings that decide whether $60 is wasted</h3>
+    <ul>
+      <li>Objective Traffic, not App Installs.</li>
+      <li>Devices: Mobile, iOS only, set before saving the ad group.</li>
+      <li>Automated targeting off. Communities named, keywords named.</li>
+      <li>Dates on the campaign so it reads Scheduled. Read the ad group summary line for the real start in your time zone.</li>
+      <li>Comments on and answered. One campaign link per ad.</li>
+      <li>Reddit's Results column stays at 0; its pixel only sees web pages. Installs show in App Analytics, Sources, a day or two later.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ POST COPY ============ -->
+<section class="tab" id="tab-copy">
+  <h2>Post copy, ready to paste</h2>
+  <p class="lede">Tap Copy and paste. Titles and bodies are separate because Reddit asks for them separately. Change nothing except what is true that day. Longer versions and the rest of the posts are in the .txt and .md files next to this page.</p>
+  <div id="copyblocks"></div>
+</section>
+
+<!-- ============ TRACKER ============ -->
+<section class="tab" id="tab-tracker">
+  <h2>Tracker</h2>
+  <p class="lede">Fill this at every Tuesday and Friday readout. It saves as you type. Playbook 5 says where each number lives.</p>
+  <div class="card">
+    <h3>Readouts</h3>
+    <table id="readouts">
+      <tr><th>Date</th><th>Downloads (period)</th><th>Total</th><th>Page views</th><th>Ratings</th><th>Trial starts</th><th>Paid</th><th>Ads spend</th><th>CPI</th><th>Notes</th></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>Day 30 scorecard · <span id="day30"></span></h3>
+    <table id="scorecard">
+      <tr><th>Target</th><th>Goal</th><th>Actual</th></tr>
+    </table>
+    <p class="lede" style="margin-top:12px">Then three sentences in launch-lessons.md: what worked, what did not, what one thing wasted the most time. Next month's rule: fund only what beat $2.50 per download. Keep everything free that produced anything at all.</p>
+  </div>
+</section>
+</main>
+
+<script>
+const KEY='lantern-launch-v1';
+let state={checks:{},track:{},launch:''};
+try{const l=localStorage.getItem(KEY);if(l)state=Object.assign(state,JSON.parse(l));}catch(e){}
+let t=null;function save(){clearTimeout(t);t=setTimeout(()=>{try{localStorage.setItem(KEY,JSON.stringify(state));setSaved('saved in this browser');}catch(e){setSaved('not saving (memory only)');}},300)}
+function setSaved(s){document.getElementById('saved').textContent=s}
+
+const H={
+  release:'Playbook 1. Do it at 8 in the morning so the whole day is ahead of you.',
+  codes:'Playbook 3. Offer codes, one-time use, free, 1 year. Set an expiry a month out.',
+  links:'Playbook 2. Six links, named exactly: fb-launch, fb-post, reddit-maker, reddit-home, reddit-ads, web.',
+  ads:'Playbook 4 is the full click path. Brand on the moment it is live; Core paused until Day 3.',
+  readout:'Playbook 5. Ten minutes: pull the numbers, write them in the Tracker tab, apply the three rules.',
+  prune:'In ads.apple.com, open the keyword list, sort by cost per install. Over $2.50 with 30+ taps: pause. Under $1.50: raise the bid by $0.10.',
+  cpp:'Playbook 7. The custom page shows Outage mode first to people arriving from problem searches.',
+  redditads:'reddit-build-sheet.txt, every field. It is Scheduled, so it starts itself. By 8 PM confirm Spend is above $0.',
+  discovery:'New campaign in ads.apple.com named Discovery, $2 a day, no keywords, Search Match ON. Harvest winners at readouts, add them as negatives in Discovery.',
+  ama:'reddit-posts.md has the exact modmail. Do not post without a yes.',
+  event:'Playbook 8, step by step.',
+  scorecard:'Tracker tab, bottom card. Fill the actuals, then write three sentences in launch-lessons.md.',
+  trial:'Real purchase, not sandbox. Start the Family 6 trial from the paywall on your own phone. Confirm the second person unlocks. Cancel the trial in Settings, Apple ID, Subscriptions before day 7 so you are not charged, or leave it and pay yourself $12.99; either is fine.',
+  tfinstall:'On a tester\'s phone that still has TestFlight data, download from the App Store over it. Every item, person, medication and photo must still be there. If anything is missing, send the heads-up only and hold the codes.',
+  site:'Merge branch lantern-live to main in the kismetstudio-site repo. The press page is already live.',
+  fb:'facebook-post.txt. Image lantern-launch-wide-1200x630.png. Link in the first comment. Then ten to fifteen Messenger notes one to one.',
+  reddit1:'reddit-posts.md, Post 1. Direct link allowed. Stay in the thread for two hours.',
+};
+
+const TONIGHT={
+  't-decide':[['d1','Decide: pull the submission and swap the screenshot, or let it ride','punch-list.md item 1. Say the word and it is done through the API.']],
+  't-asc':[
+    ['a1','Business, Agreements: Paid Apps reads Active; banking and tax (W-9) complete','Without it the subscription fails silently on launch day.'],
+    ['a2','Small Business Program: enrolled (85 percent instead of 70, not retroactive)','developer.apple.com/app-store/small-business-program, Enroll.'],
+    ['a3','Monetization, Subscriptions: Family 6 and Family 10 show the 7-day trial in all territories','Group 50 stays in the group, hidden in the app. Leave it.'],
+    ['a4','Distribution, 1.0: Manually release this version (set; glance at it)','Do not let it auto-release overnight.'],
+    ['a5','App Privacy: published, "Data Not Collected"','Done November 4. Confirm it still reads Published.'],
+  ],
+  't-codes':[
+    ['c1','Request 100 Family 6 offer codes, free, 1 year, one-time use',H.codes],
+    ['c2','Beta tester sheet: name, contact, code, sent, redeemed. Nine rows.','beta-tester-thankyou.txt has the copy.'],
+  ],
+  't-reddit':[
+    ['r1','Build the Reddit Ads campaign and leave it Scheduled for Day 15 to Day 24','reddit-build-sheet.txt. Traffic objective, iOS only, CPC $0.90, creative A1, comments on.'],
+    ['r2','Confirm the ad group exists and the status reads Scheduled, not Paused','A campaign saved without its ad group sits there forever looking scheduled.'],
+  ],
+  't-warm':[
+    ['w1','Join the eleven subs in the Reddit tab; five helpful comments tonight, zero app mentions','A brand-new account posting a link on launch day gets auto-removed.'],
+    ['w2','Facebook page set up: cover, profile picture, About, three links','facebook-content-plan.md, page setup checklist.'],
+    ['w3','Site: branch lantern-live is ready; press page is live at /lantern/press/',H.site],
+    ['w4','Set the launch date at the top of this page and run tools/make_ics.py','Then import lantern-dates.ics into Calendar.'],
+  ],
+  't-morning':[
+    ['m1','8:00 press Release This Version',H.release],
+    ['m2','Open the direct link every 10 minutes until the page is live','apps.apple.com/us/app/id6830418364. Do not wait for search.'],
+    ['m3','The moment it is live: download it on your own phone and start a real Family trial',H.trial],
+    ['m4','Send every beta tester the heads-up (hold the TestFlight build, code coming today)','beta-tester-thankyou.txt, first block.'],
+    ['m5','TestFlight install test on a tester\'s phone with real data',H.tfinstall],
+    ['m6','Send the thank-you with one offer code each; log every code','beta-tester-thankyou.txt, short version.'],
+    ['m7','Build both Apple Ads campaigns; Brand on now, Core paused until Day 3',H.ads],
+    ['m8','Post the build story to r/SideProject and stay in the thread for two hours',H.reddit1],
+    ['m9','Facebook post with the image; link in the first comment; then the Messenger notes',H.fb],
+    ['m10','Follow up with the ten friends who did not react; ask for a download today and an honest rating this week','The first ten ratings decide whether strangers trust the page.'],
+    ['m11','Merge lantern-live on the site; swap the first-comment link to fb-launch once it exists',H.site],
+    ['m12','Do not read today\'s charts as signal. Judge nothing before Friday.','Analytics runs a day or two behind.'],
+  ],
+};
+
+const PLAN=[
+ {chip:'WEEK 1 · RELEASE',days:[
+  {d:0,t:'Launch',ts:[['p1a','Release morning, in order (Tonight tab)',H.release],['p1b','Brand campaign on; Core built and paused',H.ads],['p1c','r/SideProject build story',H.reddit1],['p1d','Facebook and Instagram posts, link in first comment',H.fb],['p1e','Beta tester heads-up, install test, thank-you with codes',H.tfinstall]]},
+  {d:1,t:'Second wave',ts:[['p2a','r/iosapps post (reddit-posts.md, Post 2)'],['p2b','Eight to ten Messenger notes, one to one'],['p2c','Three helpful comments in home subs, no mentions'],['p2d','Reply to every review and comment']]},
+  {d:2,t:'Ads on',ts:[['p3a','Create the six campaign links if the + button has appeared',H.links],['p3b','Turn on Exact Match Core ($8/day)',H.ads],['p3c','r/iOSProgramming post (Post 3)'],['p3d','First readout tonight',H.readout]]},
+  {d:3,t:'Ratings',ts:[['p4a','Rating ask to beta testers, separate message, direct review link'],['p4b','Three helpful comments, no mentions']]},
+  {d:4,t:'',ts:[['p5a','r/apple weekly self-promo thread, two lines'],['p5b','Facebook post 3 (content plan)'],['p5c','Readout',H.readout]]},
+  {d:5,t:'Saturday',ts:[['p6a','r/homeowners pantry audit post, no link (Post 4)'],['p6b','Facebook post 4']]},
+  {d:6,t:'',ts:[['p7a','Three helpful comments'],['p7b','Reply to everything']]},
+ ]},
+ {chip:'WEEK 2 · LISTEN',days:[
+  {d:7,t:'First cohort clears',ts:[['p8a','Read trial-to-paid for the Day 1 trials'],['p8b','r/Parenting medication card post, no link (Post 6)'],['p8c','Facebook post 5'],['p8d','Readout and prune',H.prune]]},
+  {d:8,t:'',ts:[['p9a','Reshoot the store screenshots on the simulator so Home shows the dashboard (for 1.0.1)']]},
+  {d:9,t:'Custom page',ts:[['p10a','Custom product page "Outage first", point ad group A at it',H.cpp],['p10b','Facebook post 6']]},
+  {d:10,t:'',ts:[['p11a','Readout',H.readout],['p11b','Decide the 1.0.1 keyword field (launch-lessons.md section 6)']]},
+  {d:11,t:'',ts:[['p12a','r/firsttimehomebuyer first-week photo list, no link (Post 5)'],['p12b','Facebook post 7']]},
+  {d:12,t:'Saturday',ts:[['p13a','Facebook post 8']]},
+  {d:13,t:'',ts:[['p14a','Three helpful comments'],['p14b','Confirm the Reddit campaign still reads Scheduled for tomorrow']]},
+ ]},
+ {chip:'WEEK 3 · PAID',days:[
+  {d:14,t:'Reddit Ads start',ts:[['p15a','By 8 PM confirm Spend is above $0 on ads.reddit.com',H.redditads],['p15b','Facebook post 9'],['p15c','Readout',H.readout]]},
+  {d:15,t:'Giveaway',ts:[['p16a','r/AppHookup: 25 Family codes (Post 8)'],['p16b','Apple Ads Discovery campaign, $2/day',H.discovery]]},
+  {d:16,t:'',ts:[['p17a','Facebook post 10'],['p17b','Answer the promoted post\'s comments twice today']]},
+  {d:17,t:'',ts:[['p18a','Reddit readout: cost per click by creative'],['p18b','Modmail r/CaregiverSupport about the medication thread',H.ama],['p18c','Readout',H.readout]]},
+  {d:18,t:'',ts:[['p19a','r/CaregiverSupport post if the mods said yes (Post 7)'],['p19b','Second rating ask on Facebook, to the new downloaders only']]},
+  {d:19,t:'Saturday',ts:[['p20a','Facebook post 12'],['p20b','Add one Reddit challenger only if A1 is under 1.2 percent click rate']]},
+  {d:20,t:'',ts:[['p21a','Three helpful comments']]},
+ ]},
+ {chip:'WEEK 4 · DECIDE',days:[
+  {d:21,t:'Reserve decision',ts:[['p22a','Readout; move the $40 reserve to whichever channel is under $2.50 a download',H.readout],['p22b','Harvest Discovery terms into Core; add them as negatives in Discovery',H.discovery]]},
+  {d:22,t:'',ts:[['p23a','Facebook post 13']]},
+  {d:23,t:'Reddit Ads end',ts:[['p24a','Export the Reddit numbers while you can still find them'],['p24b','Facebook post 14']]},
+  {d:24,t:'',ts:[['p25a','Readout',H.readout]]},
+  {d:25,t:'',ts:[['p26a','Facebook post 15 (seasonal)']]},
+  {d:26,t:'Saturday',ts:[['p27a','Facebook post 16']]},
+  {d:27,t:'Event',ts:[['p28a','In-App Event, free placement',H.event]]},
+  {d:28,t:'',ts:[['p29a','Readout',H.readout],['p29b','Submit 1.0.1 if the screenshot reshoot and keyword field are ready']]},
+  {d:29,t:'Scorecard',ts:[['p30a','Fill the Day 30 scorecard and write the three sentences',H.scorecard]]},
+ ]},
+];
+
+const REDDITCAL=[[0,'r/SideProject','Build story, A2 framing (Post 1)'],[1,'r/iosapps','Same story, platform angle (Post 2)'],[2,'r/iOSProgramming','Technical lessons (Post 3)'],[4,'r/apple weekly','Two lines'],[5,'r/homeowners','Pantry audit, no link (Post 4)'],[7,'r/Parenting','The one card, no link (Post 6)'],[11,'r/firsttimehomebuyer','First-week photo list, no link (Post 5)'],[14,'Reddit Ads','A1 alone, $6/day, iOS only, Day 15 to 24'],[15,'r/AppHookup','25 Family codes (Post 8)'],[18,'r/CaregiverSupport','Nine prescriptions, modmail first (Post 7)'],[19,'Reddit Ads','One challenger, only if A1 is under 1.2 percent'],['Daily','All home subs','Three helpful comments, no app mention']];
+
+const COPY=[
+ ['Facebook · family and friends (link in the first comment)', `So this is a thing I made.
+
+It is called Lantern, and it went live on the App Store this morning. It is for the food, water, medicine and gear you already keep for a bad week.
+
+The idea came from standing in the dark with a flashlight, knowing there was a week of food somewhere in the house and not being able to say where, or how old any of it was. Most households are more ready than they think. What they do not have is a list. Lantern keeps it.
+
+Scan a can and it knows when to use it. Tell it who lives in your house and it tells you how many days you are covered for, in real calories and real gallons, not a score. Every person has a medication card you can hand to a neighbour, a nurse or a shelter desk. When the power goes, Outage mode starts the clocks on the fridge and the freezer.
+
+And the emergency toolkit is free for everyone, always: the SOS strobe, the whistle, the fridge clock, the medication card, the know-how cards from the CDC and FEMA. No account, no cloud. Everything stays on your phone, which still works when nothing else does.
+
+I would love your help with two small things:
+
+1. Download it. Even if you never open it again, early downloads matter more than I can explain.
+2. If you do try it and it helps, leave a rating. Honest ones. The first handful of ratings decide whether strangers ever trust it.
+
+Link in the comments. And if you find something broken, tell me. I would much rather hear it from you than read it in a review.`],
+ ['Facebook · first comment', `Here it is: https://apps.apple.com/us/app/id6830418364`],
+ ['Messenger · one to one', `Hey [NAME], quick favor.
+
+The app I have been building went live on the App Store this morning. It is called Lantern. It keeps track of the food, water, medicine and gear you keep for a bad week: what you have, where it is, when to use it, and how many days your house is covered for. The emergency toolkit part (flashlight, fridge clock, medication card) is free for everyone.
+
+Would you download it today? Early downloads matter a lot more than I can explain, and if you try it and it is useful, a rating would mean the world.
+
+https://apps.apple.com/us/app/id6830418364
+
+And if anything is broken, tell me. I would rather hear it from you.`],
+ ['Beta testers · heads-up (send first)', `Quick heads-up: Lantern goes live on the App Store this morning.
+
+Your Family code is coming later today. I am holding it until I have confirmed on my own phone that installing the App Store version over TestFlight keeps everything you already entered.
+
+So for now: do not delete the TestFlight build, and do not download it from the store yet. The moment it is safe I will send you the link and your code in one message.
+
+Thank you for getting it here.`],
+ ['Beta testers · thank-you with code', `Lantern is live on the App Store as of this morning.
+
+You helped build it, so here is what I promised: a year of Family, free. Code below.
+
+Important: do NOT delete the TestFlight version first. Just download Lantern from the App Store and it will install over it and keep everything you have already entered. Then redeem the code.
+
+  [CODE]
+
+1. Download Lantern from the App Store first: https://apps.apple.com/us/app/id6830418364
+2. On your iPhone, tap https://apps.apple.com/redeem?ctx=offercodes&id=6830418364&code=[CODE] (or App Store app, your picture top right, Redeem Gift Card or Code, Enter Code Manually).
+3. Open Lantern. Family unlocks within a few seconds. If not: Settings, Plan, Restore purchases.
+
+One code, one person, one year of Family 6. It expires on [EXPIRY DATE], so redeem it this week.
+
+Thank you. Genuinely. The app is better than I could have made it alone and you are the reason.`],
+ ['Beta testers · rating ask (Day 4, separate message)', `One more small thing, if you have a minute. The first ten ratings decide whether a stranger scrolling past ever taps. This link opens straight to the review box:
+
+https://apps.apple.com/app/id6830418364?action=write-review
+
+Honest is the only kind I want. Thank you.`],
+ ['Reddit · r/SideProject · title', `I built the app I wished we'd had the night the power went out. It's on the App Store today.`],
+ ['Reddit · r/SideProject · body', `Two winters ago we lost power for four days. We had, it turned out, about a week of food in the house. I could not have told you that at the time, or where it was, or how old any of it was. We ate the freezer in the wrong order, threw out things that were fine, and ran out of the one thing that mattered, which was my wife's blood pressure medication.
+
+So I spent this year building Lantern. It is a household readiness app for iPhone. Not a bunker app. It is for the ordinary version of being ready: a full pantry, water that gets rotated, medicine that has not expired, and a plan everyone in the house knows.
+
+What it actually does:
+
+- Scan a barcode or a printed date and the item is logged. It knows the shelf life of about ninety staples, so a can with no date still gets one. The barcode lookup also pulls the nutrition panel in.
+- Add who lives in the house (ages, sizes, medications, pets) and it turns the pantry into days of food and water for those actual people. Real calories, real gallons, not a score out of 100.
+- Every person has a medication card: dose, times, take with food, who prescribed it. One card for the whole house that you can text to a neighbour or print for the fridge.
+- Family members fill in their own profile from a link. No account, no server. The link is the transport.
+- Outage mode starts the clocks on the fridge and freezer and gives you the generator and carbon monoxide cards. There is an SOS strobe, a whistle, a compass, the NOAA radio frequencies.
+
+The toolkit half is free for everyone with no sign-up. The tracking half is free for one person and fifty items, and there is a yearly Family plan for a whole house.
+
+Tech, since this is r/SideProject: SwiftUI and SwiftData, iOS 18, no backend at all. Barcodes go to Open Food Facts and nothing else leaves the phone. StoreKit 2 for the plans. The hardest parts were the shelf-life library (hand-built from USDA, CDC and FDA sources, every entry cites one) and the calorie math, which uses Mifflin-St Jeor when it knows a person's weight and height and the Dietary Guidelines bands when it does not.
+
+Honest numbers so far: nine beta testers, all family and friends, two weeks of TestFlight. Downloads: it went live this morning, so none yet. I will post the first month's numbers here either way.
+
+App Store: https://apps.apple.com/us/app/id6830418364
+
+Happy to answer anything about the build or the choices.`],
+ ['Reddit · r/iosapps · title', `Lantern: a calm household readiness app. Scan your pantry, see how many days your family is covered, medication cards, outage mode. No account.`],
+ ['Reddit · r/homeowners · title (no link)', `The twenty-minute pantry audit that tells you how many days you could actually stay home`],
+ ['Reddit · r/AppHookup · title', `[iOS] Lantern: Household Readiness. 25 one-year Family codes for the people who try it and tell me what is wrong.`],
+ ['Reddit · r/apple weekly thread', `Lantern: Household Readiness. Scan your pantry, see how many days your family is covered, medication cards, outage mode. No account, no cloud, iPhone. https://apps.apple.com/us/app/id6830418364`],
+ ['Instagram · launch caption', `Lantern is on the App Store.
+
+Most houses already have a week of food. Nobody has the list. Scan the pantry, add who lives with you, and see how many days you are covered for. Every person gets a medication card you can hand to anyone. When the power goes, Outage mode starts the clocks.
+
+The toolkit is free for everyone, always. No account, no cloud. Link in bio.
+
+#LanternApp #HouseholdReadiness #KnowWhatYouHave #PowerOutage #HurricaneSeason #FamilyFirst #iPhone #EmergencyKit #PantryOrganization #ReadyForWhenYouNeedItMost`],
+ ['Apple Ads · Brand keywords (exact, $0.30)', `lantern app
+lantern household
+lantern readiness
+lantern household readiness
+kismet lantern
+kismet studio
+lantern emergency
+lantern supplies
+lantern pantry
+lanturn app`],
+ ['Apple Ads · Group A, problems (exact, $2.00)', `hurricane prep
+hurricane checklist
+hurricane supplies
+storm prep
+winter storm checklist
+power outage
+power outage app
+generator checklist
+emergency kit checklist
+emergency supplies list
+72 hour kit
+go bag checklist
+go bag list
+car emergency kit
+first aid kit checklist
+water storage
+how much water to store
+food expiration tracker
+expiration date tracker
+pantry inventory
+pantry tracker
+medication list
+medication list app
+medication card
+medication tracker family`],
+ ['Apple Ads · Group B, category (exact, $1.50)', `emergency preparedness
+emergency preparedness app
+disaster preparedness
+disaster kit
+family emergency plan
+emergency plan app
+household emergency
+home emergency kit
+earthquake kit
+wildfire checklist
+evacuation checklist
+prepper app
+prepper checklist
+survival app
+bug out bag`],
+ ['Apple Ads · negatives (exact, both groups)', `lantern flashlight
+flashlight
+camping lantern
+solar lantern
+lantern festival
+sky lantern
+paper lantern
+emergency alert
+weather radar
+hurricane tracker
+generator game`],
+ ['Reddit Ads · headline A1', `Most houses already have a week of food. Nobody has the list.`],
+ ['Promotional text (App Store, changes without review)', `Know what you have. Food, water, medicine and gear, with the dates that matter and how many days your people are covered for. The emergency Toolkit is free, always.`],
+];
+
+// ---------- rendering ----------
+function fmt(d){return d.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'})}
+function dayDate(n){if(!state.launch)return null;const d=new Date(state.launch+'T12:00:00');d.setDate(d.getDate()+n);return d}
+function task(id,text,how){
+  const done=!!state.checks[id];
+  const el=document.createElement('div');el.className='task'+(done?' done':'');
+  el.innerHTML=`<input type="checkbox" ${done?'checked':''}><div class="t">${text}${how?'<button class="how">exactly how</button><div class="h">'+how+'</div>':''}</div>`;
+  el.querySelector('input').addEventListener('change',e=>{state.checks[id]=e.target.checked;el.classList.toggle('done',e.target.checked);save();pct()});
+  const hb=el.querySelector('.how');if(hb)hb.addEventListener('click',()=>el.classList.toggle('open'));
+  return el;
+}
+let total=0;
+function renderTonight(){for(const [sel,list] of Object.entries(TONIGHT)){const box=document.getElementById(sel);box.innerHTML='';list.forEach(([id,t,h])=>{box.appendChild(task(id,t,h));total++})}}
+function renderPlan(){
+  const root=document.getElementById('plan');root.innerHTML='';
+  PLAN.forEach(w=>{const wrap=document.createElement('div');wrap.innerHTML=`<div class="chip" style="margin:18px 0 8px">${w.chip}</div>`;root.appendChild(wrap);
+    w.days.forEach(day=>{const c=document.createElement('div');c.className='card day';const dd=dayDate(day.d);
+      c.innerHTML=`<h3>Day ${day.d+1}${day.t?' · '+day.t:''} <span class="date">${dd?fmt(dd):'(set the launch date)'}</span></h3>`;
+      day.ts.forEach(([id,t,h])=>{c.appendChild(task(id,t,h));total++});root.appendChild(c)})});
+}
+function renderRedditCal(){const tb=document.getElementById('redditcal');[...tb.querySelectorAll('tr:not(:first-child)')].forEach(r=>r.remove());
+  REDDITCAL.forEach(([d,w,what])=>{const tr=document.createElement('tr');const dd=typeof d==='number'?dayDate(d):null;tr.innerHTML=`<td>${typeof d==='number'?'Day '+(d+1)+(dd?' · '+fmt(dd):''):d}</td><td>${w}</td><td>${what}</td>`;tb.appendChild(tr)})}
+function renderCopy(){const root=document.getElementById('copyblocks');root.innerHTML='';COPY.forEach(([title,body])=>{const c=document.createElement('div');c.className='card';c.innerHTML=`<h3>${title}</h3><div class="copy"><button>Copy</button>${body.replace(/</g,'&lt;')}</div>`;
+  c.querySelector('button').addEventListener('click',e=>{navigator.clipboard.writeText(body).then(()=>{e.target.textContent='Copied';e.target.classList.add('ok');setTimeout(()=>{e.target.textContent='Copy';e.target.classList.remove('ok')},1500)})});root.appendChild(c)})}
+function renderTracker(){
+  const tb=document.getElementById('readouts');[...tb.querySelectorAll('tr:not(:first-child)')].forEach(r=>r.remove());
+  const dates=[];for(let i=1;i<=30;i++){const dd=dayDate(i);if(dd&&(dd.getDay()==2||dd.getDay()==5))dates.push(fmt(dd))}
+  if(!dates.length)for(let i=1;i<=9;i++)dates.push('Readout '+i);
+  dates.forEach((label,ri)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${label}</td>`+Array.from({length:9},(_,ci)=>`<td><input data-k="r${ri}c${ci}"></td>`).join('');tb.appendChild(tr)});
+  const sc=document.getElementById('scorecard');[...sc.querySelectorAll('tr:not(:first-child)')].forEach(r=>r.remove());
+  [['Downloads','400'],['Family trial starts','40'],['Trial to paid','25 percent'],['Ratings at 4.6 or higher','15'],['Apple Ads cost per install','under $2.50'],['Reddit posts over 50 upvotes','3']].forEach(([t,g],i)=>{const tr=document.createElement('tr');tr.innerHTML=`<td>${t}</td><td>${g}</td><td><input data-k="s${i}"></td>`;sc.appendChild(tr)});
+  document.querySelectorAll('#tab-tracker input').forEach(inp=>{inp.value=state.track[inp.dataset.k]||'';inp.addEventListener('input',()=>{state.track[inp.dataset.k]=inp.value;save()})});
+  const d30=dayDate(29);document.getElementById('day30').textContent=d30?fmt(d30):'';
+}
+function pct(){const n=Object.values(state.checks).filter(Boolean).length;document.getElementById('pct').textContent=Math.round(100*n/Math.max(1,total))+'% of tasks done ('+n+' of '+total+')'}
+function renderAll(){total=0;renderTonight();renderPlan();renderRedditCal();renderTracker();pct()}
+document.querySelectorAll('nav button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('on'));b.classList.add('on');document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));document.getElementById('tab-'+b.dataset.tab).classList.add('on');window.scrollTo(0,0)}));
+const li=document.getElementById('launch');li.value=state.launch||'';li.addEventListener('change',()=>{state.launch=li.value;save();renderAll()});
+renderCopy();renderAll();setSaved(state.launch?'saved in this browser':'ready');
+</script>
+</body>
+</html>

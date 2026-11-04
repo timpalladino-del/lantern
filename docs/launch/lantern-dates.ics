@@ -1,0 +1,246 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Kismet Studio//Lantern launch//EN
+CALSCALE:GREGORIAN
+X-WR-CALNAME:Lantern launch
+BEGIN:VEVENT
+UID:0d3bcee3-3947-41ff-9eac-e58d71d5ea75@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261110
+DTEND;VALUE=DATE:20261111
+SUMMARY:Lantern · Day 1 · Release morning
+DESCRIPTION:8:00 press Release This Version. Confirm live via the direct link\, start a real Family trial on your own phone\, TestFlight install test on a tester's phone\, send the heads-up then the thank-you with codes\, build both Apple Ads campaigns (Brand on now\, Core paused)\, post r/SideProject\, post Facebook with link in first comment\, swap the site to the live badge.
+END:VEVENT
+BEGIN:VEVENT
+UID:650ff0bc-2399-44e9-9ad0-cd8151662cbd@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261111
+DTEND;VALUE=DATE:20261112
+SUMMARY:Lantern · Day 2
+DESCRIPTION:r/iosapps build story. 8 to 10 Messenger notes one to one. Three helpful comments in home subs\, no mentions.
+END:VEVENT
+BEGIN:VEVENT
+UID:b8e00abd-3fe5-4122-bea5-0eeb88ecb54b@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261112
+DTEND;VALUE=DATE:20261113
+SUMMARY:Lantern · Day 3 · Ads on
+DESCRIPTION:Create campaign links in App Analytics if the + button is there: fb-launch\, fb-post\, reddit-maker\, reddit-home\, reddit-ads\, web. Turn on Exact Match Core. r/iOSProgramming post. First readout tonight.
+END:VEVENT
+BEGIN:VEVENT
+UID:8d21586d-f221-4387-b51f-582e912f72d4@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Lantern · Day 4
+DESCRIPTION:Rating ask to beta testers (separate message). Replies on every review.
+END:VEVENT
+BEGIN:VEVENT
+UID:4e035a64-e9c6-4d84-b41c-ce498ac03979@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261114
+DTEND;VALUE=DATE:20261115
+SUMMARY:Lantern · Day 5
+DESCRIPTION:r/apple weekly thread\, two lines. Facebook post 3.
+END:VEVENT
+BEGIN:VEVENT
+UID:e5ff02c0-e02b-4782-8a41-6f44471d75c0@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261115
+DTEND;VALUE=DATE:20261116
+SUMMARY:Lantern · Day 6 · Saturday
+DESCRIPTION:r/homeowners pantry audit post\, no link. Facebook post 4.
+END:VEVENT
+BEGIN:VEVENT
+UID:d50dc734-1e69-40f6-a60f-99c48db11fe5@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Lantern · Day 8
+DESCRIPTION:r/Parenting medication card post\, no link. Facebook post 5. First trial cohort clears its 7 days: read trial-to-paid.
+END:VEVENT
+BEGIN:VEVENT
+UID:3ef368ac-7e56-4eff-895b-9a4f5bbb6dd2@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261119
+DTEND;VALUE=DATE:20261120
+SUMMARY:Lantern · Day 10
+DESCRIPTION:Custom product page 'Outage first'. Point Apple Ads group A at it. Facebook post 6.
+END:VEVENT
+BEGIN:VEVENT
+UID:79fcd12a-3cc3-41fe-9bb3-d8f201528ddb@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261121
+DTEND;VALUE=DATE:20261122
+SUMMARY:Lantern · Day 12
+DESCRIPTION:r/firsttimehomebuyer first-week photo list\, no link. Facebook post 7.
+END:VEVENT
+BEGIN:VEVENT
+UID:8954b85e-b6b1-479f-8709-6712d69cdbb6@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261122
+DTEND;VALUE=DATE:20261123
+SUMMARY:Lantern · Day 13 · Saturday
+DESCRIPTION:Facebook post 8.
+END:VEVENT
+BEGIN:VEVENT
+UID:e47545af-3ee9-4e06-81fc-6416b5637585@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:Lantern · Day 15 · Reddit Ads start
+DESCRIPTION:By 8 PM confirm Spend is above $0 on ads.reddit.com. Facebook post 9.
+END:VEVENT
+BEGIN:VEVENT
+UID:f268946b-8d87-4d40-9b88-e1fa722ec1ea@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261125
+DTEND;VALUE=DATE:20261126
+SUMMARY:Lantern · Day 16
+DESCRIPTION:r/AppHookup giveaway\, 25 codes. Discovery campaign in Apple Ads\, $2 a day\, Search Match on.
+END:VEVENT
+BEGIN:VEVENT
+UID:a84a93e5-727d-4259-8127-88a220901c23@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261126
+DTEND;VALUE=DATE:20261127
+SUMMARY:Lantern · Day 17
+DESCRIPTION:Facebook post 10.
+END:VEVENT
+BEGIN:VEVENT
+UID:777c128c-2688-48fb-a901-15332d991f68@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:Lantern · Day 18
+DESCRIPTION:Reddit readout: cost per click by creative. Modmail r/CaregiverSupport about the medication thread.
+END:VEVENT
+BEGIN:VEVENT
+UID:84eec0dd-100d-4b6a-9b33-9e795777ec48@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261128
+DTEND;VALUE=DATE:20261129
+SUMMARY:Lantern · Day 19
+DESCRIPTION:r/CaregiverSupport post. Second rating ask on Facebook (to the new downloaders only).
+END:VEVENT
+BEGIN:VEVENT
+UID:34eee0f6-67ff-4ec7-928c-f7edef720da1@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261129
+DTEND;VALUE=DATE:20261130
+SUMMARY:Lantern · Day 20 · Saturday
+DESCRIPTION:Facebook post 12. Add one Reddit challenger only if A1 is under 1.2 percent CTR.
+END:VEVENT
+BEGIN:VEVENT
+UID:5ce51ebd-d7c4-4f70-9735-457a67abd774@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:Lantern · Day 22 · Reserve decision
+DESCRIPTION:Readout. Move the $50 reserve to whichever channel is under $2.50 a download. Harvest Discovery terms into Core and add them as negatives in Discovery.
+END:VEVENT
+BEGIN:VEVENT
+UID:a60d2d3a-cf60-4b5b-b8a8-6f96d857ae17@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261203
+DTEND;VALUE=DATE:20261204
+SUMMARY:Lantern · Day 24 · Reddit Ads end
+DESCRIPTION:Export the Reddit numbers while you can still find them.
+END:VEVENT
+BEGIN:VEVENT
+UID:54ad3e29-32e3-4a91-bc75-76c512e9da69@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261205
+DTEND;VALUE=DATE:20261206
+SUMMARY:Lantern · Day 26
+DESCRIPTION:Facebook post 15 (seasonal).
+END:VEVENT
+BEGIN:VEVENT
+UID:d7979306-9387-4755-b602-ddd44c5d8ab4@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261206
+DTEND;VALUE=DATE:20261207
+SUMMARY:Lantern · Day 27 · Saturday
+DESCRIPTION:Facebook post 16.
+END:VEVENT
+BEGIN:VEVENT
+UID:368ada33-3bf0-496a-8ee4-f2a2b6ee4fbf@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261207
+DTEND;VALUE=DATE:20261208
+SUMMARY:Lantern · Day 28
+DESCRIPTION:In-App Event: 'Winter outage weekend' or 'Hurricane season wrap-up'\, whichever fits the date. Free placement.
+END:VEVENT
+BEGIN:VEVENT
+UID:3d2062dc-097c-4ffe-85be-20eda16e363b@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261209
+DTEND;VALUE=DATE:20261210
+SUMMARY:Lantern · Day 30 · Scorecard
+DESCRIPTION:Fill the Day 30 card in the Tracker. Three sentences: what worked\, what did not\, what wasted the most time. Decide the 1.0.1 keyword field.
+END:VEVENT
+BEGIN:VEVENT
+UID:ae5ab4c2-f1cd-4bec-884e-dc780f626fa4@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261113
+DTEND;VALUE=DATE:20261114
+SUMMARY:Lantern · Readout (Day 4)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:ea06bdae-43d3-4712-a162-31e1058953a8@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261117
+DTEND;VALUE=DATE:20261118
+SUMMARY:Lantern · Readout (Day 8)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:b887a98c-f6ab-4db2-8bb8-749c00b83a7a@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261120
+DTEND;VALUE=DATE:20261121
+SUMMARY:Lantern · Readout (Day 11)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:846d79c1-27a2-4041-a475-2bf14f04e9de@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261124
+DTEND;VALUE=DATE:20261125
+SUMMARY:Lantern · Readout (Day 15)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:e6360064-91bb-45fc-8b53-c145105f3079@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261127
+DTEND;VALUE=DATE:20261128
+SUMMARY:Lantern · Readout (Day 18)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:00e7d712-798f-4c61-9be0-25c169b349f5@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261201
+DTEND;VALUE=DATE:20261202
+SUMMARY:Lantern · Readout (Day 22)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:2f863243-609a-4244-9a00-4df7cb93d860@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261204
+DTEND;VALUE=DATE:20261205
+SUMMARY:Lantern · Readout (Day 25)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+BEGIN:VEVENT
+UID:483cc66f-ad1e-4ea2-9221-f5383215ef47@kismetstudio.io
+DTSTAMP:20261104T043134Z
+DTSTART;VALUE=DATE:20261208
+DTEND;VALUE=DATE:20261209
+SUMMARY:Lantern · Readout (Day 29)
+DESCRIPTION:Ten minutes: downloads\, page views\, ratings\, trial starts\, trial-to-paid\, ads spend and cost per install. Write them in the Tracker tab\, then apply the three mechanical rules.
+END:VEVENT
+END:VCALENDAR

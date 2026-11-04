@@ -1,0 +1,160 @@
+BETA TESTER THANK YOU + FAMILY OFFER CODE
+Send on release day, once the app is live.
+One code per tester. Log each one: who, code, date sent, date redeemed.
+
+Lantern's paid tier is a subscription, so the gift is an OFFER CODE,
+not a promo code. Request them in App Store Connect: Monetization,
+Subscriptions, Family 6, Offer Codes, Create: one-time use codes,
+Free, 1 year, 100 codes, all territories. Download the .txt. They
+stop working on the expiry date you set when you create them, so
+set it a month out and note it.
+
+READ THE WARNING AT THE BOTTOM BEFORE YOU SEND ANY OF THESE.
+
+==================================================================
+HEADS-UP - send FIRST, release morning, before any code goes out
+==================================================================
+
+Quick heads-up: Lantern goes live on the App Store this morning.
+
+Your Family code is coming later today. I am holding it until I have
+confirmed on my own phone that installing the App Store version over
+TestFlight keeps everything you already entered.
+
+So for now: do not delete the TestFlight build, and do not download
+it from the store yet. The moment it is safe I will send you the
+link and your code in one message.
+
+Thank you for getting it here.
+
+==================================================================
+SHORT VERSION - for a text or DM
+==================================================================
+
+Lantern is live on the App Store as of this morning.
+
+You helped build it, so here is what I promised: a year of Family,
+free. Code below.
+
+Important: do NOT delete the TestFlight version first. Just download
+Lantern from the App Store and it will install over it and keep
+everything you have already entered. Then redeem the code.
+
+  [CODE]
+
+How to redeem it (about a minute):
+
+1. Download Lantern from the App Store first, right over the
+   TestFlight version: https://apps.apple.com/us/app/id6830418364
+2. On your iPhone, tap this link and it opens straight to the
+   redeem screen:
+   https://apps.apple.com/redeem?ctx=offercodes&id=6830418364&code=[CODE]
+   (Or: App Store app, your picture top right, Redeem Gift Card or
+   Code, Enter Code Manually.)
+3. Open Lantern. Family unlocks on its own within a few seconds. If
+   it does not, Settings, Plan, Restore purchases.
+
+One code, one person, one year of Family 6. It will not renew into
+a paid plan unless you choose to later. It expires on [EXPIRY DATE],
+so redeem it this week.
+
+And this is not the finished thing. Share your profile from the
+Household screen and let the rest of the house fill in their own.
+
+Thank you. Genuinely. The app is better than I could have made it
+alone and you are the reason.
+
+==================================================================
+LONG VERSION - for email
+==================================================================
+
+Subject: Lantern is live, and your Family code is inside
+
+Hi [NAME],
+
+Lantern went live on the App Store this morning.
+
+Before anything else: thank you. You spent your own time poking at a
+half-finished app and telling me honestly what was wrong with it. Not
+"looks good." Actual specifics. That is rarer and more useful than you
+probably realise.
+
+A few things you and the others caught that genuinely changed the app:
+
+The supplies list had no way to select a pile of items and delete or
+move them at once. It does now, and it was the first thing one of you
+asked for.
+
+Someone added a go-bag and got asked how many batteries it needed.
+A go-bag does not need batteries. Every kind of equipment now asks its
+own questions.
+
+And the invitation that goes out to family members was a bare link
+with no instructions. It is now a numbered set of steps with the
+download link in it, and the reply knows which household it belongs
+to. That exists because one of you forwarded me the confused text
+your sister sent back.
+
+So: what I promised during the beta stands. A year of Family, free.
+
+  YOUR CODE: [CODE]
+
+  How to redeem it (about a minute):
+
+1. Download Lantern from the App Store first, right over the
+   TestFlight version: https://apps.apple.com/us/app/id6830418364
+   It keeps everything you have entered.
+2. On your iPhone, tap
+   https://apps.apple.com/redeem?ctx=offercodes&id=6830418364&code=[CODE]
+   or open the App Store app, tap your picture top right, Redeem
+   Gift Card or Code, Enter Code Manually, and type the code.
+3. Open Lantern. Family unlocks within a few seconds. If it does
+   not, Settings, Plan, Restore purchases.
+
+The code is one-time, one-person, one year of Family 6. It expires on
+[EXPIRY DATE], so redeem it this week.
+
+What is already built and coming next: a reshoot of the store
+screenshots so the new dashboard is what people see, the Group plan
+for churches and neighbourhood groups, and an Apple Watch glance for
+the fridge clock.
+
+Thank you. Genuinely.
+
+Tim
+
+==================================================================
+RATING ASK - a separate message, three or four days later
+==================================================================
+Do not put the rating ask in the thank-you. People who just got a
+gift feel asked to pay for it. Wait until Day 4 or 5.
+
+One more small thing, if you have a minute. The first ten ratings
+decide whether a stranger scrolling past ever taps. This link opens
+straight to the review box:
+
+https://apps.apple.com/app/id6830418364?action=write-review
+
+Honest is the only kind I want. Thank you.
+
+==================================================================
+WARNING - read before sending anything
+==================================================================
+
+1. Test the install yourself first. On a phone that still has the
+   TestFlight build with real data in it, download Lantern from the
+   App Store over it. Open it. Every item, person, medication, photo
+   and setting must still be there. Same bundle id means it should,
+   but see it happen. If anything is missing, send the heads-up only
+   and hold the codes.
+
+2. Offer codes redeemed on a free download do not stop a tester from
+   rating or reviewing. They can and should.
+
+3. A tester who already started the 7-day trial on their own cannot
+   stack the code on top of it until the trial ends. Tell them to
+   cancel the trial (Settings, Apple ID, Subscriptions) and redeem
+   the code after it lapses, or just wait out the week.
+
+4. Log every code. Codes you cannot account for are codes you cannot
+   revoke.

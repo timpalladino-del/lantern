@@ -1,0 +1,125 @@
+REDDIT ADS BUILD SHEET, LANTERN
+Build it the night before release, leave it Scheduled. It starts on
+its own on Day 15 and stops on Day 24. About 20 minutes in
+ads.reddit.com, signed in as the Reddit account you post from.
+
+Why this is clicked by hand: ads.reddit.com blocks every browser tool.
+Everything below is exact, in the order the UI asks.
+
+Why Day 15 and not Day 1: a promoted post that already earned
+upvotes costs a fraction of a cold ad. By Day 15 the r/SideProject
+and r/iosapps posts have numbers; promote the better one if either
+beat 50 upvotes, otherwise run creative A1 cold.
+
+==================================================================
+CAMPAIGN
+==================================================================
+  Create Campaign -> Objective: Traffic (NOT App Installs; that
+    wants a measurement partner you do not have)
+  Name: Lantern Launch - A1
+  Campaign budget optimization: off if offered
+  Schedule: start Day 15 12:00 AM, end Day 24 11:59 PM
+    (Set the dates on the campaign, not only the ad group. Then
+    read the summary line in the ad group editor: it states the
+    real start in YOUR time zone. A midnight start typed into a
+    form thinking in another zone became a 10 PM start on Sumhow.)
+  Daily budget: $6.00 at the campaign level. Lifetime about $60.
+
+==================================================================
+AD GROUP
+==================================================================
+  Name: Households
+  Bid: CPC, $0.90. Not CPM. Raise to $1.20 on Day 18 if clicks are
+    under 20.
+  Audience controls
+    Include locations: United States
+    Show more options -> Device and carrier -> Device: Mobile,
+      Operating system: iOS ONLY. Set this BEFORE saving; it cannot
+      be changed afterward. The app is iPhone only; an Android click
+      can never convert.
+  Targeting card
+    Communities (type each; some subs opt out of ads and will not
+      appear in the picker, skip those):
+      Home: r/homeowners, r/firsttimehomebuyer, r/HomeMaintenance,
+        r/HomeImprovement
+      Weather: r/hurricane, r/TropicalWeather, r/weather,
+        r/florida, r/texas, r/NorthCarolina, r/Louisiana
+      Family: r/Parenting, r/Mommit, r/daddit, r/CaregiverSupport,
+        r/AgingParents
+      Pets: r/dogs, r/cats
+      Money and food: r/Frugal, r/MealPrepSunday, r/Cooking,
+        r/ZeroWaste
+      Tech: r/iphone, r/iosapps
+      Last, only if reach looks thin after day 2: r/preppers (large,
+        and the audience there wants a bunker app; the ad will read
+        as too soft to them)
+    Keywords (the ad shows under threads containing these words):
+      hurricane, power outage, generator, go bag, emergency kit,
+      first aid kit, expired, pantry, water storage, medication
+      list, boil water, blizzard, ice storm, evacuation, shelter in
+      place, canned food
+    Turn off automated targeting (bottom right of the card). On a
+      small budget it spends outside your communities.
+    Interests: leave empty
+  Demographics: Gender All (Reddit has no age targeting)
+  Placements: Automatic
+
+==================================================================
+AD
+==================================================================
+  Creative: social/lantern-reddit-A1-1200x628.png
+  Headline (A1, the control):
+    Most houses already have a week of food. Nobody has the list.
+  CTA: Download (Learn More if Download is not offered)
+  Destination: https://apps.apple.com/us/app/id6830418364
+    (swap in the reddit-ads campaign link from App Analytics once
+    it exists; edit the ad, not the campaign)
+  Comments: ON. Check them twice a day while it runs, or turn them
+    off. A promoted post where the developer answers outperforms a
+    silent one.
+  Tracking (click / impression trackers): leave blank
+
+==================================================================
+CHALLENGER (one at a time, never three at once)
+==================================================================
+  Only A1 runs for the first five days. On Day 20, if A1 is under
+  1.2 percent click rate, add ONE challenger in the same ad group
+  and split the budget two ways:
+
+  A2 (launch week only): I spent a year building the app I wished
+     we'd had the night the power went out. It's on the App Store.
+  A3 (the toolkit angle): The flashlight, the fridge clock and the
+     medication card are free for everyone. The rest is for
+     families.
+  A4 (the caregiver angle): Nine prescriptions, four times a day,
+     one that lives in the fridge. One card the whole family can
+     read.
+
+  CastleWise's beta split a small budget three ways and two thirds
+  of it bought a negative result. One control plus one challenger
+  reaches an answer faster on the same money.
+
+  NEVER a headline that says free (as a price), buy, or a number
+  with a dollar sign. Never prepper, survival, bug out, tactical.
+
+==================================================================
+REVIEW
+==================================================================
+  Campaign status reads Scheduled, not Paused and not Active.
+  Paused never starts. Active would start today.
+  Check the Ad Groups tab, not just the campaign row: a campaign
+  saved without its ad groups sits there forever looking scheduled.
+
+==================================================================
+ON DAY 15
+==================================================================
+  By 8 PM: open ads.reddit.com and confirm Spend is above $0. A
+  campaign that silently fails to start on day one is common; the
+  usual cause is a payment method that needs confirming.
+  Reddit front-loads delivery: the whole daily budget is usually
+  gone by early afternoon. That is normal.
+  Readouts Day 18 and Day 22: cost per click by creative. Pause any
+  creative over $2.50 a click after 30 clicks.
+  Reddit's own "Results" column stays at 0 forever; its pixel only
+  sees web pages. Installs show up in App Analytics, Sources, a
+  day or two later.

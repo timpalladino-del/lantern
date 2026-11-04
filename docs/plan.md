@@ -568,3 +568,13 @@ label, every tool works offline, nothing here needs a purchase.
 **Supplies selection**
 - The action bar while selecting now sits above the tab bar (it was a toolbar the tab bar hid): Category, Move,
   Kit (when kits exist) and Delete. Every item has a category; the bar changes it in bulk.
+
+## 21. Launch kit (added November 4, 2026)
+
+`docs/launch/` holds the launch kit, built to the CastleWise standard: README-START-HERE, the command
+center (six tabs, launch date drives every day), punch list, Facebook and Messenger copy, beta tester
+heads-up and thank-you with offer codes, Reddit posts and the Reddit Ads build sheet, Apple Ads keyword
+plan, press release and fact sheet, review reply templates, the four-week Facebook content plan, pricing
+plan, launch lessons (CastleWise's eleven applied), social images, QR code, calendar file and the scripts
+that made them. The press page is live at kismetstudio.io/lantern/press/; the live version of the Lantern
+page waits on branch `lantern-live` of the site repo.

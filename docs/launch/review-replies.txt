@@ -1,0 +1,84 @@
+REVIEW REPLIES AND THE SECOND RATING ASK
+========================================
+
+Developer replies show publicly under the review. Keep them short,
+specific, no sales pitch, no em dashes. Paste in App Store Connect,
+Ratings and Reviews, Reply. Reply to every written review within a
+day; a reply is the one thing a stranger reads after the review.
+
+--- Five stars, general ---
+
+Thank you. The weekly "use this first" note is the part I am proudest
+of, so I am glad it landed. If there is something you wish it tracked
+and it does not, the feedback link in Settings goes straight to me.
+
+--- Five stars, mentions the medication card ---
+
+Thank you. The card exists because the night we needed it, the list
+was in my head and nowhere else. If a nurse or a neighbour ever reads
+yours, I would like to hear how it held up.
+
+--- Five stars, mentions the free toolkit ---
+
+Thank you for saying so. The toolkit stays free on every plan, always,
+and nothing in it will ever ask you to pay during an outage. That is a
+promise, not a launch offer.
+
+--- Four stars, wants a feature ---
+
+Thank you, and noted: [FEATURE] is on the list. The next update
+already has [NEXT THING]; if [FEATURE] is small it may ride along.
+If you want to be told when it ships, the feedback link in Settings
+reaches me directly.
+
+--- Three stars, confused by the paywall ---
+
+Fair, and thank you for saying it plainly. One person and fifty items
+are free, and the whole toolkit is free for everyone. The Family plan
+is only for a house with more than one person's medications and
+supplies to track. If the message in the app did not make that clear,
+that is on me and I will reword it.
+
+--- Two or one stars, a bug ---
+
+I am sorry. That should not happen and I would like to fix it this
+week. Could you send a line to team@kismetstudio.io with your iPhone
+model and what you tapped just before it went wrong? I read every
+message myself.
+
+--- Two or one stars, "I expected X" ---
+
+Thank you for trying it. Lantern is deliberately the calm version:
+a list of what you have and how long it lasts, not threat levels or
+checklists for every scenario. If that is not what you were after,
+I understand, and I am sorry it cost you the time. If there is one
+thing that would have made it worth keeping, I would genuinely like
+to know.
+
+--- Any review that mentions a crash ---
+
+Thank you for reporting it, and sorry. If you can, open Settings,
+Privacy and Security, Analytics, Analytics Data on your iPhone and
+send any file starting with "Lantern" to team@kismetstudio.io. That
+file is what I need to find it.
+
+--- Facebook / Messenger, second rating ask (two weeks in) ---
+
+Two weeks in and Lantern has [X.X] on the App Store. From [N]
+ratings.
+
+Those [N] are carrying the whole page right now, because the first
+ten ratings are what decide whether a stranger scrolling past ever
+taps. If you downloaded it, even if you only poked around once, a
+rating takes twenty seconds and the link in the first comment opens
+straight to the box. Honest is the only kind I want.
+
+That is the whole ask. Thank you to everyone who already did.
+
+(first comment)
+Straight to the review box: https://apps.apple.com/app/id6830418364?action=write-review
+
+Castlewise note: a second direct ask to the same small circle
+produced zero. The first ask already collected everyone willing.
+Send this one to the people who downloaded after the first post,
+not the whole list again.

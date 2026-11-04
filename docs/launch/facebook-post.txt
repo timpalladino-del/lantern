@@ -1,0 +1,136 @@
+FACEBOOK POST - FAMILY AND FRIENDS
+Post on release morning once the app is live and you have confirmed
+the Family trial starts on your own phone.
+Attach: social/lantern-launch-wide-1200x630.png
+Link goes in the FIRST COMMENT, not the post.
+
+------------------------------------------------------------------
+THE POST
+------------------------------------------------------------------
+
+So this is a thing I made.
+
+It is called Lantern, and it went live on the App Store this
+morning. It is for the food, water, medicine and gear you already
+keep for a bad week.
+
+The idea came from standing in the dark with a flashlight, knowing
+there was a week of food somewhere in the house and not being able
+to say where, or how old any of it was. Most households are more
+ready than they think. What they do not have is a list. Lantern
+keeps it.
+
+Scan a can and it knows when to use it. Tell it who lives in your
+house and it tells you how many days you are covered for, in real
+calories and real gallons, not a score. Every person has a
+medication card you can hand to a neighbour, a nurse or a shelter
+desk. When the power goes, Outage mode starts the clocks on the
+fridge and the freezer.
+
+And the emergency toolkit is free for everyone, always: the SOS
+strobe, the whistle, the fridge clock, the medication card, the
+know-how cards from the CDC and FEMA. No account, no cloud.
+Everything stays on your phone, which still works when nothing
+else does.
+
+I would love your help with two small things:
+
+1. Download it. Even if you never open it again, early downloads
+   matter more than I can explain.
+2. If you do try it and it helps, leave a rating. Honest ones. The
+   first handful of ratings decide whether strangers ever trust it.
+
+Link in the comments. And if you find something broken, tell me. I
+would much rather hear it from you than read it in a review.
+
+------------------------------------------------------------------
+FIRST COMMENT (post immediately after, with the link)
+------------------------------------------------------------------
+
+Here it is: https://apps.apple.com/us/app/id6830418364
+
+(Once App Analytics has campaign links, swap in the fb-launch one:
+https://apps.apple.com/app/apple-store/id6830418364?pt=129222714&ct=fb-launch&mt=8
+Confirm the pt value in App Store Connect, Analytics, Campaigns
+before using it.)
+
+------------------------------------------------------------------
+NOTES
+------------------------------------------------------------------
+
+Put the link in the first comment, not the post. Facebook suppresses
+reach on posts with outbound links; a link in the comments does not
+take the same hit.
+
+Do not boost this post. Family and friends reach is organic and free,
+and paid reach to that audience buys you nothing.
+
+Reply to every comment for the first two hours. Early engagement
+decides who else ever sees it.
+
+Do not mention your job or employer here or anywhere public. No
+price in the post. No "prepper", no "survival".
+
+------------------------------------------------------------------
+FACEBOOK MESSENGER - ONE-TO-ONE (Day 1 and Day 2)
+------------------------------------------------------------------
+Send individually, not as a group chat. Change [NAME] every time.
+Ten to fifteen people the first day, the ones who will actually do
+it. Group blasts get ignored; a personal message gets a download.
+
+Hey [NAME], quick favor.
+
+The app I have been building went live on the App Store this
+morning. It is called Lantern. It keeps track of the food, water,
+medicine and gear you keep for a bad week: what you have, where it
+is, when to use it, and how many days your house is covered for.
+The emergency toolkit part (flashlight, fridge clock, medication
+card) is free for everyone.
+
+Would you download it today? Early downloads matter a lot more than
+I can explain, and if you try it and it is useful, a rating would
+mean the world.
+
+https://apps.apple.com/us/app/id6830418364
+
+And if anything is broken, tell me. I would rather hear it from you.
+
+------------------------------------------------------------------
+FACEBOOK GROUPS YOU BETA-RECRUITED IN (Day 1, one group per hour)
+------------------------------------------------------------------
+Post in each group where you asked for testers. Space them at least
+an hour apart and change the first line slightly each time. Link in
+the first comment. Reply to every comment. Read the group's rules
+on self-promotion first; some want a mod's okay.
+
+Lantern is live on the App Store today, and I owe a thank-you to the
+people in this group who tested it.
+
+A few weeks ago I asked here for a handful of households to try an
+app for keeping track of emergency supplies: the food, the water,
+the medicine, the generator. You found things I would never have
+found alone. The medication card and the "add supplies straight into
+a location" button both exist because someone here asked for them.
+
+It is free to download and the emergency toolkit is free for
+everyone, always. Link in the comments. If you tried it, an honest
+rating this week would help more than you know.
+
+------------------------------------------------------------------
+FLORIDA FOLLOW-UP (only if the flooding is still in the news)
+------------------------------------------------------------------
+The coming-soon post on Nov 3 led with the Space Coast flooding.
+If that is still the story on launch day, post this version to the
+page instead of the family post, and keep the family post for your
+personal profile.
+
+To everyone drying out on the Space Coast and around the lake:
+still thinking of you.
+
+Last week we said Lantern was coming. It is on the App Store this
+morning. If your kitchen is a pile of cans and a case of water
+right now, this is the moment to write down what you have before
+it goes back on the shelves. Scan each one; Lantern dates it. Add
+who lives with you; it tells you how many days that is. The
+toolkit, with the fridge clock, the flashlight and the medication
+card, is free for everyone, always. Link in the comments.

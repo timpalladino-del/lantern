@@ -241,23 +241,24 @@ through Apple Family Sharing so a spouse does not pay twice.
 
 ### The ladder
 
-| | Free | Family 6 | Family 10 | Group 50 |
-|---|---|---|---|---|
-| Price | $0 | $12.99 / yr | $19.99 / yr | $49.99 / yr |
-| People in your house | 1 | 6 | 10 | 10 (organizer's house) |
-| Households in the group | | | | up to 50 |
-| Items | 50 | unlimited | unlimited | unlimited |
-| Pets | unlimited | unlimited | unlimited | unlimited |
-| Free trial | | 7 days | 7 days | 7 days |
-| Toolkit (SOS, outage mode, contacts, plan, know-how, medication card, compass, radio, games) | all, always | all | all | all |
-| Scanning, shelf-life library, readiness math, PDFs, CSV | yes | yes | yes | yes |
-| Kits, maintenance reminders, seasonal checklists, documents vault, widgets, sync | no | yes | yes | yes |
-| Profile links and medication cards | first person | all | all | all |
-| Group roster, readiness roll-up, shared contacts and plan | | | | yes |
+| | Free | Duo | Family 6 | Family 10 | Group 50 |
+|---|---|---|---|---|---|
+| Price | $0 | $7.99 / yr | $12.99 / yr | $19.99 / yr | $49.99 / yr |
+| People in your house | 1 | 2 | 6 | 10 | 10 (organizer's house) |
+| Households in the group | | | | | up to 50 |
+| Items | 50 | unlimited | unlimited | unlimited | unlimited |
+| Pets | unlimited | unlimited | unlimited | unlimited | unlimited |
+| Free trial | | 7 days | 7 days | 7 days | 7 days |
+| Toolkit (SOS, outage mode, contacts, plan, know-how, medication card, compass, radio, games) | all, always | all | all | all | all |
+| Scanning, shelf-life library, readiness math, PDFs, CSV | yes | yes | yes | yes | yes |
+| Kits, maintenance reminders, seasonal checklists, documents vault, widgets, sync | no | yes | yes | yes | yes |
+| Profile links and medication cards | first person | both | all | all | all |
+| Group roster, readiness roll-up, shared contacts and plan | | | | | yes |
 
-What moves someone up: adding a second person or passing 50 items moves Free to Family 6. The seventh person
-moves Family 6 to Family 10 (Apple prorates). A person living alone with more than 50 items pays Family 6; there is
-no solo plan. Store page: "Free until you need it. One plan from $12.99 a year."
+What moves someone up: adding a second person or passing 50 items moves Free to Duo (Family 6 is offered
+beside it). The third person moves Duo to Family 6, the seventh moves Family 6 to Family 10; Apple prorates
+on the way up and applies downgrades at renewal. A person living alone with more than 50 items pays Duo.
+Store page: "Free until you need it. Duo from $7.99 a year, Family from $12.99."
 
 ### Group 50, defined
 
@@ -278,7 +279,8 @@ tier only if the data asks for it.
 - The paywall appears when someone adds a second person, passes 50 items, or opens a paid screen. Let them add
   the person and see "covered for 4 days" first, then offer the trial.
 - The paywall never appears inside Outage mode or any Toolkit tool.
-- Subscription group ranks: Family 6 < Family 10 < Group 50, so upgrades and downgrades behave correctly.
+- Subscription group ranks: Duo < Family 6 < Family 10 < Group 50 (App Store Connect levels 4, 3, 2, 1), so
+  upgrades and downgrades behave correctly.
 
 ### Paywall as built (November 3, 2026)
 
@@ -458,6 +460,8 @@ Stocked and Stockpile (existing competitors), anything with Prep, Ready, Surviva
 - 2026-11-03: Profiles travel as links (`lantern://profile/new`, `lantern://profile/import`), so family members build their own profile and send it back. No server.
 - 2026-11-03: Toolkit tab added; every Toolkit tool is free on every tier. No pre-written message templates.
 - 2026-11-03: Built kits, universal links, trusted contact, demo data, App Store screenshots (docs/screens/appstore on the Mac), Icon Composer icon. Device build installed on the iPhone 16 Pro Max without the associated-domains entitlement (Release only until the capability is enabled with an Apple ID in Xcode).
+- 2026-11-04: Duo added (1.0.1): two people, $7.99/yr, 7-day trial, Family Sharing on, product
+  io.kismetstudio.lantern.duo (App Store Connect 6830816212, group level 4). Reasoning in §23.
 - 2026-11-03: Pricing final for now: Free (1 person, 50 items); Family 6 $12.99/yr; Family 10 $19.99/yr; Group 50 $49.99/yr (50 households, organizer gets Family 10, members stay Free); No Organizations tier. 7-day trial. Toolkit free on every tier. No solo plan, no one-time purchase.
 - 2026-11-03: No amber buttons. Amber is light only (icon, glow, progress, active tab). Buttons are Ink on light, Paper on dark.
 - 2026-11-03: Onboarding captures people, not headcounts: name, age, weight, height (optional), sex, activity level,
@@ -616,3 +620,45 @@ meeting place. Each is filled from the household names, the outage start time an
 spots, then Text (opens Messages with the body, you pick who), Share, or Copy. The user's own emergency
 contacts appear as a second list: tap a name, pick a message, Messages opens addressed to them. The
 message builder is a static function and tested.
+
+## 23. Duo (added November 4, 2026, for 1.0.1)
+
+**What it is.** A paid plan for two people in one house: everything Family 6 has (unlimited items and kits,
+both people's medications and medication cards, profile links, equipment reminders), capped at two people.
+$7.99 a year, 7-day free trial, Family Sharing on. Product `io.kismetstudio.lantern.duo`, group level 4,
+the bottom of the paid ladder.
+
+**Why.** Two-adult households without children at home are the single largest household type in the
+United States, about three in ten, and one-person households are another three in ten. The second-person
+paywall is the moment most of them meet Lantern's price, and "Family 6, $12.99" reads wrong to a couple on
+both words: they are not a family of six and they are being asked to pay for four empty seats. Duo fixes the
+name and the price for the largest segment at once. It also gives the person living alone who passes fifty
+items a plan that sounds like it was meant for them, which the November 3 decision ("no solo plan") left
+without an answer.
+
+**Why it does not undercut Family.** The cap is enforced in the app: the third person triggers the Family 6
+paywall, and Apple prorates the upgrade inside the subscription group. A family of four cannot stay on Duo.
+The earlier objection to a Solo tier ("a discount that cannot be enforced") does not apply, because every
+paid plan now caps people and the cap is the product.
+
+**Money.** Net per Duo subscriber after the Small Business Program is about $6.79, against $11.04 for
+Family 6. Duo pays for itself if, among households that see the second-person paywall, it converts at
+better than 1.6 times the rate Family 6 would have. For couples, that is the bet. The Day 30 rule in
+pricing-plan.md still stands: nothing moves until 100 downloads and 30 days, and the number to read is
+revenue per download, not conversion.
+
+**Paywall as built.**
+- Second person or 51st item: Duo first and selected, Family 6 beside it. Subhead names both.
+- Third person on Duo: "Three or more in the house? Family has room." Family 6 selected, Family 10 beside it.
+- Seventh person: Family 10 only, as before. Settings, See plans: Duo, Family 6, Family 10.
+- Home banner reads "Your plan covers 2 of 3 people" on Duo; the trial line no longer names Family.
+- `Plan.needed(forPeople:)` returns Duo for two. `-plan duo` fakes it in Debug. `Config/Lantern.storekit`
+  carries the product at group number 4 so the simulator shows the real paywall.
+
+**Store and site.** The App Store description paragraph and the website plans section show three cards:
+Free, Duo, Family. Group 50 stays hidden. Offer codes for testers stay on Family 6.
+
+**Not done until 1.0 is approved.** The Duo product is created and priced in App Store Connect but reads
+"Ready to Submit"; it goes into the 1.0.1 review submission with build 7 or later, the same way Family 6 and
+Family 10 went in with 1.0 (web UI, Add for Review, the draft). The 1.0 description in App Store Connect is
+not touched while 1.0 is in review; the new paragraph goes in with 1.0.1.

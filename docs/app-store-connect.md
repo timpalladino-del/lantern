@@ -143,3 +143,12 @@ Agreement, App Review contact phone number, then Submit for Review.
 - What's in it: the games section built out (twenty games) and ready-to-send status texts. See plan.md §22.
 - Do not attach build 7 to version 1.0. When 1.0 is approved and released, create version 1.0.1 in App
   Store Connect, attach build 7 (or a later one), and submit.
+
+## Duo subscription (November 4, 2026)
+
+- Created through the API: id 6830816212, product io.kismetstudio.lantern.duo, group level 4, one year,
+  Family Sharing on, en-US "Duo" / "Two people in your house, unlimited supplies.", available in every
+  territory with a 7-day free trial in each. USA $7.99 with the other territories from the equalizations.
+- Order that works: create, localization, availability, then prices (a price POST before availability
+  returns UNSUPPORTED_TERRITORY), then intro offers.
+- State: Ready to Submit. Goes into the 1.0.1 submission by hand (web UI, Add for Review) with the build.

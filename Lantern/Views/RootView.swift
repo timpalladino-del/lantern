@@ -170,6 +170,10 @@ struct RootView: View {
             paywallReason = .secondPerson(coveredDays: 4)
         case "paywall-items":
             paywallReason = .itemLimit
+        case "paywall-three":
+            paywallReason = .moreThanTwo
+        case "paywall-plans":
+            paywallReason = .plans
         case "medication", "medication-middle", "medication-bottom":
             screenshotScrollTarget = ["medication-middle": "instructions", "medication-bottom": "notes"][args[i + 1]]
             if let demoMed = (try? context.fetch(FetchDescriptor<Medication>()))?.first(where: { $0.name == "Metformin" && $0.person?.name == "Maria" }) {

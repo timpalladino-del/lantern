@@ -36,7 +36,7 @@ What it actually does:
   cards. There is an SOS strobe, a whistle, a compass, the NOAA radio frequencies.
 
 The toolkit half is free for everyone with no sign-up. The tracking half is free for one person and fifty
-items, and there is a yearly Family plan for a whole house.
+items, and there are yearly plans for two people or a whole house.
 
 Tech, since this is r/SideProject: SwiftUI and SwiftData, iOS 18, no backend at all. Barcodes go to Open
 Food Facts and nothing else leaves the phone. StoreKit 2 for the plans. The hardest parts were the

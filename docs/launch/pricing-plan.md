@@ -5,22 +5,24 @@
 | Plan | Covers | Price | Where it is |
 |---|---|---|---|
 | Free | 1 person, 50 items, every kit limit of 1, the whole Toolkit | $0 | default |
+| Duo (1.0.1) | 2 people, unlimited items and kits, both people's medications, profile links, equipment reminders | $7.99 a year, 7-day free trial | paywall, default selection at the second person and the 51st item |
 | Family 6 | up to 6 people, unlimited items and kits, everyone's medications, profile links, equipment reminders | $12.99 a year, 7-day free trial | paywall, default selection |
 | Family 10 | the same for up to 10 people | $19.99 a year, 7-day free trial | paywall |
 | Group 50 | up to 50 people | $49.99 a year | App Store Connect only, hidden in the app |
 
 Family Sharing is on for both Family plans, so one subscription covers everyone in the Apple family.
-Product IDs: io.kismetstudio.lantern.family6, .family10, .group50. Subscription group 22542888.
+Product IDs: io.kismetstudio.lantern.duo (6830816212, from 1.0.1), .family6, .family10, .group50.
+Subscription group 22542888. Duo reasoning: plan.md §23.
 
-The paywall appears at the second person and the 51st item, never during Outage mode and never on
-anything in the Toolkit. That rule is in the code and in the store copy. Keep it.
+The paywall appears at the second person and the 51st item (Duo leads, Family 6 beside it), at the third
+person on Duo (Family 6 leads), never during Outage mode and never on anything in the Toolkit. That rule is in the code and in the store copy. Keep it.
 
 ## Where money is and is not mentioned
 
 - App Store listing: "Free until you need it" and the plan names, no numbers in the description. Prices
   are on the paywall and in App Store Connect where Apple shows them.
 - Screenshots: no price anywhere. See punch-list.md item 1.
-- kismetstudio.io/lantern/: the plans section shows $12.99 and $19.99. This is a conscious exception to
+- kismetstudio.io/lantern/: the plans section shows $7.99, $12.99 and $19.99. This is a conscious exception to
   the old Kismet "no money on the site" rule, made for Lantern because the free tier is the pitch and a
   visitor who cannot find the price assumes the worst. Keep the numbers accurate or remove them; never
   stale.

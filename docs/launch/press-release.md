@@ -51,8 +51,8 @@ movement. It should feel like a tidy pantry."
 **Availability**
 
 Lantern: Household Readiness is available now on the App Store for iPhone running iOS 18 or later. The
-toolkit and tracking for one person are free. Family plans cover a whole household for a yearly price,
-shared through Apple Family Sharing, with a seven-day free trial.
+toolkit and tracking for one person are free. Duo covers two people and Family covers a whole household,
+each for a yearly price shared through Apple Family Sharing, with a seven-day free trial.
 
 App Store: https://apps.apple.com/us/app/id6830418364
 Press kit, icon and screenshots: https://kismetstudio.io/lantern/press/
@@ -80,7 +80,7 @@ In an emergency, call 911 first.
 | Developer | Kismet Studio (Tim Palladino) |
 | Platform | iPhone, iOS 18 or later |
 | Release | [DATE] |
-| Price | Free with a Family plan; toolkit free for everyone |
+| Price | Free, with Duo and Family plans; toolkit free for everyone |
 | App Store | https://apps.apple.com/us/app/id6830418364 |
 | Website | https://kismetstudio.io/lantern/ |
 | Privacy | No account, no cloud, no analytics. Barcode lookup optional. |

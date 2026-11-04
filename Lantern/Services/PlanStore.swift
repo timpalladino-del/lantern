@@ -1,15 +1,16 @@
 import Foundation
 import StoreKit
 
-/// The ladder. Free is one person and 50 items. Everything in the Toolkit is free on every plan.
+/// The ladder. Free is one person and 50 items. Duo is two people. Everything in the Toolkit is free on every plan.
 enum Plan: Int, Comparable, CaseIterable {
-    case free = 0, family6, family10, group50
+    case free = 0, duo, family6, family10, group50
 
     static func < (a: Plan, b: Plan) -> Bool { a.rawValue < b.rawValue }
 
     var productID: String? {
         switch self {
         case .free: return nil
+        case .duo: return "io.kismetstudio.lantern.duo"
         case .family6: return "io.kismetstudio.lantern.family6"
         case .family10: return "io.kismetstudio.lantern.family10"
         case .group50: return "io.kismetstudio.lantern.group50"
@@ -24,6 +25,7 @@ enum Plan: Int, Comparable, CaseIterable {
     var title: String {
         switch self {
         case .free: return "Free"
+        case .duo: return "Duo"
         case .family6: return "Family 6"
         case .family10: return "Family 10"
         case .group50: return "Group 50"
@@ -33,6 +35,7 @@ enum Plan: Int, Comparable, CaseIterable {
     var maxPeople: Int {
         switch self {
         case .free: return 1
+        case .duo: return 2
         case .family6: return 6
         case .family10, .group50: return 10
         }
@@ -44,6 +47,7 @@ enum Plan: Int, Comparable, CaseIterable {
     var fallbackPrice: String {
         switch self {
         case .free: return "$0"
+        case .duo: return "$7.99"
         case .family6: return "$12.99"
         case .family10: return "$19.99"
         case .group50: return "$49.99"
@@ -53,6 +57,7 @@ enum Plan: Int, Comparable, CaseIterable {
     /// The smallest plan that covers this many people in one house.
     static func needed(forPeople n: Int) -> Plan {
         if n <= 1 { return .free }
+        if n <= 2 { return .duo }
         if n <= 6 { return .family6 }
         return .family10
     }
@@ -62,6 +67,7 @@ enum Plan: Int, Comparable, CaseIterable {
 enum PaywallReason: Identifiable, Equatable {
     case secondPerson(coveredDays: Double?)
     case itemLimit
+    case moreThanTwo
     case moreThanSix
     case feature(String)
     case plans
@@ -70,6 +76,7 @@ enum PaywallReason: Identifiable, Equatable {
         switch self {
         case .secondPerson: return "secondPerson"
         case .itemLimit: return "itemLimit"
+        case .moreThanTwo: return "moreThanTwo"
         case .moreThanSix: return "moreThanSix"
         case .feature(let f): return "feature-\(f)"
         case .plans: return "plans"
@@ -105,7 +112,7 @@ final class PlanStore {
         #if DEBUG
         let args = ProcessInfo.processInfo.arguments
         if let i = args.firstIndex(of: "-plan"), i + 1 < args.count {
-            debugPlan = ["free": .free, "family6": .family6, "family10": .family10, "group50": .group50][args[i + 1]]
+            debugPlan = ["free": .free, "duo": .duo, "family6": .family6, "family10": .family10, "group50": .group50][args[i + 1]]
         }
         #endif
         updates = Task { [weak self] in
@@ -212,6 +219,10 @@ final class PlanStore {
 
     func reasonForAdding(personNumber n: Int) -> PaywallReason? {
         if covers(peopleCount: n) { return nil }
-        return plan == .free ? .secondPerson(coveredDays: nil) : .moreThanSix
+        switch plan {
+        case .free: return .secondPerson(coveredDays: nil)
+        case .duo: return .moreThanTwo
+        default: return .moreThanSix
+        }
     }
 }

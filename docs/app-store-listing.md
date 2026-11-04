@@ -39,7 +39,7 @@ PRIVATE BY DESIGN
 No account. No cloud. No analytics. Everything stays on your iPhone. The only thing Lantern ever sends anywhere is a barcode's digits to a public food database, and you can turn that off.
 
 FREE UNTIL YOU NEED IT
-Lantern is free for one person and fifty items, with the entire Toolkit included. Family covers up to six people (or ten) for one yearly price, shared with your Apple Family Sharing group. 7-day free trial. Nothing in the Toolkit is ever behind the paywall.
+Lantern is free for one person and fifty items, with the entire Toolkit included. Duo covers two people for a small yearly price. Family covers up to six people (or ten). Every plan is shared with your Apple Family Sharing group and starts with a 7-day free trial. Nothing in the Toolkit is ever behind the paywall.
 
 Lantern gives general information from public sources for planning. It is not medical or safety advice. In an emergency, call 911 first.
 

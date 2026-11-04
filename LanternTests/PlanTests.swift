@@ -4,10 +4,12 @@ import XCTest
 @MainActor
 final class PlanTests: XCTestCase {
     func testLadderOrderAndLimits() {
-        XCTAssertTrue(Plan.free < Plan.family6)
+        XCTAssertTrue(Plan.free < Plan.duo)
+        XCTAssertTrue(Plan.duo < Plan.family6)
         XCTAssertTrue(Plan.family6 < Plan.family10)
         XCTAssertTrue(Plan.family10 < Plan.group50)
         XCTAssertEqual(Plan.free.maxPeople, 1)
+        XCTAssertEqual(Plan.duo.maxPeople, 2)
         XCTAssertEqual(Plan.family6.maxPeople, 6)
         XCTAssertEqual(Plan.family10.maxPeople, 10)
         XCTAssertEqual(Plan.group50.maxPeople, 10)
@@ -15,7 +17,8 @@ final class PlanTests: XCTestCase {
 
     func testNeededPlanForPeople() {
         XCTAssertEqual(Plan.needed(forPeople: 1), .free)
-        XCTAssertEqual(Plan.needed(forPeople: 2), .family6)
+        XCTAssertEqual(Plan.needed(forPeople: 2), .duo)
+        XCTAssertEqual(Plan.needed(forPeople: 3), .family6)
         XCTAssertEqual(Plan.needed(forPeople: 6), .family6)
         XCTAssertEqual(Plan.needed(forPeople: 7), .family10)
     }
@@ -40,5 +43,14 @@ final class PlanTests: XCTestCase {
         XCTAssertFalse(store.coversPerson(at: 1))
         XCTAssertNil(store.reasonForAdding(personNumber: 1))
         XCTAssertEqual(store.reasonForAdding(personNumber: 2), .secondPerson(coveredDays: nil))
+    }
+
+    func testDuoProductRoundTrip() {
+        XCTAssertEqual(Plan(productID: "io.kismetstudio.lantern.duo"), .duo)
+        XCTAssertEqual(Plan.duo.productID, "io.kismetstudio.lantern.duo")
+        XCTAssertEqual(Plan.duo.title, "Duo")
+        XCTAssertTrue(Plan.duo.isPaid)
+        XCTAssertEqual(Plan.allCases.compactMap(\.productID).count, 4)
+        XCTAssertEqual(Set(Plan.allCases.compactMap(\.productID)).count, 4)
     }
 }

@@ -6,12 +6,18 @@ struct PaywallView: View {
     let reason: PaywallReason
     @Environment(\.dismiss) private var dismiss
     @State private var store = PlanStore.shared
-    @State private var selected: Plan = .family6
+    @State private var selected: Plan = .duo
     @State private var purchased = false
 
     private var offered: [Plan] {
-        var plans: [Plan] = [.family6, .family10]
-        if case .moreThanSix = reason { plans = [.family10] }
+        // Duo leads when one or two people are involved; Family leads once there are three.
+        var plans: [Plan] = [.duo, .family6]
+        switch reason {
+        case .moreThanTwo: plans = [.family6, .family10]
+        case .moreThanSix: plans = [.family10]
+        case .plans, .feature: plans = [.duo, .family6, .family10]
+        default: break
+        }
         if PlanStore.showsGroupTier { plans.append(.group50) }
         return plans.filter { $0 > store.plan }
     }
@@ -67,6 +73,7 @@ struct PaywallView: View {
             return whole <= 0 ? "Lantern covers one person for free." : "Your household is covered for \(whole) day\(whole == 1 ? "" : "s")."
         case .secondPerson(nil): return "Lantern covers one person for free."
         case .itemLimit: return "You've tracked 50 items. That's a real pantry."
+        case .moreThanTwo: return "Three or more in the house? Family has room."
         case .moreThanSix: return "More than six people? Family 10 has room."
         case .feature(let f): return "\(f) is part of Family."
         case .plans: return "Free until you need it."
@@ -75,8 +82,9 @@ struct PaywallView: View {
 
     private var subhead: String {
         switch reason {
-        case .secondPerson: return "Keep tracking everyone who lives here, with their medications and a card you can hand to whoever is helping."
-        case .itemLimit: return "Family keeps going: unlimited items, everyone in the house, and reminders for the gear that keeps you safe."
+        case .secondPerson: return "Duo covers the two of you. Family covers the whole house. Either way: everyone's medications, a card you can hand to whoever is helping, and no item limit."
+        case .itemLimit: return "Duo keeps going: unlimited items, a second person when you want one, and reminders for the gear that keeps you safe."
+        case .moreThanTwo: return "Everything in Duo, for up to six people in one house. The App Store credits what is left on Duo."
         case .moreThanSix: return "Everything in Family 6, for up to ten people in one house."
         case .feature: return "One plan covers the whole house. Everything in the Toolkit stays free."
         case .plans: return "One plan covers the whole house. Everything in the Toolkit stays free, always."
@@ -85,7 +93,7 @@ struct PaywallView: View {
 
     private var bullets: some View {
         VStack(alignment: .leading, spacing: 12) {
-            PaywallBullet(symbol: "person.2.fill", text: "Everyone in the house, with medications and medication cards")
+            PaywallBullet(symbol: "person.2.fill", text: "Everyone the plan covers, with medications and medication cards")
             PaywallBullet(symbol: "shippingbox.fill", text: "Unlimited supplies, not 50")
             PaywallBullet(symbol: "paperplane.fill", text: "Profile links, so family fills in their own details")
             PaywallBullet(symbol: "wrench.and.screwdriver.fill", text: "Reminders for the generator, alarms and extinguisher")
@@ -164,6 +172,7 @@ private struct PlanCard: View {
 
     private var detail: String {
         switch plan {
+        case .duo: return "Two people in your house"
         case .family6: return "Up to 6 people in your house"
         case .family10: return "Up to 10 people in your house"
         case .group50: return "Up to 50 households, for organizers"

@@ -32,6 +32,35 @@
           "codeOffers" : [
 
           ],
+          "displayPrice" : "7.99",
+          "familyShareable" : true,
+          "groupNumber" : 4,
+          "internalID" : "6B0000000004",
+          "introductoryOffer" : {
+            "internalID" : "6B0000000014",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P1W"
+          },
+          "localizations" : [
+            {
+              "description" : "Two people in your house, unlimited supplies.",
+              "displayName" : "Duo",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "io.kismetstudio.lantern.duo",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Duo",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
           "displayPrice" : "12.99",
           "familyShareable" : true,
           "groupNumber" : 3,

@@ -162,6 +162,10 @@ extension SeedData {
             item.litersPerUnit = l.l
             if let e = l.exp { item.expirationDate = days(e); item.dateSource = l.key == nil ? .manual : .estimated }
             if l.n == "Water bricks (filled)" { item.fillDate = days(-60) }
+            if l.n == "Black beans" {
+                item.servingsPerUnit = 3.5
+                item.nutrition = NutritionFacts(servingSize: "1/2 cup (130 g)", calories: 110, proteinG: 7, carbsG: 20, fatG: 0.5, fiberG: 6, sugarG: 1, sodiumMg: 400, source: "label")
+            }
             _ = library
             context.insert(item)
             created[l.n] = item

@@ -21,7 +21,7 @@ struct RootView: View {
     @State private var screenshotSheet: ScreenshotSheet?
 
     enum ScreenshotSheet: String, Identifiable {
-        case outage, kit, medcard, plan, household
+        case outage, kit, medcard, plan, household, person, item
         var id: String { rawValue }
     }
     @State private var screenshotScrollTarget: String?
@@ -85,6 +85,14 @@ struct RootView: View {
                 case .medcard: MedicationCardView()
                 case .plan: PlanView()
                 case .household: if let h = households.first { HouseholdView(household: h).navigationTitle("Household") }
+                case .person:
+                    if let h = households.first, let p = h.sortedPeople.first(where: { $0.name == "Maria" }) ?? h.sortedPeople.first {
+                        PersonEditView(household: h, person: p)
+                    }
+                case .item:
+                    if let it = (try? context.fetch(FetchDescriptor<SupplyItem>()))?.first(where: { $0.name == "Black beans" }) ?? items.first {
+                        ItemDetailView(item: it)
+                    }
                 }
             }
             .tint(Color.accentColor)
@@ -136,7 +144,7 @@ struct RootView: View {
         }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
-        case "outage", "kit", "medcard", "plan", "household":
+        case "outage", "kit", "medcard", "plan", "household", "person", "item":
             screenshotSheet = ScreenshotSheet(rawValue: args[i + 1])
         case "paywall":
             paywallReason = .secondPerson(coveredDays: 4)

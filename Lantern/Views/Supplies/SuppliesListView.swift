@@ -127,6 +127,15 @@ struct SuppliesListView: View {
             .sheet(isPresented: $showPacks) { StarterPackPickerView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }
             .sensoryFeedback(.impact(weight: .light), trigger: usedCount)
+            .onAppear {
+                #if DEBUG
+                let args = ProcessInfo.processInfo.arguments
+                if let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count, args[i + 1] == "select", !editMode.isEditing {
+                    editMode = .active
+                    selection = Set(filtered.prefix(3).map(\.persistentModelID))
+                }
+                #endif
+            }
         }
     }
 

@@ -30,7 +30,7 @@ final class NutritionTests: XCTestCase {
     }
 
     func testRowsFormatGramsAndMilligrams() {
-        let facts = NutritionFacts(calories: 200, fatG: 1.5, sodiumMg: 480, proteinG: 8)
+        let facts = NutritionFacts(calories: 200, proteinG: 8, fatG: 1.5, sodiumMg: 480)
         let rows = Dictionary(uniqueKeysWithValues: facts.rows.map { ($0.0, $0.1) })
         XCTAssertEqual(rows["Calories"], "200")
         XCTAssertEqual(rows["Total fat"], "1.5 g")

@@ -293,7 +293,7 @@ struct HomeView: View {
                     SkillsWrap(entries: covered.map { s in (s, people.filter { $0.skillKeys.contains(s.key) }.map(\.name)) })
                 }
                 if !missingCore.isEmpty, covered.count >= 1 {
-                    Text("Nobody is marked for \(missingCore.map(\.title.lowercased()).joined(separator: ", ")). Mark whoever can, or pick one to learn.")
+                    Text("Nobody is marked for \(missingCore.map { $0.title.lowercased() }.joined(separator: ", ")). Mark whoever can, or pick one to learn.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
             } header: { Text("Who can do what") }

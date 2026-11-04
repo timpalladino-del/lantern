@@ -1,10 +1,10 @@
 # App Store listing
 
-## Name
-Lantern
+## Name (App Store; "Lantern" was taken)
+Lantern: Household Readiness
 
 ## Subtitle (30 characters max)
-Ready for when you need it most
+Ready when you need it most
 
 ## Promotional text (170 max, editable without a new build)
 Know what you have. Food, water, medicine and gear, with the dates that matter and how many days your people are covered for. The emergency Toolkit is free, always.

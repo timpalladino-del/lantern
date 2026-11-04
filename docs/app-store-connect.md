@@ -6,8 +6,9 @@ they are hard-coded in `Lantern/Services/PlanStore.swift` and mirrored in `Confi
 ## App record
 
 - Bundle ID: `io.kismetstudio.lantern` (team 69MM5TC2UN)
-- Name: Lantern
-- Subtitle: Ready for when you need it most.
+- Name: Lantern: Household Readiness (plain "Lantern" is taken on the App Store; the home-screen name stays Lantern)
+- Subtitle: Ready when you need it most
+- App record id 6830418364, bundle ID record RLY753X48D, subscription group 22542888.
 - Primary category: Lifestyle. Secondary: Utilities.
 - Privacy policy URL: https://kismetstudio.io/lantern/privacy/
 - Terms of use (EULA): https://kismetstudio.io/lantern/terms/ (enter in the App Information "License Agreement" field, and in the paywall it is linked)

@@ -95,3 +95,11 @@ Agreement, App Review contact phone number, then Submit for Review.
 - [ ] Localizations (en-US) for the group and each product
 - [ ] Paid Apps agreement active
 - [ ] Sandbox tester created
+
+## Submission (November 4, 2026)
+
+- Build 5 (25186fc0-ff8c-4469-b123-e0e077ac1fe0) and build 6 (0339f725-b591-49ac-8983-82ef3ad495c7) uploaded and processed.
+- Version 1.0 (28f15ab6-977f-4450-b665-ed21d71fe85c) attached to build 6.
+- App Privacy published in the web UI ("we do not collect data").
+- Review submission 17f5f2bc-df13-4efa-a88c-ac3b7df5d20f: version item added, submitted=true → WAITING_FOR_REVIEW.
+- Internal TestFlight group "Kismet internal" receives every build automatically.

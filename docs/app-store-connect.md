@@ -152,3 +152,7 @@ Agreement, App Review contact phone number, then Submit for Review.
 - Order that works: create, localization, availability, then prices (a price POST before availability
   returns UNSUPPORTED_TERRITORY), then intro offers.
 - State: Ready to Submit. Goes into the 1.0.1 submission by hand (web UI, Add for Review) with the build.
+- The last missing piece of metadata was the App Store review screenshot (Family 6 and Family 10 had one
+  from the first pass). Uploaded the paywall capture (`-plan free -screenshot paywall`, which shows Duo
+  selected) through `subscriptionAppStoreReviewScreenshots`: reserve, PUT the bytes to the upload
+  operations, PATCH uploaded with the MD5. Script: `~/.appstoreconnect/lantern_duo_shot.py`.

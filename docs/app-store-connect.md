@@ -103,3 +103,11 @@ Agreement, App Review contact phone number, then Submit for Review.
 - App Privacy published in the web UI ("we do not collect data").
 - Review submission 17f5f2bc-df13-4efa-a88c-ac3b7df5d20f: version item added, submitted=true → WAITING_FOR_REVIEW.
 - Internal TestFlight group "Kismet internal" receives every build automatically.
+
+## Resubmission (November 4, 2026, 04:50 UTC)
+
+- First submission 17f5f2bc cancelled (PATCH canceled=true); version went DEVELOPER_REJECTED, which
+  unlocks screenshots.
+- Deleted 08-paywall.png (showed prices) and the old 01-home.png; uploaded a new 01-home.png of the
+  dashboard captured with `-demo -tab Home -plan family6` (no trial banner). Eight screenshots, reordered.
+- New review submission 27817508-257f-4715-a9a7-7fcd7a726ce8 with the version item, submitted → WAITING_FOR_REVIEW.

@@ -2,25 +2,13 @@
 
 In order. The first two are decisions; the rest are chores.
 
-## 1. The paywall screenshot shows a price (decide before approval lands)
+## 1. The paywall screenshot showed a price (done, November 4)
 
-Screenshot 8 of 9 in the submission is the paywall: "$12.99 per year", "$19.99", "Start 7-day free
-trial". CastleWise was rejected under guideline 2.3.7 for exactly this ("$9.99" in one screenshot). Apple's
-letter blamed the description; the fix was the screenshot.
-
-Options:
-
-- **Pull it now.** Remove the submission from review (App Store Connect, the version page, Remove from
-  Review), delete screenshot 08-paywall.png from the 6.9-inch set, resubmit. Costs the queue position
-  (usually a day). Removes the known risk.
-- **Let it ride.** If it is rejected, delete the screenshot and resubmit; a metadata-only rejection is
-  normally a same-day turnaround. Costs one to three days only if it happens.
-
-Recommendation: pull it. A first review has enough unknowns without a known one. Say the word and the
-session does it through the API in two calls.
-
-While you are in there: screenshot 1 (Home) shows the old Home screen. The dashboard in build 6 looks
-different. It is not a rejection risk, but reshoot the whole set for 1.0.1 so the store matches the app.
+Screenshot 8 showed "$12.99 per year" and "Start 7-day free trial", the CastleWise 2.3.7 rejection. The
+submission was pulled, that screenshot deleted, the stale Home screenshot replaced with the new dashboard
+(captured with the Family plan active so no trial banner shows), and 1.0 resubmitted with eight
+screenshots. New review submission 27817508-257f-4715-a9a7-7fcd7a726ce8, Waiting for Review again at
+04:50 UTC. Cost: about an hour of queue position.
 
 ## 2. The coming-soon post said "no subscription"
 

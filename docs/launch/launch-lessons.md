@@ -88,4 +88,7 @@ See pricing-plan.md. Nothing decided until 100 downloads and 30 days.
 ## Log
 
 - 2026-11-04: 1.0 (build 6) submitted. App Privacy was the last blocker and took a person. Launch kit
-  written. Screenshot 8 shows a price; decision pending.
+  written. Screenshot 8 showed a price; the submission was pulled an hour later, the screenshot deleted,
+  Home reshot as the dashboard, and 1.0 resubmitted. Lesson: cancelling a submission through the API puts
+  the version in DEVELOPER_REJECTED, which is what unlocks screenshots; a new submission with the version
+  item goes straight back to Waiting for Review. Whole round trip about ten minutes of work.

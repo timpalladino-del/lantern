@@ -21,7 +21,8 @@ struct RootView: View {
     @State private var screenshotSheet: ScreenshotSheet?
 
     enum ScreenshotSheet: String, Identifiable {
-        case outage, kit, medcard, plan, household, person, item
+        case outage, kit, medcard, plan, household, person, item, games, texts
+        case headsup, trivia, hangman, fourinarow, tictactoe, draw, wyr, twenty, story, hunt, puppets, memory, simon, first, rps, number, dice
         var id: String { rawValue }
     }
     @State private var screenshotScrollTarget: String?
@@ -93,6 +94,25 @@ struct RootView: View {
                     if let it = (try? context.fetch(FetchDescriptor<SupplyItem>()))?.first(where: { $0.name == "Black beans" }) ?? items.first {
                         ItemDetailView(item: it)
                     }
+                case .games: GamesView()
+                case .texts: StatusTextsView()
+                case .headsup: WordRoundView(mode: .headsUp)
+                case .trivia: TriviaView()
+                case .hangman: HangmanView()
+                case .fourinarow: FourInARowView()
+                case .tictactoe: TicTacToeView()
+                case .draw: DrawGuessView()
+                case .wyr: WouldYouRatherView()
+                case .twenty: TwentyQuestionsView()
+                case .story: StoryChainView()
+                case .hunt: ScavengerHuntView()
+                case .puppets: ShadowPuppetsView()
+                case .memory: MemoryMatchView()
+                case .simon: SimonView()
+                case .first: WhoGoesFirstView()
+                case .rps: RockPaperScissorsView()
+                case .number: NumberGuessView()
+                case .dice: DiceCardsView()
                 }
             }
             .tint(Color.accentColor)
@@ -144,8 +164,8 @@ struct RootView: View {
         }
         guard let i = args.firstIndex(of: "-screenshot"), i + 1 < args.count else { return }
         switch args[i + 1] {
-        case "outage", "kit", "medcard", "plan", "household", "person", "item":
-            screenshotSheet = ScreenshotSheet(rawValue: args[i + 1])
+        case let name where ScreenshotSheet(rawValue: name) != nil:
+            screenshotSheet = ScreenshotSheet(rawValue: name)
         case "paywall":
             paywallReason = .secondPerson(coveredDays: 4)
         case "paywall-items":

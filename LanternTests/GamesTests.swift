@@ -149,8 +149,8 @@ final class GamesTests: XCTestCase {
         let ctx = container.mainContext
         let h = Household()
         ctx.insert(h)
-        let a = Person(name: "Tim"); ctx.insert(a)
-        let b = Person(name: "Maria"); ctx.insert(b)
+        let a = Person(name: "Tim"); a.sortOrder = 0; ctx.insert(a)
+        let b = Person(name: "Maria"); b.sortOrder = 1; ctx.insert(b)
         h.people = [a, b]
         try ctx.save()
         let o = OutageEvent(startedAt: Date(timeIntervalSince1970: 1_700_000_000))

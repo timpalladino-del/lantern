@@ -97,7 +97,7 @@ struct StatusTextsView: View {
 
     /// Built as a static function so it can be tested without a view.
     static func messages(household: Household?, outage: OutageEvent?, plan: HouseholdPlan?, now: Date) -> [Message] {
-        let people = household?.people.map(\.name).filter { !$0.isEmpty } ?? []
+        let people = (household?.people ?? []).sorted { ($0.sortOrder, $0.createdAt) < ($1.sortOrder, $1.createdAt) }.map(\.name).filter { !$0.isEmpty }
         let who: String = {
             switch people.count {
             case 0: return "We're"

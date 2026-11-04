@@ -195,7 +195,7 @@ struct HomeView: View {
                         Image(systemName: "person.2.fill").foregroundStyle(Color.glow)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Your plan covers \(plan.plan.maxPeople) of \(h.people.count) people").font(.subheadline.weight(.semibold))
-                            Text(plan.trialEligible ? "Start a 7-day free trial." : "See plans.").font(.caption).foregroundStyle(.secondary)
+                            Text(plan.plan.isPaid ? "Family has room for everyone in the house." : plan.trialEligible ? "Start a 7-day free trial." : "See plans.").font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)

@@ -104,10 +104,10 @@ enum PaywallReason: Identifiable, Equatable {
 @Observable
 final class PlanStore {
     static let shared = PlanStore()
-    static let freeItemLimit = 50
-    static let freeKitLimit = 1
+    nonisolated static let freeItemLimit = 50
+    nonisolated static let freeKitLimit = 1
     /// Group 50 exists in App Store Connect but is not sold until group features ship.
-    static let showsGroupTier = false
+    nonisolated static let showsGroupTier = false
 
     private(set) var plan: Plan = .free
     private(set) var products: [Product] = []

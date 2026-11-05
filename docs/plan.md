@@ -691,3 +691,38 @@ half and the buttons on the flat half. Phones without a hinge never see it.
 Xcode 27.2's simulator exposes the inner display but no way to fold the device from the command line;
 the inner display stays dark when powered on its own. The hinge code compiles against the 27.2 SDK and
 is guarded by availability; it has not run on a hinge.
+
+## 25. Review pass (November 5, 2026, build 10)
+
+A full read of Views and Services against §20 to §24 and hig.md turned up forty items. Fixed in build 10:
+
+- **Plans.** One source for plan copy (`Plan.peopleLine`, `Plan.next(forPeople:)`). The paywall, Settings,
+  the Home banner and every locked row name the next plan up, so a Duo household never sees Family copy or
+  a dead-end sheet; a Family 10 household never sees the banner at all. Settings offers "Move up a plan" to
+  paid users. The 50-item limit now holds inside kits ("Still missing" rows and "Add every item on the
+  list"). Deleting a person asks first.
+- **Crashes and clocks.** Memory match looked tiles up by index after a redeal; now by id. Who goes first
+  could index past a deleted name during a spin; delete is off while spinning. The game clock was a new
+  Timer per redraw, which stalled while drawing; it is one task per screen. Heads up no longer starts after
+  you leave the countdown, and the tilt starts disarmed.
+- **Copy.** Equipment is Gear everywhere, including Onboarding and Home. Status texts drop the outage
+  clause when no outage is running and use I/we for a household of one. Plurals fixed in readiness gaps,
+  memory match and kit badges. The medication card's em dash is gone. "Free" is out of the paywall
+  headlines. Water shows gallons in Outage mode and Ready, not litres. Zero people reads "No one added yet".
+- **Colour rules.** Amber only on progress, the tab bar and the onboarding and paywall symbols; every other
+  amber icon is ink. Signal only on expired medicine; game losses and errors use ember, playing cards a
+  plain red. Simon's fourth pad is grey, not primary, so it reads in Dark Mode.
+- **Toolkit.** A running SOS light or alarm shows at the top of the Toolkit with a Stop button, since both
+  keep going after you leave their screen. The light's battery warning re-reads every minute. The
+  screen-awake hold is reference counted so one tool cannot clear another's.
+- **Who can do what.** Every line opens the person it names, skills list tappable names, and there is a
+  link to the whole household. Before anyone is marked, each person is listed with "Mark skills".
+- **Accessibility.** Four-in-a-row cells, trivia marks, dice and cards have labels; the contact row and
+  "Hold to peek" have VoiceOver actions; the Supplies empty state stacks at large type; the location
+  symbol menu is labelled; the onboarding bulb is hidden from VoiceOver.
+- **Dead code.** The duplicate share sheet, the duplicated gap rows (now `GapRow`, which reads the shopping
+  list instead of a per-screen set), an unused library reference and an unused requester name.
+
+Left for later, in order: Home person bubbles open sheets rather than the detail column on the open Duo;
+"3d overdue" style durations are terse for VoiceOver; the per-position coverage rule (first N people in
+sort order are covered) is kept but not yet explained in Settings.

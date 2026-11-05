@@ -4,7 +4,7 @@ import SwiftData
 /// A readiness gap with one button that adds it to the shopping list. The list itself is the record,
 /// so the button stays "On the shopping list" across screens and relaunches.
 struct GapRow: View {
-    let gap: ReadinessGap
+    let gap: ReadinessReport.Gap
     @Environment(\.modelContext) private var context
     @Query private var shopping: [ShoppingItem]
 

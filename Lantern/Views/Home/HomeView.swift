@@ -277,46 +277,73 @@ struct HomeView: View {
         if !covered.isEmpty || !onPower.isEmpty || !needHelp.isEmpty || people.contains(where: { !$0.emergencyRole.isEmpty }) {
             Section {
                 ForEach(onPower, id: \.uuid) { p in
-                    HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "bolt.fill").foregroundStyle(Color.ember).frame(width: 22)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("\(p.name): \(p.powerDevices.map(\.title).joined(separator: ", "))").font(.subheadline)
-                            Text(p.powerDevices.first?.hint ?? "").font(.caption).foregroundStyle(.secondary)
+                    Button { editingPerson = p } label: {
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "bolt.fill").foregroundStyle(Color.ember).frame(width: 22)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("\(p.name): \(p.powerDevices.map(\.title).joined(separator: ", "))").font(.subheadline)
+                                Text(p.powerDevices.first?.hint ?? "").font(.caption).foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
                         }
                     }
+                    .foregroundStyle(.primary)
                 }
                 ForEach(needHelp, id: \.uuid) { p in
-                    Label("\(p.name) needs help to leave: \(p.mobility.title.lowercased())", systemImage: "figure.roll")
-                        .font(.subheadline)
+                    Button { editingPerson = p } label: {
+                        HStack {
+                            Label("\(p.name) needs help to leave: \(p.mobility.title.lowercased())", systemImage: "figure.roll").font(.subheadline)
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
                 }
                 ForEach(people.filter { !$0.emergencyRole.isEmpty }, id: \.uuid) { p in
-                    HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "checklist").foregroundStyle(.secondary).frame(width: 22)
-                        Text("\(p.name): \(p.emergencyRole)").font(.subheadline)
+                    Button { editingPerson = p } label: {
+                        HStack(alignment: .top, spacing: 10) {
+                            Image(systemName: "checklist").foregroundStyle(.secondary).frame(width: 22)
+                            Text("\(p.name): \(p.emergencyRole)").font(.subheadline)
+                            Spacer()
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                        }
                     }
+                    .foregroundStyle(.primary)
                 }
                 if !covered.isEmpty {
-                    SkillsWrap(entries: covered.map { s in (s, people.filter { $0.skillKeys.contains(s.key) }.map(\.name)) })
+                    SkillsWrap(entries: covered.map { s in (s, people.filter { $0.skillKeys.contains(s.key) }) }) { editingPerson = $0 }
                 }
                 if !missingCore.isEmpty, covered.count >= 1 {
-                    Text("Nobody is marked for \(missingCore.map { $0.title.lowercased() }.joined(separator: ", ")). Mark whoever can, or pick one to learn.")
+                    Text("Nobody is marked for \(missingCore.map { $0.title.lowercased() }.joined(separator: ", ")). Tap a name to mark who can, or pick one to learn.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
-            } header: { Text("Who can do what") }
+                NavigationLink { HouseholdView(household: h).navigationTitle("Household") } label: {
+                    Label("Everyone's skills and needs", systemImage: "person.2.fill").font(.subheadline)
+                }
+            } header: { Text("Who can do what") } footer: {
+                Text("Tap a name to change what they can do.")
+            }
         } else {
             Section {
-                Button { if let first = people.first { editingPerson = first } } label: {
-                    HStack(spacing: 12) {
-                        Image(systemName: "person.text.rectangle").foregroundStyle(Color.glow)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Who can do what?").font(.subheadline.weight(.semibold))
-                            Text("Mark first aid, the generator, the gas shutoff, and anything that runs on power.").font(.caption).foregroundStyle(.secondary)
-                        }
-                        Spacer()
-                        Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                HStack(spacing: 12) {
+                    Image(systemName: "person.text.rectangle").foregroundStyle(Color.glow)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Who can do what?").font(.subheadline.weight(.semibold))
+                        Text("Mark first aid, the generator, the gas shutoff, and anything that runs on power.").font(.caption).foregroundStyle(.secondary)
                     }
                 }
-                .foregroundStyle(.primary)
+                ForEach(people, id: \.uuid) { p in
+                    Button { editingPerson = p } label: {
+                        HStack {
+                            Text(p.name)
+                            Spacer()
+                            Text("Mark skills").font(.caption).foregroundStyle(.secondary)
+                            Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+                        }
+                    }
+                    .foregroundStyle(.primary)
+                }
             }
         }
     }
@@ -427,16 +454,25 @@ struct PetBubble: View {
 }
 
 /// "First aid: Maria, Tim" as a flowing list. Plain text rows keep it readable at any size.
+/// One row per skill with the names of the people who have it. Each name opens that person.
 struct SkillsWrap: View {
-    let entries: [(Skill, [String])]
+    let entries: [(Skill, [Person])]
+    var onPick: (Person) -> Void
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            ForEach(entries, id: \.0.key) { skill, names in
+            ForEach(entries, id: \.0.key) { skill, people in
                 HStack(alignment: .top, spacing: 8) {
                     Image(systemName: skill.symbol).foregroundStyle(.secondary).frame(width: 22)
                     Text(skill.title).font(.subheadline)
                     Spacer()
-                    Text(names.joined(separator: ", ")).font(.subheadline).foregroundStyle(.secondary).multilineTextAlignment(.trailing)
+                    HStack(spacing: 6) {
+                        ForEach(people, id: \.uuid) { p in
+                            Button(p.name) { onPick(p) }
+                                .font(.subheadline)
+                                .buttonStyle(.borderless)
+                                .tint(Color.ink)
+                        }
+                    }
                 }
             }
         }

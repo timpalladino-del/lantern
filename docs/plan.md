@@ -662,3 +662,32 @@ Free, Duo, Family. Group 50 stays hidden. Offer codes for testers stay on Family
 "Ready to Submit"; it goes into the 1.0.1 review submission with build 7 or later, the same way Family 6 and
 Family 10 went in with 1.0 (web UI, Add for Review, the draft). The 1.0 description in App Store Connect is
 not touched while 1.0 is in review; the new paragraph goes in with 1.0.1.
+
+## 24. iPhone Duo (added November 5, 2026, for 1.0.1)
+
+The foldable has two screens: the outer one at 466 by 678 points when closed (a short, wide phone) and
+the inner one at 669 by 951 points when open (an iPad mini's shape). Lantern treats them as two layouts.
+
+**Closed.** The phone layout, unchanged. iOS puts the tab bar down the right edge on this aspect; nothing
+in the app assumes a tall screen except the games, which already fit the 6.1-inch phone.
+
+**Open, side by side.** Any window 600 points or wider is promoted to the regular width class
+(`wideWindowSizeClass()` on the root), and the five tabs are built on `SplitContainer`, a
+NavigationSplitView that collapses to the old single column on a phone. On the open Duo: Home keeps the
+dashboard on the left with the household on the right, and whatever you tap on the left opens on the
+right; Supplies is the list beside the item; Equipment the list beside the gear; Ready beside the
+household; Toolkit is the tool list beside Outage mode, and every tool, game and card opens in the right
+column.
+
+**Across the hinge.** Rock, paper, scissors gains a two-player mode on wide screens: the top half is
+turned to face the person across the table, each picks on their own half, and nothing shows until both
+have picked. The pattern is in `HeadToHeadRPS` for the next game that wants it.
+
+**Half open on a table.** `HingeMonitor` wraps `UIHingeInteraction` (iOS 27.1) and reports closed,
+partially open or fully open. Dice, cards and a coin uses it: half open, the results sit on the upright
+half and the buttons on the flat half. Phones without a hinge never see it.
+
+**Verified.** Closed on the iPhone Duo simulator. Open on an iPad mini at the regular width class, since
+Xcode 27.2's simulator exposes the inner display but no way to fold the device from the command line;
+the inner display stays dark when powered on its own. The hinge code compiles against the 27.2 SDK and
+is guarded by availability; it has not run on a hinge.

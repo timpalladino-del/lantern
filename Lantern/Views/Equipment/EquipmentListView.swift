@@ -17,7 +17,7 @@ struct EquipmentListView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        SplitContainer {
             Group {
                 if equipment.isEmpty {
                     ContentUnavailableView {
@@ -47,6 +47,8 @@ struct EquipmentListView: View {
                 }
             }
             .sheet(isPresented: $showAdd) { EquipmentEditView() }
+        } detail: {
+            DetailPlaceholder(symbol: "wrench.and.screwdriver", title: "Pick a piece of equipment", text: "Its check schedule, notes and photos open here.")
         }
     }
 }

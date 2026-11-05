@@ -52,6 +52,7 @@ struct RootView: View {
             Tab("Toolkit", systemImage: "flashlight.on.fill", value: "Toolkit") { ToolkitView().tint(Color.accentColor) }
         }
         .tint(Color.glow)
+        .wideWindowSizeClass()
         .task {
             PlanStore.shared.start()
             SeedData.ensureDefaults(in: context)

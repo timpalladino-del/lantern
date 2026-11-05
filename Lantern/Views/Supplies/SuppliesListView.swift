@@ -60,7 +60,7 @@ struct SuppliesListView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        SplitContainer {
             Group {
                 if items.isEmpty {
                     emptyState
@@ -136,6 +136,8 @@ struct SuppliesListView: View {
                 }
                 #endif
             }
+        } detail: {
+            DetailPlaceholder(symbol: "shippingbox", title: "Pick an item", text: "Its dates, nutrition and where it lives open here. Swipe a row to use one or mark it checked.")
         }
     }
 

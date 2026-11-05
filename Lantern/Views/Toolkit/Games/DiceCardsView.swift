@@ -8,6 +8,7 @@ struct DiceCardsView: View {
     @State private var flips = 0
     @State private var deck: [Card] = Card.freshDeck()
     @State private var drawn: [Card] = []
+    @State private var hinge = HingeMonitor()
 
     struct Card: Identifiable, Equatable {
         let rank: String, suit: String
@@ -20,6 +21,57 @@ struct DiceCardsView: View {
     }
 
     var body: some View {
+        Group {
+            if hinge.status == .partiallyOpen { tabletop } else { list }
+        }
+        .background(HingeObserver(monitor: hinge))
+        .navigationTitle("Dice, cards and a coin")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+
+    /// The iPhone Duo half open on a table: results on the upright half, buttons on the flat half.
+    private var tabletop: some View {
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                VStack(spacing: 18) {
+                    HStack(spacing: 14) {
+                        ForEach(Array(dice.enumerated()), id: \.offset) { _, d in
+                            Image(systemName: "die.face.\(d).fill").font(.system(size: 64)).symbolEffect(.bounce, value: rolls)
+                        }
+                    }
+                    Text("\(dice.reduce(0, +))").font(.largeTitle.weight(.bold)).monospacedDigit()
+                    if let coin { Text(coin).font(.title2.weight(.semibold)) }
+                    if !drawn.isEmpty {
+                        HStack(spacing: 8) {
+                            ForEach(drawn.suffix(5).reversed()) { c in
+                                VStack(spacing: 2) { Text(c.rank).font(.headline); Text(c.suit) }
+                                    .frame(width: 46, height: 64)
+                                    .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
+                                    .foregroundStyle(c.isRed ? Color.signal : Color.primary)
+                            }
+                        }
+                    }
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .frame(height: geo.size.height / 2)
+                Divider()
+                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 14) {
+                    GameUI.bigButton("Roll", symbol: "dice") { dice = (0..<diceCount).map { _ in Int.random(in: 1...6) }; rolls += 1 }
+                    GameUI.bigButton("Flip", symbol: "arrow.trianglehead.2.clockwise.rotate.90", tint: Color.secondary) { coin = Bool.random() ? "Heads" : "Tails"; flips += 1 }
+                    GameUI.bigButton("Draw (\(deck.count))", symbol: "rectangle.portrait.on.rectangle.portrait", tint: Color.secondary) { if let c = deck.popLast() { drawn.append(c) } }
+                    GameUI.bigButton("Shuffle", symbol: "shuffle", tint: Color.secondary) { deck = Card.freshDeck(); drawn = [] }
+                    Stepper("\(diceCount) dice", value: $diceCount, in: 1...6)
+                        .onChange(of: diceCount) { _, n in dice = Array(repeating: 1, count: n) }
+                        .gridCellColumns(2)
+                }
+                .padding(20)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            }
+        }
+        .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
+    }
+
+    private var list: some View {
         List {
             Section("Dice") {
                 Stepper("\(diceCount) dice", value: $diceCount, in: 1...6)
@@ -78,7 +130,5 @@ struct DiceCardsView: View {
                 Text("A standard deck, newest card on the left. Go Fish, War, Crazy Eights: everyone keeps their hand on their own phone, or use one and pass it around.")
             }
         }
-        .navigationTitle("Dice, cards and a coin")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

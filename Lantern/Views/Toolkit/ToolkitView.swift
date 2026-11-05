@@ -8,7 +8,7 @@ struct ToolkitView: View {
     private var activeOutage: OutageEvent? { outages.first { $0.isActive } }
 
     var body: some View {
-        NavigationStack {
+        SplitContainer {
             List {
                 Section {
                     NavigationLink { OutageView() } label: {
@@ -71,6 +71,9 @@ struct ToolkitView: View {
                 }
             }
             .navigationTitle("Toolkit")
+        } detail: {
+            // The open Duo and iPad get Outage mode on the right before anything is chosen.
+            OutageView()
         }
     }
 }

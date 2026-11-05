@@ -39,7 +39,7 @@ struct HomeView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        SplitContainer {
             List {
                 if let h = households.first {
                     householdStrip(h)
@@ -80,6 +80,12 @@ struct HomeView: View {
                 if let h = households.first { PersonEditView(household: h) }
             }
             .sensoryFeedback(.success, trigger: doneCount)
+        } detail: {
+            if let h = households.first {
+                HouseholdView(household: h).navigationTitle("Household")
+            } else {
+                DetailPlaceholder(symbol: "house", title: "Home", text: "Add yourself on the left to start.")
+            }
         }
     }
 

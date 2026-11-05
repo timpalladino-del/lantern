@@ -9,7 +9,7 @@ struct ReadinessView: View {
     @State private var addedGapIDs: Set<String> = []
 
     var body: some View {
-        NavigationStack {
+        SplitContainer {
             Group {
                 if let household = households.first {
                     content(household: household)
@@ -18,6 +18,8 @@ struct ReadinessView: View {
                 }
             }
             .navigationTitle("Ready")
+        } detail: {
+            DetailPlaceholder(symbol: "checkmark.shield", title: "Readiness in days", text: "Tap the household or a gap on the left to work on it here.")
         }
     }
 

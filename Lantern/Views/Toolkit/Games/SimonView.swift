@@ -15,7 +15,11 @@ struct SimonView: View {
 
     var body: some View {
         VStack(spacing: 22) {
-            Text(status).font(.title3.weight(.semibold)).multilineTextAlignment(.center).padding(.horizontal).padding(.top, 20).contentTransition(.numericText())
+            if over {
+                GameUI.outcome(status, symbol: "xmark.octagon.fill", tint: Color.signal).gameContent().padding(.top, 20)
+            } else {
+                Text(status).font(.title3.weight(.semibold)).multilineTextAlignment(.center).gameContent().padding(.top, 20).contentTransition(.numericText())
+            }
             HStack(spacing: 28) {
                 VStack { Text("\(game.round)").font(.title.weight(.bold)).monospacedDigit(); Text("Round").font(.caption).foregroundStyle(.secondary) }
                 VStack { Text("\(best)").font(.title.weight(.bold)).monospacedDigit(); Text("Best").font(.caption).foregroundStyle(.secondary) }
@@ -34,13 +38,14 @@ struct SimonView: View {
                     .accessibilityLabel("\(names[i]) pad")
                 }
             }
-            .padding(.horizontal, 32)
+            .gameContent()
+            .boardTypeCap()
             .animation(.easeOut(duration: 0.12), value: lit)
             .sensoryFeedback(.impact(weight: .light), trigger: presses)
 
             GameUI.bigButton(game.sequence.isEmpty || over ? "Start" : "Watching…", symbol: "play.fill") { start() }
                 .disabled(!(game.sequence.isEmpty || over))
-                .padding(.horizontal, 32)
+                .gameContent()
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())

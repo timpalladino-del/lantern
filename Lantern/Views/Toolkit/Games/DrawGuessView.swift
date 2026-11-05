@@ -65,7 +65,7 @@ struct DrawGuessView: View {
                 GameUI.bigButton("They got it", symbol: "checkmark", tint: Color.moss) { next() }
                 GameUI.bigButton("New word", symbol: "shuffle", tint: Color.secondary) { next() }
             }
-            .padding(.horizontal).padding(.bottom, 8)
+            .gameContent().padding(.bottom, 8)
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Draw and guess")

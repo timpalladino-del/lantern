@@ -18,7 +18,11 @@ struct FourInARowView: View {
 
     var body: some View {
         VStack(spacing: 18) {
-            Text(status).font(.title2.weight(.bold)).padding(.top, 20).contentTransition(.numericText())
+            if let w = game.winner {
+                GameUI.outcome(w == .a ? "Blue wins" : "Green wins", symbol: "star.fill", tint: w == .a ? Color.accentColor : Color.moss).padding(.top, 20)
+            } else {
+                Text(status).font(.title2.weight(.bold)).padding(.top, 20).contentTransition(.numericText())
+            }
 
             GeometryReader { geo in
                 let cell = min(geo.size.width / CGFloat(FourInARow.columns), geo.size.height / CGFloat(FourInARow.rows + 1))
@@ -52,7 +56,8 @@ struct FourInARowView: View {
                 .frame(maxWidth: .infinity)
             }
             .frame(height: 360)
-            .padding(.horizontal, 16)
+            .gameContent()
+            .boardTypeCap()
             .sensoryFeedback(.impact(weight: .medium), trigger: drops)
 
             HStack(spacing: 28) {
@@ -63,7 +68,7 @@ struct FourInARowView: View {
                 next.turn = game.winner == .a ? .b : .a
                 game = next
             }
-            .padding(.horizontal, 24)
+            .gameContent()
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())

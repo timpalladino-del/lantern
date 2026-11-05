@@ -48,7 +48,9 @@ struct RockPaperScissorsView: View {
             }
             .padding(.top, 30)
 
-            Text(outcome).font(.title.weight(.bold)).contentTransition(.numericText())
+            Label(outcome, systemImage: mine == nil ? "hand.tap" : outcome == "You win" ? "star.fill" : outcome == "Tie" ? "equal.circle" : "xmark.circle")
+                .font(.title.weight(.bold)).contentTransition(.numericText())
+                .symbolEffect(.bounce, value: rounds)
                 .foregroundStyle(outcome == "You win" ? Color.moss : outcome == "Phone wins" ? Color.signal : Color.primary)
 
             HStack(spacing: 12) {
@@ -69,7 +71,7 @@ struct RockPaperScissorsView: View {
                     .tint(mine == choice ? Color.accentColor : Color.secondary)
                 }
             }
-            .padding(.horizontal)
+            .gameContent()
             .sensoryFeedback(.impact, trigger: rounds)
 
             HStack(spacing: 24) {
@@ -144,7 +146,7 @@ struct HeadToHeadRPS: View {
                     .foregroundStyle(m.versus(t) == 1 ? Color.moss : m.versus(t) == -1 ? Color.signal : Color.primary)
                 Button("Again") { top = nil; bottom = nil }.buttonStyle(.borderedProminent)
             } else if mine.wrappedValue != nil {
-                Image(systemName: "checkmark.circle.fill").font(.system(size: 36)).foregroundStyle(Color.moss)
+                Image(systemName: "checkmark.circle.fill").font(.system(size: 36)).foregroundStyle(Color.moss).symbolEffect(.bounce, options: .nonRepeating)
                 Text("Picked. Waiting for the other side.").foregroundStyle(.secondary)
             } else {
                 Text("Pick one").font(.title3.weight(.semibold))
@@ -161,7 +163,7 @@ struct HeadToHeadRPS: View {
                         .tint(Color.secondary)
                     }
                 }
-                .padding(.horizontal)
+                .gameContent()
             }
             Spacer(minLength: 0)
         }

@@ -15,13 +15,13 @@ struct TwentyQuestionsView: View {
                 Text("I'm thinking of \(secret.kind).").font(.title3.weight(.semibold))
                 Text("Ask yes-or-no questions. The phone holder peeks and answers.").font(.footnote).foregroundStyle(.secondary).multilineTextAlignment(.center)
             }
-            .padding(.horizontal).padding(.top, 24)
+            .gameContent().padding(.top, 24)
 
             Text(revealed || peeking ? secret.thing : "• • • • •")
                 .font(.system(size: 40, weight: .bold, design: .rounded)).minimumScaleFactor(0.5).lineLimit(2)
                 .frame(maxWidth: .infinity, minHeight: 110)
                 .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 18))
-                .padding(.horizontal)
+                .gameContent()
                 .accessibilityLabel(revealed || peeking ? "The secret is \(secret.thing)" : "Secret hidden")
 
             Label("Hold to peek", systemImage: "eye.fill")
@@ -29,13 +29,13 @@ struct TwentyQuestionsView: View {
                 .frame(maxWidth: .infinity, minHeight: 44)
                 .background(Color.accentColor.opacity(revealed ? 0.06 : 0.12), in: RoundedRectangle(cornerRadius: 10))
                 .gesture(DragGesture(minimumDistance: 0).onChanged { _ in if !revealed { peeking = true } }.onEnded { _ in peeking = false })
-                .padding(.horizontal)
+                .gameContent()
                 .accessibilityAddTraits(.isButton)
                 .accessibilityHint("Press and hold to see the secret")
 
             VStack(spacing: 10) {
                 Text("\(asked) of 20 questions").font(.headline).contentTransition(.numericText())
-                ProgressView(value: Double(asked), total: 20).tint(Color.glow).padding(.horizontal, 40)
+                ProgressView(value: Double(asked), total: 20).tint(Color.glow).gameContent()
                 HStack(spacing: 12) {
                     GameUI.bigButton("Asked one", symbol: "plus", tint: Color.accentColor) { if asked < 20 { asked += 1; taps += 1 } }
                         .disabled(asked >= 20 || revealed)
@@ -44,7 +44,7 @@ struct TwentyQuestionsView: View {
                         else { revealed = true }
                     }
                 }
-                .padding(.horizontal)
+                .gameContent()
             }
             if asked >= 20 && !revealed { Text("That's twenty. Last guess, then reveal.").foregroundStyle(Color.signal).font(.footnote) }
             Spacer()

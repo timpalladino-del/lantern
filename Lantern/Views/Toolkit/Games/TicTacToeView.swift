@@ -15,7 +15,13 @@ struct TicTacToeView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text(status).font(.title2.weight(.bold)).padding(.top, 20).contentTransition(.numericText())
+            if let w = game.winner {
+                GameUI.outcome("\(w.rawValue) wins", symbol: "star.fill", tint: Color.moss).padding(.top, 20)
+            } else if game.isDraw {
+                GameUI.outcome("Draw", symbol: "equal.circle.fill", tint: Color.secondary).padding(.top, 20)
+            } else {
+                Text(status).font(.title2.weight(.bold)).padding(.top, 20).contentTransition(.numericText())
+            }
             let cols = Array(repeating: GridItem(.flexible(), spacing: 8), count: 3)
             LazyVGrid(columns: cols, spacing: 8) {
                 ForEach(0..<9, id: \.self) { i in
@@ -36,7 +42,8 @@ struct TicTacToeView: View {
                     .accessibilityLabel(game.cells[i].map { "Cell \(i + 1), \($0.rawValue)" } ?? "Cell \(i + 1), empty")
                 }
             }
-            .padding(.horizontal, 24)
+            .gameContent()
+            .boardTypeCap()
             .sensoryFeedback(.impact(weight: .light), trigger: moves)
 
             HStack(spacing: 28) {
@@ -47,7 +54,7 @@ struct TicTacToeView: View {
                 next.turn = game.winner == .x ? .o : .x   // loser starts; after a draw, O starts
                 game = next
             }
-            .padding(.horizontal, 24)
+            .gameContent()
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())

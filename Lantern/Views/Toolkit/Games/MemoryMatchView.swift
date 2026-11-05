@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MemoryMatchView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     struct Tile: Identifiable { let id = UUID(); let symbol: String; var faceUp = false; var matched = false }
     private static let symbols = ["sun.max.fill", "moon.fill", "cloud.rain.fill", "leaf.fill", "flame.fill", "drop.fill", "star.fill", "heart.fill",
                                   "bolt.fill", "snowflake", "tortoise.fill", "bird.fill", "fish.fill", "pawprint.fill", "tree.fill", "car.fill"]
@@ -22,7 +23,7 @@ struct MemoryMatchView: View {
                 Spacer()
                 Text("\(moves) moves").font(.headline).monospacedDigit()
             }
-            .padding(.horizontal).padding(.top, 12)
+            .gameContent().padding(.top, 12)
 
             let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: pairs == 12 ? 4 : 4)
             LazyVGrid(columns: columns, spacing: 8) {
@@ -34,26 +35,28 @@ struct MemoryMatchView: View {
                                 .fill(t.matched ? Color.moss.opacity(0.25) : t.faceUp ? Color(uiColor: .secondarySystemGroupedBackground) : Color.accentColor.opacity(0.85))
                             if t.faceUp || t.matched {
                                 Image(systemName: t.symbol).font(.title).foregroundStyle(Color.primary)
+                                    .symbolEffect(.bounce, value: t.matched)
                             } else {
                                 Image(systemName: "flashlight.off.fill").font(.caption).foregroundStyle(Color.white.opacity(0.35))
                             }
                         }
                         .aspectRatio(1, contentMode: .fit)
-                        .rotation3DEffect(.degrees(t.faceUp || t.matched ? 0 : 180), axis: (0, 1, 0))
-                        .animation(.easeInOut(duration: 0.25), value: t.faceUp)
+                        .rotation3DEffect(.degrees(reduceMotion ? 0 : (t.faceUp || t.matched ? 0 : 180)), axis: (0, 1, 0))
+                        .animation(reduceMotion ? nil : .easeInOut(duration: 0.25), value: t.faceUp)
                     }
                     .buttonStyle(.plain)
                     .disabled(t.faceUp || t.matched || busy)
                     .accessibilityLabel(t.faceUp || t.matched ? "Tile showing \(t.symbol.replacingOccurrences(of: ".fill", with: ""))" : "Face-down tile")
                 }
             }
-            .padding(.horizontal)
+            .gameContent()
+            .boardTypeCap()
             .sensoryFeedback(.impact(weight: .light), trigger: flips)
 
             if allMatched {
-                Text("All matched in \(moves) moves.").font(.title3.weight(.semibold)).foregroundStyle(Color.moss)
+                GameUI.outcome("All matched in \(moves) moves.", symbol: "party.popper.fill", tint: Color.moss)
             }
-            GameUI.bigButton(allMatched ? "Play again" : "Shuffle", symbol: "shuffle") { reset(pairs) }.padding(.horizontal)
+            GameUI.bigButton(allMatched ? "Play again" : "Shuffle", symbol: "shuffle") { reset(pairs) }.gameContent()
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())

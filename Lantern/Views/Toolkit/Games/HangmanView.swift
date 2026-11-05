@@ -39,7 +39,7 @@ struct HangmanView: View {
             }
             GameUI.bigButton("Start", symbol: "play.fill") { start() }
                 .disabled(source == .friend && secret.trimmingCharacters(in: .whitespaces).filter(\.isLetter).isEmpty)
-                .padding(.horizontal)
+                .gameContent()
             Spacer()
         }
     }
@@ -50,10 +50,15 @@ struct HangmanView: View {
             Text(hint).font(.footnote).foregroundStyle(.secondary)
             Text(g.masked).font(.system(.title, design: .monospaced).weight(.bold)).multilineTextAlignment(.center).padding(.horizontal)
                 .accessibilityLabel(g.masked.replacingOccurrences(of: "_", with: "blank"))
-            Text(g.isWon ? "You got it." : g.isLost ? "Out of guesses. It was \(g.word)." : "\(g.missesLeft) wrong \(g.missesLeft == 1 ? "guess" : "guesses") left")
-                .font(.headline).foregroundStyle(g.isWon ? Color.moss : g.isLost ? Color.signal : Color.primary)
+            if g.isWon {
+                GameUI.outcome("You got it.", symbol: "checkmark.seal.fill", tint: Color.moss)
+            } else if g.isLost {
+                GameUI.outcome("Out of guesses. It was \(g.word).", symbol: "xmark.seal.fill", tint: Color.signal).gameContent()
+            } else {
+                Text("\(g.missesLeft) wrong \(g.missesLeft == 1 ? "guess" : "guesses") left").font(.headline)
+            }
             if g.isOver {
-                GameUI.bigButton("Play again", symbol: "arrow.counterclockwise") { game = nil; secret = "" }.padding(.horizontal)
+                GameUI.bigButton("Play again", symbol: "arrow.counterclockwise") { game = nil; secret = "" }.gameContent()
             } else {
                 VStack(spacing: 8) {
                     ForEach(rows, id: \.self) { row in
@@ -75,6 +80,7 @@ struct HangmanView: View {
             }
             Spacer()
         }
+        .boardTypeCap()
     }
 
     private func start() {

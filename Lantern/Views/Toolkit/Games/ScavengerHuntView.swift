@@ -13,7 +13,8 @@ struct ScavengerHuntView: View {
         List {
             Section {
                 HStack {
-                    Text("\(found.count) of \(items.count) found").font(.headline)
+                    Label("\(found.count) of \(items.count) found", systemImage: found.count == items.count ? "party.popper.fill" : "flashlight.on.fill")
+                        .font(.headline).symbolEffect(.bounce, value: found.count == items.count)
                     Spacer()
                     CountdownTimer(seconds: 300, running: $running, remaining: $remaining) { timeUp = true }
                 }
@@ -29,6 +30,7 @@ struct ScavengerHuntView: View {
                         HStack {
                             Image(systemName: found.contains(item) ? "checkmark.circle.fill" : "circle")
                                 .foregroundStyle(found.contains(item) ? Color.moss : Color.secondary).font(.title3)
+                                .contentTransition(.symbolEffect(.replace))
                             Text(item).foregroundStyle(.primary).strikethrough(found.contains(item), color: .secondary)
                         }
                     }

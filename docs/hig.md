@@ -1,6 +1,6 @@
 # Lantern and Apple's Human Interface Guidelines
 
-How the app follows the HIG, what it deliberately does, and what is still open. Updated 2026-11-03.
+How the app follows the HIG, what it deliberately does, and what is still open. Updated 2026-11-05.
 
 ## App icon
 
@@ -25,7 +25,12 @@ the three layers (ground, disc and halo, lantern) in Icon Composer so Clear mode
 
 ## Navigation and layout
 
-- Five tabs via the iOS 18 `Tab` API. Each tab is its own `NavigationStack` with a large title at the root.
+- Five tabs via the iOS 18 `Tab` API. Each tab is a `NavigationSplitView` (`SplitContainer`) with a large title
+  at the root: one column on a phone, two columns on the open iPhone Duo and iPad, where any window 600 points
+  or wider is promoted to the regular width class. Push links in the sidebar open in the detail column.
+- Game screens share one content margin (20 points), a 560-point maximum content width so boards stay
+  reachable on wide screens, and a Dynamic Type cap at the largest non-accessibility size on boards with
+  fixed cell sizes (`gameContent()`, `boardTypeCap()`).
 - Toolbars use standard placements. Icon-only toolbar buttons carry accessibility labels.
 - Lists are system `List` and `Form`, with `LabeledContent` for label and value pairs, so Dynamic Type, VoiceOver and swipe actions behave like every other iOS app.
 - Empty states use `ContentUnavailableView` with a label, description and actions.
@@ -46,12 +51,21 @@ Used to confirm something happened, never as decoration, and never looping where
 | Shopping list check | `.contentTransition(.symbolEffect(.replace))` | Circle to checkmark |
 | Ready tab "covered" | `.bounce` when gaps reach zero | A small reward |
 | Onboarding finish | `.bounce` once | Done |
+| Game outcomes (`GameUI.outcome`) | `.bounce` once | A win, a draw, a round done, a word guessed |
+| Trivia answer marks | `.bounce` once | Right or wrong, as the mark appears |
+| Memory match tile | `.bounce` on match | Pair found; the card flip itself is off under Reduce Motion |
+| Higher or lower arrows | `.bounce` per guess | The hint changed |
+| Scavenger hunt rows, status text Copy | `.contentTransition(.symbolEffect(.replace))` | Circle to checkmark, copy to done |
+| Dice and coin | `.bounce` on roll and flip | The result landed |
+| Rock, paper, scissors hands | `.contentTransition(.symbolEffect(.replace))` | The reveal |
+| Would you rather | `.bounce` on vote | Counted |
+| Story twist | `.bounce` once as the twist appears | Something changed |
 
 All symbol effects respect Reduce Motion automatically.
 
 ## Haptics
 
-`sensoryFeedback` only on outcomes: `.success` when an equipment check is marked done, `.impact(.light)` on "Used 1". Nothing on navigation or selection.
+`sensoryFeedback` only on outcomes: `.success` when an equipment check is marked done or a name is picked, `.impact(.light)` on "Used 1" and on a game move, `.selection` on a vote. Nothing on navigation.
 
 ## Typography
 
@@ -61,5 +75,6 @@ System fonts throughout, so Dynamic Type and Bold Text work. Numbers that line u
 
 - Icon Composer `.icon` bundle for Clear mode (needs the Mac).
 - VoiceOver pass on the scanner overlay.
-- iPad layout (the app is iPhone-only for now).
+- iPad as a sold platform (the layout now works there; the target is still iPhone-only).
+- The hinge posture code has not run on a hinge.
 - Widgets and Live Activities for "use this week" and outage mode.

@@ -35,7 +35,7 @@ struct StatusTextsView: View {
                                 .accessibilityLabel("Share")
                             Button {
                                 UIPasteboard.general.string = m.body; copied = m.id
-                            } label: { Image(systemName: copied == m.id ? "checkmark" : "doc.on.doc").frame(minWidth: 28) }
+                            } label: { Image(systemName: copied == m.id ? "checkmark" : "doc.on.doc").frame(minWidth: 28).contentTransition(.symbolEffect(.replace)) }
                                 .buttonStyle(.bordered)
                                 .accessibilityLabel(copied == m.id ? "Copied" : "Copy")
                         }

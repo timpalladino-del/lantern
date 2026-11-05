@@ -19,6 +19,7 @@ struct StoryChainView: View {
                 ForEach(Array(twists.enumerated()), id: \.offset) { i, t in
                     HStack(alignment: .top, spacing: 10) {
                         Image(systemName: "sparkles").foregroundStyle(Color.glow).padding(.top, 3)
+                            .symbolEffect(.bounce, options: .nonRepeating)
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Twist \(i + 1)").font(.caption).foregroundStyle(.secondary)
                             Text(t).fixedSize(horizontal: false, vertical: true)
@@ -44,7 +45,7 @@ struct StoryChainView: View {
                 Text("How to play: read the opening line out loud. The next person adds one sentence, then passes the phone. If the story stalls, tap Twist. Finish with \"The end\" from the youngest person.")
                     .font(.footnote).foregroundStyle(.secondary).padding(.top, 12)
             }
-            .padding(.horizontal)
+            .gameContent()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Story chain")

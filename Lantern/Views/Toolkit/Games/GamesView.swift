@@ -57,6 +57,19 @@ struct GamesView: View {
 
 /// Shared pieces for the game screens.
 enum GameUI {
+    /// Content margin on every game screen. Matches the system list inset on iPhone.
+    static let margin: CGFloat = 20
+    /// Boards and controls stop growing past this, so they stay reachable on the open Duo and iPad.
+    static let maxContentWidth: CGFloat = 560
+
+    /// One line of result with a symbol that bounces once when it appears.
+    static func outcome(_ text: String, symbol: String, tint: Color) -> some View {
+        Label(text, systemImage: symbol)
+            .font(.title3.weight(.semibold))
+            .foregroundStyle(tint)
+            .symbolEffect(.bounce, options: .nonRepeating)
+            .multilineTextAlignment(.center)
+    }
     /// A big neutral action button that fills the row.
     static func bigButton(_ title: String, symbol: String, tint: Color = .accentColor, action: @escaping () -> Void) -> some View {
         Button(action: action) {
@@ -88,4 +101,16 @@ struct CountdownTimer: View {
             if remaining == 0 { running = false; onEnd() }
         }
     }
+}
+
+extension View {
+    /// Keeps a game's content centred with system margins and a sensible maximum width.
+    func gameContent() -> some View {
+        self.padding(.horizontal, GameUI.margin)
+            .frame(maxWidth: GameUI.maxContentWidth)
+            .frame(maxWidth: .infinity)
+    }
+
+    /// Boards with fixed cell sizes stop scaling at the largest non-accessibility size so they stay on screen.
+    func boardTypeCap() -> some View { dynamicTypeSize(...DynamicTypeSize.xxxLarge) }
 }

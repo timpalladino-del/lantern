@@ -19,7 +19,7 @@ struct WhoGoesFirstView: View {
                     HStack {
                         Text(n).font(highlighted == i ? .headline : .body)
                         Spacer()
-                        if winner == n { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.moss) }
+                        if winner == n { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.moss).symbolEffect(.bounce, options: .nonRepeating) }
                         else if highlighted == i { Image(systemName: "circle.fill").foregroundStyle(Color.glow).font(.caption) }
                     }
                     .listRowBackground(highlighted == i ? Color.glow.opacity(0.15) : nil)
@@ -37,7 +37,7 @@ struct WhoGoesFirstView: View {
                 GameUI.bigButton(spinning ? "Spinning" : "Spin", symbol: "arrow.trianglehead.2.clockwise.rotate.90") { spin() }
                     .disabled(names.count < 2 || spinning)
                     .listRowBackground(Color.clear).listRowInsets(EdgeInsets())
-                if let winner { Text("\(winner) goes first.").font(.title3.weight(.semibold)).frame(maxWidth: .infinity) }
+                if let winner { GameUI.outcome("\(winner) goes first.", symbol: "flag.checkered", tint: Color.primary).frame(maxWidth: .infinity) }
             }
 
             Section {

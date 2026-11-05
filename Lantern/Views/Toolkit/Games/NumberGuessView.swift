@@ -9,8 +9,14 @@ struct NumberGuessView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text(hint).font(.title3.weight(.semibold)).multilineTextAlignment(.center).padding(.horizontal).padding(.top, 30)
-                .contentTransition(.numericText())
+            if game.isWon {
+                GameUI.outcome(hint, symbol: "checkmark.circle.fill", tint: Color.moss).gameContent().padding(.top, 30)
+            } else {
+                Label(hint, systemImage: game.guesses.isEmpty ? "questionmark.circle" : (game.guesses.last! < game.secret ? "arrow.up.circle.fill" : "arrow.down.circle.fill"))
+                    .font(.title3.weight(.semibold)).multilineTextAlignment(.center).gameContent().padding(.top, 30)
+                    .contentTransition(.numericText())
+                    .symbolEffect(.bounce, value: game.guesses.count)
+            }
             HStack {
                 TextField("Your guess", text: $entry).keyboardType(.numberPad).textFieldStyle(.roundedBorder).focused($focused)
                     .font(.title2).frame(width: 140).multilineTextAlignment(.center).submitLabel(.go).onSubmit(submit)
@@ -18,11 +24,11 @@ struct NumberGuessView: View {
                 Button("Guess", action: submit).buttonStyle(.borderedProminent).disabled(game.isWon || Int(entry) == nil)
             }
             if !game.guesses.isEmpty {
-                Text("Guesses: " + game.guesses.map(String.init).joined(separator: ", ")).font(.footnote).foregroundStyle(.secondary).padding(.horizontal)
+                Text("Guesses: " + game.guesses.map(String.init).joined(separator: ", ")).font(.footnote).foregroundStyle(.secondary).gameContent()
             }
             if game.isWon {
                 GameUI.bigButton("Play again", symbol: "arrow.counterclockwise") { game = NumberGuess(); entry = ""; hint = "New number. 1 to 100."; focused = true }
-                    .padding(.horizontal)
+                    .gameContent()
             }
             if let best { Text("Fewest guesses so far: \(best)").font(.caption).foregroundStyle(.secondary) }
             Spacer()

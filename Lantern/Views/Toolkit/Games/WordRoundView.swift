@@ -99,14 +99,14 @@ struct WordRoundView: View {
                 Text(word)
                     .font(.system(size: mode == .headsUp ? 56 : 44, weight: .bold, design: .rounded))
                     .multilineTextAlignment(.center).minimumScaleFactor(0.5).lineLimit(3)
-                    .padding(.horizontal, 24)
+                    .gameContent()
                     .contentTransition(.numericText())
                 Spacer()
                 HStack(spacing: 12) {
                     GameUI.bigButton("Pass", symbol: "arrow.right", tint: Color.secondary) { pass() }
                     GameUI.bigButton("Got it", symbol: "checkmark", tint: Color.moss) { correct() }
                 }
-                .padding(.horizontal)
+                .gameContent()
                 Text("\(got.count) right · \(passed.count) passed").font(.footnote).foregroundStyle(.secondary).padding(.bottom, 8)
             }
         }
@@ -115,7 +115,7 @@ struct WordRoundView: View {
     private var results: some View {
         List {
             Section {
-                Text("\(got.count) right in \(roundLength) seconds").font(.title2.weight(.bold)).frame(maxWidth: .infinity)
+                GameUI.outcome("\(got.count) right in \(roundLength) seconds", symbol: got.isEmpty ? "hourglass" : "checkmark.seal.fill", tint: got.isEmpty ? Color.secondary : Color.moss).frame(maxWidth: .infinity)
             }
             if !got.isEmpty { Section("Got") { ForEach(got, id: \.self) { Text($0) } } }
             if !passed.isEmpty { Section("Passed") { ForEach(passed, id: \.self) { Text($0).foregroundStyle(.secondary) } } }

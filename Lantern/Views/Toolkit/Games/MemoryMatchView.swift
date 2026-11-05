@@ -21,11 +21,11 @@ struct MemoryMatchView: View {
                     .pickerStyle(.segmented).frame(width: 220)
                     .onChange(of: pairs) { _, n in reset(n) }
                 Spacer()
-                Text("\(moves) moves").font(.headline).monospacedDigit()
+                Text("\(moves) \(moves == 1 ? "move" : "moves")").font(.headline).monospacedDigit()
             }
             .gameContent().padding(.top, 12)
 
-            let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: pairs == 12 ? 4 : 4)
+            let columns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 4)
             LazyVGrid(columns: columns, spacing: 8) {
                 ForEach(tiles.indices, id: \.self) { i in
                     let t = tiles[i]
@@ -54,7 +54,7 @@ struct MemoryMatchView: View {
             .sensoryFeedback(.impact(weight: .light), trigger: flips)
 
             if allMatched {
-                GameUI.outcome("All matched in \(moves) moves.", symbol: "party.popper.fill", tint: Color.moss)
+                GameUI.outcome("All matched in \(moves) \(moves == 1 ? "move" : "moves").", symbol: "party.popper.fill", tint: Color.moss)
             }
             GameUI.bigButton(allMatched ? "Play again" : "Shuffle", symbol: "shuffle") { reset(pairs) }.gameContent()
             Spacer()
@@ -80,9 +80,13 @@ struct MemoryMatchView: View {
             tiles[f].matched = true; tiles[i].matched = true
         } else {
             busy = true
+            let a = tiles[f].id, b = tiles[i].id
             Task {
                 try? await Task.sleep(for: .milliseconds(800))
-                tiles[f].faceUp = false; tiles[i].faceUp = false; busy = false
+                // The deck may have been redealt while we waited; look the tiles up by id.
+                if let fa = tiles.firstIndex(where: { $0.id == a }) { tiles[fa].faceUp = false }
+                if let fb = tiles.firstIndex(where: { $0.id == b }) { tiles[fb].faceUp = false }
+                busy = false
             }
         }
     }

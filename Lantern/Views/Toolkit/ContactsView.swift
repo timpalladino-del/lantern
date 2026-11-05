@@ -77,7 +77,9 @@ struct ContactRow: View {
             }
         }
         .contentShape(Rectangle())
+        .contentShape(Rectangle())
         .onTapGesture(perform: onEdit)
+        .accessibilityAction(named: "Edit", onEdit)
     }
 }
 

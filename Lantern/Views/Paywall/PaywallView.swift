@@ -70,13 +70,13 @@ struct PaywallView: View {
         switch reason {
         case .secondPerson(let days?):
             let whole = Int(days.rounded(.down))
-            return whole <= 0 ? "Lantern covers one person for free." : "Your household is covered for \(whole) day\(whole == 1 ? "" : "s")."
-        case .secondPerson(nil): return "Lantern covers one person for free."
-        case .itemLimit: return "You've tracked 50 items. That's a real pantry."
+            return whole <= 0 ? "Lantern covers one person." : "Your household is covered for \(whole) day\(whole == 1 ? "" : "s")."
+        case .secondPerson(nil): return "Lantern covers one person."
+        case .itemLimit: return "You've tracked \(PlanStore.freeItemLimit) items. That's a real pantry."
         case .moreThanTwo: return "Three or more in the house? Family has room."
         case .moreThanSix: return "More than six people? Family 10 has room."
-        case .feature(let f): return "\(f) is part of Family."
-        case .plans: return "Free until you need it."
+        case .feature(let f): return "\(f) comes with \(offered.first?.title ?? "a plan")."
+        case .plans: return "Pay when the house grows."
         }
     }
 
@@ -86,8 +86,8 @@ struct PaywallView: View {
         case .itemLimit: return "Duo keeps going: unlimited items, a second person when you want one, and reminders for the gear that keeps you safe."
         case .moreThanTwo: return "Everything in Duo, for up to six people in one house. The App Store credits what is left on Duo."
         case .moreThanSix: return "Everything in Family 6, for up to ten people in one house."
-        case .feature: return "One plan covers the whole house. Everything in the Toolkit stays free."
-        case .plans: return "One plan covers the whole house. Everything in the Toolkit stays free, always."
+        case .feature: return "Duo covers two people, Family covers the whole house. Everything in the Toolkit stays free."
+        case .plans: return "Duo covers two people, Family covers the whole house. Everything in the Toolkit stays free, always."
         }
     }
 
@@ -170,15 +170,7 @@ private struct PlanCard: View {
     let isSelected: Bool
     let onTap: () -> Void
 
-    private var detail: String {
-        switch plan {
-        case .duo: return "Two people in your house"
-        case .family6: return "Up to 6 people in your house"
-        case .family10: return "Up to 10 people in your house"
-        case .group50: return "Up to 50 households, for organizers"
-        case .free: return ""
-        }
-    }
+    private var detail: String { plan.peopleLine }
 
     var body: some View {
         Button(action: onTap) {

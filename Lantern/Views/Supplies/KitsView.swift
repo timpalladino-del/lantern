@@ -57,7 +57,7 @@ struct KitRow: View {
     let kit: Kit
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: kit.kind.symbol).foregroundStyle(Color.glow).frame(width: 28)
+            Image(systemName: kit.kind.symbol).foregroundStyle(Color.ink).frame(width: 28)
             VStack(alignment: .leading, spacing: 2) {
                 Text(kit.name)
                 Text(subtitle).font(.caption).foregroundStyle(kit.checkIsDue ? Color.ember : Color.secondary)
@@ -67,7 +67,7 @@ struct KitRow: View {
             if n > 0 {
                 Text("\(n)").font(.caption.weight(.semibold)).padding(.horizontal, 7).padding(.vertical, 2)
                     .background(Capsule().fill(Color.ember.opacity(0.18))).foregroundStyle(Color.ember)
-                    .accessibilityLabel("\(n) items to check")
+                    .accessibilityLabel("\(n) \(n == 1 ? "item" : "items") to check")
             }
         }
     }
@@ -87,6 +87,7 @@ struct KitNewView: View {
     @Environment(\.dismiss) private var dismiss
     @Query(sort: \Kit.sortOrder) private var kits: [Kit]
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
+    @Query private var existingItems: [SupplyItem]
     @State private var selected: KitTemplate?
     @State private var name = ""
     @State private var kind: KitKind = .goBag
@@ -105,7 +106,7 @@ struct KitNewView: View {
                             kind = t.kitKind
                         } label: {
                             HStack(alignment: .top, spacing: 12) {
-                                Image(systemName: t.kitKind.symbol).foregroundStyle(Color.glow).frame(width: 28)
+                                Image(systemName: t.kitKind.symbol).foregroundStyle(Color.ink).frame(width: 28)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(t.name).foregroundStyle(.primary)
                                     Text(t.summary).font(.caption).foregroundStyle(.secondary)
@@ -159,7 +160,9 @@ struct KitNewView: View {
         kit.notes = location?.name ?? ""
         context.insert(kit)
         if let t = selected, addAllLines {
-            for line in t.items { context.insert(SeedData.makeItem(from: line, location: location, kit: kit)) }
+            let room = PlanStore.shared.plan.isPaid ? Int.max : max(0, PlanStore.freeItemLimit - existingItems.count)
+            for line in t.items.prefix(room) { context.insert(SeedData.makeItem(from: line, location: location, kit: kit)) }
+            if t.items.count > room { PlanStore.shared.pendingPaywall = .itemLimit }
         }
         try? context.save()
         dismiss()

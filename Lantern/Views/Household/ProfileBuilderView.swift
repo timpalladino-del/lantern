@@ -47,7 +47,7 @@ private struct ProfileBuilderBody: View {
             List {
                 Section {
                     VStack(alignment: .leading, spacing: 8) {
-                        Image(systemName: "person.crop.circle.badge.plus").font(.largeTitle).foregroundStyle(Color.glow)
+                        Image(systemName: "person.crop.circle.badge.plus").font(.largeTitle).foregroundStyle(Color.ink)
                             .symbolEffect(.bounce, options: .nonRepeating)
                         Text(forName.isEmpty ? "\(requester) asked for your profile" : "\(requester) asked for \(forName)'s profile").font(.title3.weight(.semibold))
                         Text("Your age and size set how much food the household plans for. Medications and allergies go on the household's medication card so whoever is helping knows. Nothing leaves your phone until you tap Send.")

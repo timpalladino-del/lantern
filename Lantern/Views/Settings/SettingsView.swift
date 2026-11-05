@@ -53,7 +53,7 @@ struct SettingsView: View {
 
                 Section("Household") {
                     if let h = households.first {
-                        NavigationLink("People, pets and medications") { HouseholdView(household: h).navigationTitle("Household") }
+                        NavigationLink("People, pets and medications") { HouseholdView(household: h) }
                     }
                     NavigationLink("Storage locations") { LocationsEditView() }
                 }
@@ -61,7 +61,7 @@ struct SettingsView: View {
                 Section {
                     Button("Export supplies (CSV)") { export(ExportService.suppliesCSV(items), name: "supplies.csv") }
                     Button("Export equipment (CSV)") { export(ExportService.equipmentCSV(equipment), name: "equipment.csv") }
-                    if let err = exportError { Text(err).font(.footnote).foregroundStyle(Color.signal) }
+                    if let err = exportError { Text(err).font(.footnote).foregroundStyle(Color.ember) }
                 } header: { Text("Export") } footer: {
                     Text("Your data is yours. Print the CSV for the binder, or open it in Numbers or Excel.")
                 }
@@ -76,7 +76,7 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $exportFile) { file in
-            ShareSheetView(url: file.url)
+            FileShareSheet(file: file)
         }
     }
 
@@ -117,24 +117,6 @@ private struct ExportFile: Identifiable {
     let url: URL
 }
 
-private struct ShareSheetView: View {
-    @Environment(\.dismiss) private var dismiss
-    let url: URL
-
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: 20) {
-                Image(systemName: "doc.text").font(.system(size: 40)).foregroundStyle(.secondary)
-                Text(url.lastPathComponent).font(.headline)
-                ShareLink(item: url) { Label("Share or save", systemImage: "square.and.arrow.up") }
-                    .buttonStyle(.borderedProminent)
-            }
-            .padding()
-            .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } } }
-        }
-        .presentationDetents([.medium])
-    }
-}
 
 private struct SourcesView: View {
     private let library = ShelfLifeLibrary.shared

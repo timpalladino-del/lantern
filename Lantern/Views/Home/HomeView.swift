@@ -17,7 +17,6 @@ struct HomeView: View {
     @State private var editingPerson: Person?
     @State private var editingPet: Pet?
     @State private var doneCount = 0
-    @State private var addedGapIDs: Set<String> = []
     @State private var paywall: PaywallReason?
     @State private var plan = PlanStore.shared
 
@@ -82,7 +81,7 @@ struct HomeView: View {
             .sensoryFeedback(.success, trigger: doneCount)
         } detail: {
             if let h = households.first {
-                HouseholdView(household: h).navigationTitle("Household")
+                HouseholdView(household: h)
             } else {
                 DetailPlaceholder(symbol: "house", title: "Home", text: "Add yourself on the left to start.")
             }
@@ -124,9 +123,9 @@ struct HomeView: View {
             .listRowInsets(EdgeInsets())
             .listRowBackground(Color.clear)
 
-            NavigationLink { HouseholdView(household: h).navigationTitle("Household") } label: {
+            NavigationLink { HouseholdView(household: h) } label: {
                 HStack {
-                    Image(systemName: "house.fill").foregroundStyle(Color.glow)
+                    Image(systemName: "house.fill").foregroundStyle(Color.ink)
                     Text(householdLine(h))
                     Spacer()
                 }
@@ -142,8 +141,8 @@ struct HomeView: View {
 
     private func householdLine(_ h: Household) -> String {
         var parts: [String] = []
-        let n = h.peopleCount
-        parts.append(n == 1 ? "1 person" : "\(n) people")
+        let n = h.people.count
+        parts.append(n == 0 ? "No one added yet" : n == 1 ? "1 person" : "\(n) people")
         if h.petCount > 0 { parts.append(h.petCount == 1 ? "1 pet" : "\(h.petCount) pets") }
         parts.append("covering \(h.targetDays) days")
         return parts.joined(separator: " · ")
@@ -168,7 +167,7 @@ struct HomeView: View {
                     if r.petFoodKcalPerDay > 0 {
                         StatTile(title: "Pet food", value: ReadinessCalculator.formatDays(r.petFoodDays), target: r.targetDays, fraction: r.petFoodFraction)
                     } else {
-                        StatTile(title: "Equipment", value: r.tasksDue == 0 ? "All checked" : "\(r.tasksDue) due", subtitle: tasks.isEmpty ? "Nothing tracked yet" : "Checks this week", fraction: nil)
+                        StatTile(title: "Gear", value: r.tasksDue == 0 ? "All checked" : "\(r.tasksDue) due", subtitle: tasks.isEmpty ? "Nothing tracked yet" : "Checks this week", fraction: nil)
                     }
                 }
                 HStack(spacing: 8) {
@@ -194,14 +193,17 @@ struct HomeView: View {
 
     @ViewBuilder
     private var planBanner: some View {
-        if let h = households.first, !plan.covers(peopleCount: h.people.count) {
+        if let h = households.first, !plan.covers(peopleCount: h.people.count), plan.plan < .family10 {
+            let next = plan.plan.next(forPeople: h.people.count)
             Section {
-                Button { paywall = .secondPerson(coveredDays: report.map { min($0.foodDays, $0.waterDays) }) } label: {
+                Button {
+                    paywall = plan.plan == .free ? .secondPerson(coveredDays: report.map { min($0.foodDays, $0.waterDays) }) : (plan.reasonForAdding(personNumber: h.people.count) ?? .plans)
+                } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: "person.2.fill").foregroundStyle(Color.glow)
+                        Image(systemName: "person.2.fill").foregroundStyle(Color.ink)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Your plan covers \(plan.plan.maxPeople) of \(h.people.count) people").font(.subheadline.weight(.semibold))
-                            Text(plan.plan.isPaid ? "Family has room for everyone in the house." : plan.trialEligible ? "Start a 7-day free trial." : "See plans.").font(.caption).foregroundStyle(.secondary)
+                            Text(plan.plan.isPaid ? "\(next.title) has room for everyone in the house." : plan.trialEligible ? "Start a 7-day free trial." : "See plans.").font(.caption).foregroundStyle(.secondary)
                         }
                         Spacer()
                         Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
@@ -216,9 +218,9 @@ struct HomeView: View {
     private var trustedContactNudge: some View {
         if let h = households.first, h.people.count == 1, let plan = plans.first, !plan.hasTrustedContact {
             Section {
-                NavigationLink { HouseholdView(household: h).navigationTitle("Household") } label: {
+                NavigationLink { HouseholdView(household: h) } label: {
                     HStack(spacing: 12) {
-                        Image(systemName: "person.crop.circle.badge.checkmark").foregroundStyle(Color.glow)
+                        Image(systemName: "person.crop.circle.badge.checkmark").foregroundStyle(Color.ink)
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Who checks on you?").font(.subheadline.weight(.semibold))
                             Text("Name someone outside the house. They get your medication card and the plan.").font(.caption).foregroundStyle(.secondary)
@@ -246,19 +248,7 @@ struct HomeView: View {
     @ViewBuilder
     private func gaps(_ r: ReadinessReport) -> some View {
         Section {
-            ForEach(r.gaps.prefix(3)) { gap in
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(gap.title).font(.subheadline.weight(.medium))
-                    Text(gap.detail).font(.caption).foregroundStyle(.secondary)
-                    Button(addedGapIDs.contains(gap.id) ? "On the shopping list" : "Add to shopping list") {
-                        context.insert(ShoppingItem(name: gap.shoppingName, quantity: gap.shoppingQuantity, unit: gap.shoppingUnit, reason: "Readiness gap"))
-                        try? context.save()
-                        addedGapIDs.insert(gap.id)
-                    }
-                    .buttonStyle(.bordered).controlSize(.small)
-                    .disabled(addedGapIDs.contains(gap.id))
-                }
-            }
+            ForEach(r.gaps.prefix(3)) { gap in GapRow(gap: gap) }
             if r.gaps.count > 3 {
                 Text("and \(r.gaps.count - 3) more under Ready").foregroundStyle(.secondary).font(.subheadline)
             }
@@ -318,7 +308,7 @@ struct HomeView: View {
                     Text("Nobody is marked for \(missingCore.map { $0.title.lowercased() }.joined(separator: ", ")). Tap a name to mark who can, or pick one to learn.")
                         .font(.caption).foregroundStyle(.secondary)
                 }
-                NavigationLink { HouseholdView(household: h).navigationTitle("Household") } label: {
+                NavigationLink { HouseholdView(household: h) } label: {
                     Label("Everyone's skills and needs", systemImage: "person.2.fill").font(.subheadline)
                 }
             } header: { Text("Who can do what") } footer: {
@@ -327,7 +317,7 @@ struct HomeView: View {
         } else {
             Section {
                 HStack(spacing: 12) {
-                    Image(systemName: "person.text.rectangle").foregroundStyle(Color.glow)
+                    Image(systemName: "person.text.rectangle").foregroundStyle(Color.ink)
                     VStack(alignment: .leading, spacing: 2) {
                         Text("Who can do what?").font(.subheadline.weight(.semibold))
                         Text("Mark first aid, the generator, the gas shutoff, and anything that runs on power.").font(.caption).foregroundStyle(.secondary)
@@ -367,9 +357,9 @@ struct HomeView: View {
     }
 
     private var equipmentSection: some View {
-        Section("Equipment this week") {
+        Section("Gear this week") {
             if dueTasks.isEmpty {
-                Text(tasks.isEmpty ? "Add your generator, alarms or extinguisher under Equipment." : "No checks due this week.")
+                Text(tasks.isEmpty ? "Add your generator, alarms or extinguisher under Gear." : "No checks due this week.")
                     .foregroundStyle(.secondary)
             } else {
                 ForEach(dueTasks.prefix(6), id: \.uuid) { task in

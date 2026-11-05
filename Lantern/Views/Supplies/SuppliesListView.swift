@@ -147,15 +147,21 @@ struct SuppliesListView: View {
         } description: {
             Text("Scan a barcode, add an item by hand, or start from a ready-made list.")
         } actions: {
-            HStack(spacing: 12) {
-                Button { showScanner = true } label: { Label("Scan", systemImage: "barcode.viewfinder") }
-                    .buttonStyle(.borderedProminent)
-                Button { showPacks = true } label: { Label("Starter pack", systemImage: "list.bullet.rectangle") }
-                    .buttonStyle(.bordered)
-                NavigationLink { KitsView() } label: { Label("Go-bag", systemImage: "backpack") }
-                    .buttonStyle(.bordered)
+            ViewThatFits(in: .horizontal) {
+                HStack(spacing: 12) { emptyActions }
+                VStack(spacing: 10) { emptyActions }
             }
         }
+    }
+
+    @ViewBuilder
+    private var emptyActions: some View {
+        Button { showScanner = true } label: { Label("Scan", systemImage: "barcode.viewfinder") }
+            .buttonStyle(.borderedProminent)
+        Button { showPacks = true } label: { Label("Starter pack", systemImage: "list.bullet.rectangle") }
+            .buttonStyle(.bordered)
+        NavigationLink { KitsView() } label: { Label("Go-bag", systemImage: "backpack") }
+            .buttonStyle(.bordered)
     }
 
     private var list: some View {

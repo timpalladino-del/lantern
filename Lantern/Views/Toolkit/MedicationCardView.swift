@@ -36,7 +36,7 @@ struct MedicationCardView: View {
                 }
                 if uncoveredCount > 0 {
                     Section {
-                        LockedRow(title: uncoveredCount == 1 ? "1 more person is part of Family" : "\(uncoveredCount) more people are part of Family", reason: .feature("Everyone's medication card"))
+                        LockedRow(title: "\(uncoveredCount == 1 ? "1 more person comes" : "\(uncoveredCount) more people come") with \(PlanStore.shared.plan.next(forPeople: people.count).title)", reason: .feature("Everyone's medication card"))
                     }
                 }
                 Section {
@@ -77,7 +77,7 @@ struct MedicationCardView: View {
         var head = m.name
         if !m.dose.isEmpty { head += " \(m.dose)" }
         head += " (\(m.form.title.lowercased()))"
-        if m.isCritical { head += " — CANNOT MISS A DAY" }
+        if m.isCritical { head += ". CANNOT MISS A DAY" }
         out.append(head)
         if !m.purpose.isEmpty { out.append("\(indent)For: \(m.purpose)") }
         let units = m.unitsPerDose == m.unitsPerDose.rounded() ? String(Int(m.unitsPerDose)) : String(format: "%.1f", m.unitsPerDose)

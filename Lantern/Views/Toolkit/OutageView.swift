@@ -89,7 +89,7 @@ struct OutageView: View {
             let water = items.filter { $0.quantity > 0 && $0.category == .water }
             LabeledContent("Lights", value: lights.isEmpty ? "None logged" : lights.map { "\(Int($0.quantity)) \($0.name)" }.joined(separator: ", "))
             LabeledContent("Batteries", value: batteries.isEmpty ? "None logged" : batteries.map { "\(Int($0.quantity)) \($0.name)" }.joined(separator: ", "))
-            LabeledContent("Water", value: water.isEmpty ? "None logged" : String(format: "%.0f litres", water.reduce(0.0) { $0 + $1.totalLiters }))
+            LabeledContent("Water", value: water.isEmpty ? "None logged" : String(format: "%.1f gallons", water.reduce(0.0) { $0 + $1.totalLiters } / 3.785))
             if let h = households.first {
                 let r = ReadinessCalculator.compute(items: items, tasks: tasks, household: h)
                 LabeledContent("Food", value: ReadinessCalculator.formatDays(r.foodDays))

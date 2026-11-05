@@ -18,6 +18,7 @@ struct WordRoundView: View {
     @State private var flash: Color?
     @State private var answers = 0
     @State private var motion = MotionTilt()
+    @State private var awake = false
 
     enum Phase { case setup, countdown, playing, results }
 
@@ -34,7 +35,7 @@ struct WordRoundView: View {
         }
         .navigationTitle(title)
         .navigationBarTitleDisplayMode(.inline)
-        .onDisappear { motion.stop(); UIApplication.shared.isIdleTimerDisabled = false }
+        .onDisappear { motion.stop(); if awake { ScreenAwake.release(); awake = false } }
         .sensoryFeedback(.impact(weight: .heavy), trigger: answers)
     }
 
@@ -80,8 +81,9 @@ struct WordRoundView: View {
             for n in [3, 2, 1] {
                 remaining = n
                 try? await Task.sleep(for: .seconds(1))
+                if Task.isCancelled { return }
             }
-            startPlay()
+            if !Task.isCancelled { startPlay() }
         }
     }
 
@@ -92,7 +94,7 @@ struct WordRoundView: View {
                 HStack {
                     Label(category.title, systemImage: category.symbol).font(.subheadline).foregroundStyle(.secondary)
                     Spacer()
-                    CountdownTimer(seconds: roundLength, running: $running, remaining: $remaining) { finish() }
+                    CountdownTimer(running: $running, remaining: $remaining) { finish() }
                 }
                 .padding(.horizontal)
                 Spacer()
@@ -131,7 +133,7 @@ struct WordRoundView: View {
         queue = category.words.shuffled()
         got = []; passed = []
         phase = .countdown
-        UIApplication.shared.isIdleTimerDisabled = true
+        if !awake { ScreenAwake.hold(); awake = true }
     }
 
     private func startPlay() {
@@ -154,7 +156,7 @@ struct WordRoundView: View {
     private func pass() {
         guard phase == .playing else { return }
         passed.append(word); answers += 1
-        flash = Color.signal.opacity(0.25)
+        flash = Color.ember.opacity(0.25)
         advance()
     }
 
@@ -168,7 +170,6 @@ struct WordRoundView: View {
         motion.stop()
         running = false
         phase = .results
-        UIApplication.shared.isIdleTimerDisabled = false
     }
 }
 
@@ -177,7 +178,8 @@ struct WordRoundView: View {
 @Observable
 final class MotionTilt {
     private let manager = CMMotionManager()
-    private var armed = true
+    /// Starts disarmed so a phone already lying flat does not score before it is held up.
+    private var armed = false
 
     func start(onDown: @escaping () -> Void, onUp: @escaping () -> Void) {
         guard manager.isDeviceMotionAvailable else { return }
@@ -190,5 +192,5 @@ final class MotionTilt {
         }
     }
 
-    func stop() { manager.stopDeviceMotionUpdates(); armed = true }
+    func stop() { manager.stopDeviceMotionUpdates(); armed = false }
 }

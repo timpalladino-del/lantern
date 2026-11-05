@@ -10,13 +10,13 @@ struct SimonView: View {
     @State private var presses = 0
     @State private var best: Int = UserDefaults.standard.integer(forKey: "games.simonBest")
 
-    private let colors: [Color] = [Color.ink, Color.moss, Color.signal, Color.primary]
-    private let names = ["blue", "green", "red", "dark"]
+    private let colors: [Color] = [Color.ink, Color.moss, Color.ember, Color.secondary]
+    private let names = ["blue", "green", "red", "grey"]
 
     var body: some View {
         VStack(spacing: 22) {
             if over {
-                GameUI.outcome(status, symbol: "xmark.octagon.fill", tint: Color.signal).gameContent().padding(.top, 20)
+                GameUI.outcome(status, symbol: "xmark.octagon.fill", tint: Color.ember).gameContent().padding(.top, 20)
             } else {
                 Text(status).font(.title3.weight(.semibold)).multilineTextAlignment(.center).gameContent().padding(.top, 20).contentTransition(.numericText())
             }
@@ -43,7 +43,7 @@ struct SimonView: View {
             .animation(.easeOut(duration: 0.12), value: lit)
             .sensoryFeedback(.impact(weight: .light), trigger: presses)
 
-            GameUI.bigButton(game.sequence.isEmpty || over ? "Start" : "Watching…", symbol: "play.fill") { start() }
+            GameUI.bigButton(game.sequence.isEmpty || over ? "Start" : showing ? "Watch" : "Your turn", symbol: "play.fill") { start() }
                 .disabled(!(game.sequence.isEmpty || over))
                 .gameContent()
             Spacer()

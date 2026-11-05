@@ -43,6 +43,20 @@ enum Plan: Int, Comparable, CaseIterable {
 
     var isPaid: Bool { self != .free }
 
+    /// One line under the plan name, used by the paywall cards and Settings.
+    var peopleLine: String {
+        switch self {
+        case .free: return "One person, \(PlanStore.freeItemLimit) items, the whole Toolkit"
+        case .duo: return "Two people in your house"
+        case .family6: return "Up to 6 people in your house"
+        case .family10: return "Up to 10 people in your house"
+        case .group50: return "Up to 50 households, for organizers"
+        }
+    }
+
+    /// The plan a household of this size moves to from the current one.
+    func next(forPeople n: Int) -> Plan { max(Plan.needed(forPeople: n), self == .free ? .duo : .family6) }
+
     /// Fallback prices for when the App Store has not answered yet.
     var fallbackPrice: String {
         switch self {

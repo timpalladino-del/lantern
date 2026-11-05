@@ -109,7 +109,7 @@ enum ReadinessCalculator {
             gaps.append(.init(
                 id: "food",
                 title: "Food: \(formatDays(foodDays)) of \(target) days",
-                detail: "About \(Int(foodShort.rounded())) more calories, roughly \(cans) cans, or the equivalent in rice, pasta, and peanut butter.",
+                detail: "About \(Int(foodShort.rounded())) more calories, roughly \(cans) \(cans == 1 ? "can" : "cans"), or the equivalent in rice, pasta, and peanut butter.",
                 shoppingName: "Shelf-stable food to close the gap",
                 shoppingQuantity: Double(cans),
                 shoppingUnit: CommonUnit.can.rawValue))
@@ -121,7 +121,7 @@ enum ReadinessCalculator {
             gaps.append(.init(
                 id: "water",
                 title: "Water: \(formatDays(waterDays)) of \(target) days",
-                detail: "About \(gallons) more gallons. One gallon per person per day, plus a little for pets.",
+                detail: "About \(gallons) more \(gallons == 1 ? "gallon" : "gallons"). One gallon per person per day, plus a little for pets.",
                 shoppingName: "Water",
                 shoppingQuantity: Double(gallons),
                 shoppingUnit: CommonUnit.gal.rawValue))
@@ -135,7 +135,7 @@ enum ReadinessCalculator {
                 title: "\(m.name) for \(m.personName): \(formatDays(days)) of \(target)",
                 detail: m.isCritical
                     ? "Critical. Ask the pharmacist about an early refill or a vacation supply."
-                    : "About \(Int(short.rounded(.up))) more days' worth to reach your goal.",
+                    : "About \(Int(short.rounded(.up))) more \(Int(short.rounded(.up)) == 1 ? "day's" : "days'") worth to reach your goal.",
                 shoppingName: "\(m.name) (\(m.personName))",
                 shoppingQuantity: 1,
                 shoppingUnit: "refill"))
@@ -171,7 +171,7 @@ enum ReadinessCalculator {
             if short > 0 {
                 let pounds = Int((short / 1600).rounded(.up))
                 gaps.append(.init(id: "petfood", title: "Pet food: \(formatDays(petFoodDays)) of \(target) days",
-                                  detail: "About \(pounds) more pounds of dry food, or the equivalent in cans. Shelters often take pets only with food and records.",
+                                  detail: "About \(pounds) more \(pounds == 1 ? "pound" : "pounds") of dry food, or the equivalent in cans. Shelters often take pets only with food and records.",
                                   shoppingName: "Pet food", shoppingQuantity: Double(pounds), shoppingUnit: "lb"))
             }
         }

@@ -4,12 +4,32 @@ import SwiftData
 /// Everything the phone can do for you when the lights are out. All of it works with no signal.
 struct ToolkitView: View {
     @Query(sort: \OutageEvent.startedAt, order: .reverse) private var outages: [OutageEvent]
+    @State private var torch = TorchController.shared
+    @State private var tone = ToneGenerator.shared
 
     private var activeOutage: OutageEvent? { outages.first { $0.isActive } }
 
     var body: some View {
         SplitContainer {
             List {
+                if torch.pattern != .off || tone.current != nil {
+                    Section {
+                        if torch.pattern != .off {
+                            HStack {
+                                Label("Light is on: \(torch.pattern.title.lowercased())", systemImage: "flashlight.on.fill").foregroundStyle(Color.ember)
+                                Spacer()
+                                Button("Stop") { torch.stop() }.buttonStyle(.bordered).controlSize(.small)
+                            }
+                        }
+                        if let s = tone.current {
+                            HStack {
+                                Label("\(s.title) is playing", systemImage: "speaker.wave.3.fill").foregroundStyle(Color.ember)
+                                Spacer()
+                                Button("Stop") { tone.stop() }.buttonStyle(.bordered).controlSize(.small)
+                            }
+                        }
+                    }
+                }
                 Section {
                     NavigationLink { OutageView() } label: {
                         HStack(spacing: 14) {

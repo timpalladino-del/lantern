@@ -23,7 +23,7 @@ struct DrawGuessView: View {
                 }
                 .buttonStyle(.bordered)
                 Spacer()
-                CountdownTimer(seconds: 90, running: $running, remaining: $remaining) { timeUp = true }
+                CountdownTimer(running: $running, remaining: $remaining) { timeUp = true }
             }
             .padding(.horizontal)
 

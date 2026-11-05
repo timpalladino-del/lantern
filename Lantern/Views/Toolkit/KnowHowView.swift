@@ -10,7 +10,7 @@ struct KnowHowView: View {
                     ForEach(library.cards(in: category)) { card in
                         NavigationLink { KnowHowCardView(card: card) } label: {
                             HStack(spacing: 12) {
-                                Image(systemName: card.symbol).frame(width: 28).foregroundStyle(Color.glow)
+                                Image(systemName: card.symbol).frame(width: 28).foregroundStyle(Color.ink)
                                 VStack(alignment: .leading, spacing: 2) {
                                     Text(card.title)
                                     Text(card.summary).font(.caption).foregroundStyle(.secondary)
@@ -35,7 +35,7 @@ struct KnowHowCardView: View {
         List {
             Section {
                 HStack(spacing: 12) {
-                    Image(systemName: card.symbol).font(.title2).foregroundStyle(Color.glow)
+                    Image(systemName: card.symbol).font(.title2).foregroundStyle(Color.ink)
                     VStack(alignment: .leading, spacing: 3) {
                         Text(card.title).font(.title3.weight(.semibold))
                         Text(card.summary).foregroundStyle(.secondary)
@@ -46,7 +46,7 @@ struct KnowHowCardView: View {
             Section("Steps") {
                 ForEach(Array(card.steps.enumerated()), id: \.offset) { i, step in
                     HStack(alignment: .top, spacing: 12) {
-                        Text("\(i + 1)").font(.subheadline.weight(.bold)).monospacedDigit().foregroundStyle(Color.glow).frame(width: 22, alignment: .trailing)
+                        Text("\(i + 1)").font(.subheadline.weight(.bold)).monospacedDigit().foregroundStyle(.secondary).frame(width: 22, alignment: .trailing)
                         Text(step)
                     }
                     .padding(.vertical, 2)

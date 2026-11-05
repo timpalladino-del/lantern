@@ -10,14 +10,15 @@ struct PlanSettingsSection: View {
             LabeledContent("Plan", value: store.plan.title)
             if store.plan.isPaid {
                 Link("Manage subscription", destination: URL(string: "https://apps.apple.com/account/subscriptions")!)
-            } else {
-                Button("See plans") { showPaywall = true }
+            }
+            if store.plan < .family10 {
+                Button(store.plan.isPaid ? "Move up a plan" : "See plans") { showPaywall = true }
             }
             Button("Restore purchases") { Task { await store.restore() } }
         } header: { Text("Your plan") } footer: {
             Text(store.plan.isPaid
-                 ? "Covers up to \(store.plan.maxPeople) people in your house. Shared with your Apple Family Sharing group."
-                 : "Free covers one person and 50 items. Everything in the Toolkit is free on every plan.")
+                 ? "\(store.plan.peopleLine). Shared with your Apple Family Sharing group."
+                 : "\(store.plan.peopleLine). Everything in the Toolkit is free on every plan.")
         }
         .sheet(isPresented: $showPaywall) { PaywallView(reason: .plans).tint(Color.ink) }
     }

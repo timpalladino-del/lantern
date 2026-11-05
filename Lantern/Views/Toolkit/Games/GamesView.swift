@@ -82,11 +82,9 @@ enum GameUI {
 
 /// Counts down and stops at zero. Kept small so every timed game shares one.
 struct CountdownTimer: View {
-    let seconds: Int
     @Binding var running: Bool
     @Binding var remaining: Int
     var onEnd: () -> Void
-    private let tick = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 
     var body: some View {
         HStack(spacing: 8) {
@@ -94,11 +92,17 @@ struct CountdownTimer: View {
             Text(String(format: "%d:%02d", remaining / 60, remaining % 60)).monospacedDigit()
         }
         .font(.headline)
-        .foregroundStyle(remaining <= 10 && running ? Color.signal : Color.primary)
-        .onReceive(tick) { _ in
+        .foregroundStyle(remaining <= 10 && running ? Color.ember : Color.primary)
+        .accessibilityLabel("\(remaining) seconds left")
+        // One task per screen; redraws (every drag point in Draw and guess) no longer restart the clock.
+        .task(id: running) {
             guard running else { return }
-            if remaining > 0 { remaining -= 1 }
-            if remaining == 0 { running = false; onEnd() }
+            while running, !Task.isCancelled {
+                try? await Task.sleep(for: .seconds(1))
+                guard running, !Task.isCancelled else { return }
+                if remaining > 0 { remaining -= 1 }
+                if remaining == 0 { running = false; onEnd(); return }
+            }
         }
     }
 }

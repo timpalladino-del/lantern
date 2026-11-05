@@ -6,7 +6,6 @@ struct ReadinessView: View {
     @Query private var items: [SupplyItem]
     @Query private var tasks: [MaintenanceTask]
     @Query private var households: [Household]
-    @State private var addedGapIDs: Set<String> = []
 
     var body: some View {
         SplitContainer {
@@ -19,7 +18,7 @@ struct ReadinessView: View {
             }
             .navigationTitle("Ready")
         } detail: {
-            DetailPlaceholder(symbol: "checkmark.shield", title: "Readiness in days", text: "Tap the household or a gap on the left to work on it here.")
+            DetailPlaceholder(symbol: "checkmark.shield", title: "Readiness in days", text: "Tap the household on the left to work on who is covered.")
         }
     }
 
@@ -29,7 +28,7 @@ struct ReadinessView: View {
         List {
             Section {
                 NavigationLink {
-                    HouseholdView(household: household).navigationTitle("Household")
+                    HouseholdView(household: household)
                 } label: {
                     VStack(alignment: .leading, spacing: 3) {
                         Text(household.hasPeople ? household.sortedPeople.map(\.name).joined(separator: ", ") : "Add the people you're covering")
@@ -43,7 +42,7 @@ struct ReadinessView: View {
                              detail: "\(Int(report.caloriesOnHand.rounded())) calories on hand, \(Int(report.caloriesPerDay.rounded())) needed a day."
                                 + (report.foodIsAssumed ? " Some items have no calorie figure, so 250 per serving is assumed." : ""))
                 ReadinessBar(title: "Water", value: ReadinessCalculator.formatDays(report.waterDays), fraction: report.waterFraction,
-                             detail: String(format: "%.0f litres on hand, %.1f needed a day. One gallon per person, plus pets.", report.waterLiters, report.waterLitersPerDay))
+                             detail: String(format: "%.1f gallons on hand, %.1f needed a day. One gallon per person, plus pets.", report.waterLiters / 3.785, report.waterLitersPerDay / 3.785))
                 if report.petFoodKcalPerDay > 0 {
                     ReadinessBar(title: "Pet food", value: ReadinessCalculator.formatDays(report.petFoodDays), fraction: report.petFoodFraction,
                                  detail: "\(Int(report.petFoodCalories.rounded())) calories of pet food on hand, \(Int(report.petFoodKcalPerDay.rounded())) needed a day."
@@ -90,19 +89,7 @@ struct ReadinessView: View {
                         .foregroundStyle(Color.moss)
                         .symbolEffect(.bounce, value: report.gaps.count)
                 }
-                ForEach(report.gaps) { gap in
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text(gap.title).font(.subheadline.weight(.medium))
-                        Text(gap.detail).font(.caption).foregroundStyle(.secondary)
-                        Button(addedGapIDs.contains(gap.id) ? "On the shopping list" : "Add to shopping list") {
-                            context.insert(ShoppingItem(name: gap.shoppingName, quantity: gap.shoppingQuantity, unit: gap.shoppingUnit, reason: "Readiness gap"))
-                            try? context.save()
-                            addedGapIDs.insert(gap.id)
-                        }
-                        .buttonStyle(.bordered).controlSize(.small)
-                        .disabled(addedGapIDs.contains(gap.id))
-                    }
-                }
+                ForEach(report.gaps) { gap in GapRow(gap: gap) }
             } header: { Text("Gaps") } footer: {
                 Text("Calories per person follow Mifflin-St Jeor when weight and height are known, otherwise USDA Dietary Guidelines. Water follows CDC and Ready.gov. Planning numbers, not medical advice.")
             }

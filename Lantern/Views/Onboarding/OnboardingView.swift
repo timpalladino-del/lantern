@@ -37,6 +37,7 @@ struct OnboardingView: View {
             Spacer()
             Image(systemName: "lightbulb.max.fill").font(.system(size: 44)).foregroundStyle(Color.glow)
                 .symbolEffect(.breathe)
+                .accessibilityHidden(true)
             Text("Lantern").font(.largeTitle.weight(.bold))
             Text("Ready for when you need it most.").font(.title3).foregroundStyle(.secondary)
             VStack(alignment: .leading, spacing: 12) {
@@ -73,7 +74,7 @@ struct OnboardingView: View {
             VStack(alignment: .leading, spacing: 10) {
                 Label("Scan a barcode from the Home tab", systemImage: "barcode.viewfinder")
                 Label("Or add a starter pack under Supplies", systemImage: "list.bullet.rectangle")
-                Label("Add the generator, alarms and extinguisher under Equipment", systemImage: "wrench.and.screwdriver")
+                Label("Add the generator, alarms and extinguisher under Gear", systemImage: "wrench.and.screwdriver")
             }
             .font(.subheadline)
             Spacer()

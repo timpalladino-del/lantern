@@ -32,7 +32,7 @@ struct SoundToolsView: View {
                         HStack {
                             Label(s.title, systemImage: symbol(for: s))
                             Spacer()
-                            if tone.current == s { Image(systemName: "waveform").foregroundStyle(Color.glow).symbolEffect(.variableColor.iterative, isActive: true) }
+                            if tone.current == s { Image(systemName: "waveform").foregroundStyle(Color.ink).symbolEffect(.variableColor.iterative, isActive: true) }
                         }
                     }
                     .foregroundStyle(.primary)

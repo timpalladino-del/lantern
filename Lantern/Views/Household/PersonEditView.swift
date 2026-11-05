@@ -203,7 +203,7 @@ struct PersonEditView: View {
     private var medications: some View {
         Section("Medications") {
             if let p = existing, !PlanStore.shared.coversPerson(at: household.sortedPeople.firstIndex { $0.uuid == p.uuid } ?? 0) {
-                LockedRow(title: "Medications for \(p.name) are part of Family", reason: .feature("Tracking everyone's medications"))
+                LockedRow(title: "Medications for \(p.name) come with \(PlanStore.shared.plan.next(forPeople: household.people.count).title)", reason: .feature("Tracking everyone's medications"))
             } else if let p = existing {
                 ForEach(p.medications.sorted { $0.createdAt < $1.createdAt }, id: \.uuid) { m in
                     Button { editingMedication = m } label: { MedicationRow(medication: m) }

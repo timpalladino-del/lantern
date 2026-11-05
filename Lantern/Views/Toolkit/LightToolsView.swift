@@ -15,9 +15,12 @@ struct LightToolsView: View {
                     .pickerStyle(.segmented)
                     if torch.pattern != .off {
                         Button(role: .destructive) { torch.stop() } label: { Label("Turn off", systemImage: "stop.circle.fill") }
-                        if torch.minutesRunning >= 10 {
-                            Label("Running \(torch.minutesRunning) minutes. The LED drains the battery; switch to a real flashlight if you have one.", systemImage: "battery.25percent")
-                                .font(.footnote).foregroundStyle(Color.ember)
+                        // Re-reads the clock every minute, so the warning appears even if nothing else redraws.
+                        TimelineView(.periodic(from: .now, by: 60)) { _ in
+                            if torch.minutesRunning >= 10 {
+                                Label("Running \(torch.minutesRunning) minutes. The LED drains the battery; switch to a real flashlight if you have one.", systemImage: "battery.25percent")
+                                    .font(.footnote).foregroundStyle(Color.ember)
+                            }
                         }
                     }
                 } else {
@@ -75,11 +78,11 @@ struct LightScreenView: View {
         .onAppear {
             previousBrightness = UIScreen.main.brightness
             UIScreen.main.brightness = mode == .candle ? 0.6 : 1.0
-            UIApplication.shared.isIdleTimerDisabled = true
+            ScreenAwake.hold()
         }
         .onDisappear {
             UIScreen.main.brightness = previousBrightness
-            UIApplication.shared.isIdleTimerDisabled = false
+            ScreenAwake.release()
         }
     }
 

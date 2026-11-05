@@ -18,7 +18,7 @@ struct StoryChainView: View {
 
                 ForEach(Array(twists.enumerated()), id: \.offset) { i, t in
                     HStack(alignment: .top, spacing: 10) {
-                        Image(systemName: "sparkles").foregroundStyle(Color.glow).padding(.top, 3)
+                        Image(systemName: "sparkles").foregroundStyle(Color.ink).padding(.top, 3)
                             .symbolEffect(.bounce, options: .nonRepeating)
                         VStack(alignment: .leading, spacing: 4) {
                             Text("Twist \(i + 1)").font(.caption).foregroundStyle(.secondary)

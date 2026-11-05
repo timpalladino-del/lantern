@@ -30,6 +30,7 @@ struct LocationsEditView: View {
                         } label: {
                             Image(systemName: loc.symbol).frame(width: 28)
                         }
+                        .accessibilityLabel("Symbol for \(loc.name)")
                         Text(loc.name)
                         Spacer()
                         Text("\(loc.items.count)").foregroundStyle(.secondary)

@@ -7,6 +7,7 @@ struct HangmanView: View {
     @State private var hint = ""
     @State private var secret = ""
     @State private var guesses = 0
+    @State private var recent: [String] = []
     @FocusState private var secretFocused: Bool
 
     private let rows = ["ABCDEFG", "HIJKLMN", "OPQRSTU", "VWXYZ"]
@@ -53,7 +54,7 @@ struct HangmanView: View {
             if g.isWon {
                 GameUI.outcome("You got it.", symbol: "checkmark.seal.fill", tint: Color.moss)
             } else if g.isLost {
-                GameUI.outcome("Out of guesses. It was \(g.word).", symbol: "xmark.seal.fill", tint: Color.signal).gameContent()
+                GameUI.outcome("Out of guesses. It was \(g.word).", symbol: "xmark.seal.fill", tint: Color.ember).gameContent()
             } else {
                 Text("\(g.missesLeft) wrong \(g.missesLeft == 1 ? "guess" : "guesses") left").font(.headline)
             }
@@ -85,10 +86,14 @@ struct HangmanView: View {
 
     private func start() {
         if source == .phone {
-            let pick = GamesLibrary.hangmanWords.randomElement()!
+            var pick = GamesLibrary.hangmanWords.randomElement()!
+            while recent.contains(pick.word), recent.count < GamesLibrary.hangmanWords.count - 1 { pick = GamesLibrary.hangmanWords.randomElement()! }
+            recent = Array((recent + [pick.word]).suffix(12))
             game = Hangman(word: pick.word); hint = pick.hint
         } else {
-            let w = secret.uppercased().filter { $0.isLetter || $0 == " " }.trimmingCharacters(in: .whitespaces)
+            // Fold accents so the A to Z keyboard can always solve it.
+            let folded = secret.folding(options: [.diacriticInsensitive, .caseInsensitive], locale: .current).uppercased()
+            let w = folded.filter { ("A"..."Z").contains($0) || $0 == " " }.trimmingCharacters(in: .whitespaces)
             game = Hangman(word: w); hint = "\(w.split(separator: " ").count == 1 ? "One word" : "\(w.split(separator: " ").count) words"), \(w.filter(\.isLetter).count) letters"
         }
         guesses = 0

@@ -5,8 +5,6 @@ struct EquipmentListView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \Equipment.name) private var equipment: [Equipment]
     @State private var showAdd = false
-    private let library = MaintenanceLibrary.shared
-
     private var sorted: [Equipment] {
         equipment.sorted { a, b in
             let da = a.nextTask?.daysUntilDue() ?? Int.max
@@ -21,11 +19,11 @@ struct EquipmentListView: View {
             Group {
                 if equipment.isEmpty {
                     ContentUnavailableView {
-                        Label("No equipment yet", systemImage: "wrench.and.screwdriver")
+                        Label("No gear yet", systemImage: "wrench.and.screwdriver")
                     } description: {
                         Text("Add the generator, smoke alarms, extinguisher, or power station. Each comes with a sensible check schedule you can edit.")
                     } actions: {
-                        Button { showAdd = true } label: { Label("Add equipment", systemImage: "plus") }
+                        Button { showAdd = true } label: { Label("Add gear", systemImage: "plus") }
                             .buttonStyle(.borderedProminent)
                     }
                 } else {
@@ -39,16 +37,16 @@ struct EquipmentListView: View {
                     }
                 }
             }
-            .navigationTitle("Equipment")
+            .navigationTitle("Gear")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button { showAdd = true } label: { Image(systemName: "plus") }
-                        .accessibilityLabel("Add equipment")
+                        .accessibilityLabel("Add gear")
                 }
             }
             .sheet(isPresented: $showAdd) { EquipmentEditView() }
         } detail: {
-            DetailPlaceholder(symbol: "wrench.and.screwdriver", title: "Pick a piece of equipment", text: "Its check schedule, notes and photos open here.")
+            DetailPlaceholder(symbol: "wrench.and.screwdriver", title: "Pick a piece of gear", text: "Its check schedule, notes and photos open here.")
         }
     }
 }

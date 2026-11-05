@@ -31,8 +31,10 @@ struct FourInARowView: View {
                     HStack(spacing: 0) {
                         ForEach(0..<FourInARow.columns, id: \.self) { c in
                             Button {
-                                if game.drop(c) { drops += 1 }
-                                if game.winner == .a { scoreA += 1 } else if game.winner == .b { scoreB += 1 }
+                                if game.drop(c) {
+                                    drops += 1
+                                    if game.winner == .a { scoreA += 1 } else if game.winner == .b { scoreB += 1 }
+                                }
                             } label: {
                                 Image(systemName: "arrowtriangle.down.fill").font(.caption)
                                     .foregroundStyle(game.canDrop(c) ? color(game.turn) : Color.clear)
@@ -47,7 +49,8 @@ struct FourInARowView: View {
                         HStack(spacing: 0) {
                             ForEach(0..<FourInARow.columns, id: \.self) { c in
                                 Circle().fill(color(game.grid[c][r]))
-                                    .overlay(Circle().strokeBorder(Color.glow, lineWidth: winning.contains { $0 == (c, r) } ? 3 : 0))
+                                    .overlay(Circle().strokeBorder(Color.ink, lineWidth: winning.contains { $0 == (c, r) } ? 3 : 0))
+                                    .accessibilityLabel(game.grid[c][r] == nil ? "Column \(c + 1) row \(r + 1), empty" : "Column \(c + 1) row \(r + 1), \(game.grid[c][r] == .a ? "blue" : "green")")
                                     .padding(3).frame(width: cell, height: cell)
                             }
                         }
@@ -66,7 +69,7 @@ struct FourInARowView: View {
             }
             GameUI.bigButton(game.winner != nil || game.isFull ? "Play again" : "Start over", symbol: "arrow.counterclockwise") {
                 var next = FourInARow()
-                next.turn = game.winner == .a ? .b : .a
+                next.turn = game.winner == .b ? .a : .b   // the loser starts; after a full board, green
                 game = next
             }
             .gameContent()

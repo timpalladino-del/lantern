@@ -13,10 +13,10 @@ struct HouseholdView: View {
     @State private var editingPet: Pet?
     @State private var showNewPet = false
     @State private var showInvite = false
+    @State private var confirmDeletePerson: Person?
 
     private let targets = [3, 7, 14, 30]
 
-    private var requesterName: String { household.admin?.name ?? "Your household" }
 
     var body: some View {
         List {
@@ -25,14 +25,14 @@ struct HouseholdView: View {
                     Button { editingPerson = person } label: { PersonRow(person: person) }
                         .foregroundStyle(.primary)
                         .swipeActions {
-                            Button(role: .destructive) { context.delete(person); try? context.save() } label: { Label("Delete", systemImage: "trash") }
+                            Button(role: .destructive) { confirmDeletePerson = person } label: { Label("Delete", systemImage: "trash") }
                         }
                 }
                 Button { showNewPerson = true } label: { Label("Add a person", systemImage: "person.badge.plus") }
-                if PlanStore.shared.covers(peopleCount: household.people.count + 1) || household.people.contains(where: { $0.medications.isEmpty && $0.age == nil }) {
+                if PlanStore.shared.covers(peopleCount: household.people.count + 1) || household.people.contains(where: \.profileIsBare) {
                     Button { showInvite = true } label: { Label("Invite someone to fill in their profile", systemImage: "paperplane") }
                 } else {
-                    LockedRow(title: "Ask someone to add themselves", reason: .secondPerson(coveredDays: nil))
+                    LockedRow(title: "Ask someone to add themselves", reason: PlanStore.shared.reasonForAdding(personNumber: household.people.count + 1) ?? .plans)
                 }
             } header: { Text("People") } footer: {
                 if household.hasPeople {
@@ -89,6 +89,10 @@ struct HouseholdView: View {
         .sheet(isPresented: $showNewPerson) { PersonEditView(household: household) }
         .sheet(item: $editingPet) { p in PetEditView(household: household, pet: p) }
         .sheet(isPresented: $showNewPet) { PetEditView(household: household) }
+        .confirmationDialog("Remove \(confirmDeletePerson?.name ?? "this person")?", isPresented: Binding(get: { confirmDeletePerson != nil }, set: { if !$0 { confirmDeletePerson = nil } }), titleVisibility: .visible) {
+            Button("Remove", role: .destructive) { if let p = confirmDeletePerson { context.delete(p); try? context.save() }; confirmDeletePerson = nil }
+        } message: { Text("Their medications and card go with them. Readiness recalculates for everyone left.") }
+        .navigationTitle("Household")
         .sheet(isPresented: $showInvite) { InviteSheet(household: household) }
     }
 }

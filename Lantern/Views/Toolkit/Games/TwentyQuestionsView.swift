@@ -32,6 +32,10 @@ struct TwentyQuestionsView: View {
                 .gameContent()
                 .accessibilityAddTraits(.isButton)
                 .accessibilityHint("Press and hold to see the secret")
+                .accessibilityAction(named: "Show the secret for a moment") {
+                    peeking = true
+                    Task { try? await Task.sleep(for: .seconds(3)); peeking = false }
+                }
 
             VStack(spacing: 10) {
                 Text("\(asked) of 20 questions").font(.headline).contentTransition(.numericText())
@@ -46,7 +50,7 @@ struct TwentyQuestionsView: View {
                 }
                 .gameContent()
             }
-            if asked >= 20 && !revealed { Text("That's twenty. Last guess, then reveal.").foregroundStyle(Color.signal).font(.footnote) }
+            if asked >= 20 && !revealed { Text("That's twenty. Last guess, then reveal.").foregroundStyle(Color.ember).font(.footnote) }
             Spacer()
         }
         .background(Color(uiColor: .systemGroupedBackground).ignoresSafeArea())

@@ -20,11 +20,12 @@ struct WhoGoesFirstView: View {
                         Text(n).font(highlighted == i ? .headline : .body)
                         Spacer()
                         if winner == n { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.moss).symbolEffect(.bounce, options: .nonRepeating) }
-                        else if highlighted == i { Image(systemName: "circle.fill").foregroundStyle(Color.glow).font(.caption) }
+                        else if highlighted == i { Image(systemName: "circle.fill").foregroundStyle(Color.ink).font(.caption) }
                     }
                     .listRowBackground(highlighted == i ? Color.glow.opacity(0.15) : nil)
                 }
-                .onDelete { names.remove(atOffsets: $0); winner = nil; teams = [] }
+                .onDelete { if !spinning { names.remove(atOffsets: $0); winner = nil; teams = [] } }
+                .deleteDisabled(spinning)
                 HStack {
                     TextField("Add a name", text: $newName).submitLabel(.done).onSubmit(add)
                     Button("Add", action: add).disabled(newName.trimmingCharacters(in: .whitespaces).isEmpty)
@@ -74,6 +75,7 @@ struct WhoGoesFirstView: View {
                 let delay = 60 + (s * s * 400) / max(1, steps * steps)   // slows down toward the end
                 try? await Task.sleep(for: .milliseconds(delay))
             }
+            guard target < names.count else { spinning = false; return }
             highlighted = target
             winner = names[target]
             spins += 1

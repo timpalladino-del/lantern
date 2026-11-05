@@ -51,7 +51,7 @@ struct RockPaperScissorsView: View {
             Label(outcome, systemImage: mine == nil ? "hand.tap" : outcome == "You win" ? "star.fill" : outcome == "Tie" ? "equal.circle" : "xmark.circle")
                 .font(.title.weight(.bold)).contentTransition(.numericText())
                 .symbolEffect(.bounce, value: rounds)
-                .foregroundStyle(outcome == "You win" ? Color.moss : outcome == "Phone wins" ? Color.signal : Color.primary)
+                .foregroundStyle(outcome == "You win" ? Color.moss : outcome == "Phone wins" ? Color.ember : Color.primary)
 
             HStack(spacing: 12) {
                 ForEach(RPS.allCases) { choice in
@@ -143,7 +143,7 @@ struct HeadToHeadRPS: View {
                 }
                 Text(m.versus(t) == 1 ? "You win" : m.versus(t) == -1 ? "They win" : "Tie")
                     .font(.title2.weight(.bold))
-                    .foregroundStyle(m.versus(t) == 1 ? Color.moss : m.versus(t) == -1 ? Color.signal : Color.primary)
+                    .foregroundStyle(m.versus(t) == 1 ? Color.moss : m.versus(t) == -1 ? Color.ember : Color.primary)
                 Button("Again") { top = nil; bottom = nil }.buttonStyle(.borderedProminent)
             } else if mine.wrappedValue != nil {
                 Image(systemName: "checkmark.circle.fill").font(.system(size: 36)).foregroundStyle(Color.moss).symbolEffect(.bounce, options: .nonRepeating)

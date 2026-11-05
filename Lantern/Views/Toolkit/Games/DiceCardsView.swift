@@ -14,6 +14,7 @@ struct DiceCardsView: View {
         let rank: String, suit: String
         var id: String { rank + suit }
         var isRed: Bool { suit == "♥" || suit == "♦" }
+        var suitName: String { ["♠": "spades", "♥": "hearts", "♦": "diamonds", "♣": "clubs"][suit] ?? suit }
         static func freshDeck() -> [Card] {
             let ranks = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
             return ["♠", "♥", "♦", "♣"].flatMap { s in ranks.map { Card(rank: $0, suit: s) } }.shuffled()
@@ -39,6 +40,8 @@ struct DiceCardsView: View {
                             Image(systemName: "die.face.\(d).fill").font(.system(size: 64)).symbolEffect(.bounce, value: rolls)
                         }
                     }
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel("Dice show \(dice.map(String.init).joined(separator: ", ")), total \(dice.reduce(0, +))")
                     Text("\(dice.reduce(0, +))").font(.largeTitle.weight(.bold)).monospacedDigit()
                     if let coin { Text(coin).font(.title2.weight(.semibold)) }
                     if !drawn.isEmpty {
@@ -47,7 +50,7 @@ struct DiceCardsView: View {
                                 VStack(spacing: 2) { Text(c.rank).font(.headline); Text(c.suit) }
                                     .frame(width: 46, height: 64)
                                     .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
-                                    .foregroundStyle(c.isRed ? Color.signal : Color.primary)
+                                    .foregroundStyle(c.isRed ? Color.cardRed : Color.primary)
                             }
                         }
                     }
@@ -59,6 +62,7 @@ struct DiceCardsView: View {
                     GameUI.bigButton("Roll", symbol: "dice") { dice = (0..<diceCount).map { _ in Int.random(in: 1...6) }; rolls += 1 }
                     GameUI.bigButton("Flip", symbol: "arrow.trianglehead.2.clockwise.rotate.90", tint: Color.secondary) { coin = Bool.random() ? "Heads" : "Tails"; flips += 1 }
                     GameUI.bigButton("Draw (\(deck.count))", symbol: "rectangle.portrait.on.rectangle.portrait", tint: Color.secondary) { if let c = deck.popLast() { drawn.append(c) } }
+                        .disabled(deck.isEmpty)
                     GameUI.bigButton("Shuffle", symbol: "shuffle", tint: Color.secondary) { deck = Card.freshDeck(); drawn = [] }
                     Stepper("\(diceCount) dice", value: $diceCount, in: 1...6)
                         .onChange(of: diceCount) { _, n in dice = Array(repeating: 1, count: n) }
@@ -116,8 +120,8 @@ struct DiceCardsView: View {
                                 .frame(width: 54, height: 74)
                                 .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 8))
                                 .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(Color.secondary.opacity(0.3)))
-                                .foregroundStyle(c.isRed ? Color.signal : Color.primary)
-                                .accessibilityLabel("\(c.rank) of \(c.suit)")
+                                .foregroundStyle(c.isRed ? Color.cardRed : Color.primary)
+                                .accessibilityLabel("\(c.rank) of \(c.suitName)")
                             }
                         }
                         .padding(.vertical, 4)

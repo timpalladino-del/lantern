@@ -26,8 +26,10 @@ struct TicTacToeView: View {
             LazyVGrid(columns: cols, spacing: 8) {
                 ForEach(0..<9, id: \.self) { i in
                     Button {
-                        if game.play(i) { moves += 1 }
-                        if game.winner == .x { scoreX += 1 } else if game.winner == .o { scoreO += 1 } else if game.isDraw { draws += 1 }
+                        if game.play(i) {
+                            moves += 1
+                            if game.winner == .x { scoreX += 1 } else if game.winner == .o { scoreO += 1 } else if game.isDraw { draws += 1 }
+                        }
                     } label: {
                         RoundedRectangle(cornerRadius: 14).fill(cellColor(i))
                             .aspectRatio(1, contentMode: .fit)
@@ -51,7 +53,7 @@ struct TicTacToeView: View {
             }
             GameUI.bigButton(game.isOver ? "Play again" : "Start over", symbol: "arrow.counterclockwise") {
                 var next = TicTacToe()
-                next.turn = game.winner == .x ? .o : .x   // loser starts; after a draw, O starts
+                next.turn = game.winner == .o ? .x : .o   // the loser starts; after a draw, O starts
                 game = next
             }
             .gameContent()

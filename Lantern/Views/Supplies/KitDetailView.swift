@@ -5,8 +5,10 @@ struct KitDetailView: View {
     @Environment(\.modelContext) private var context
     @Bindable var kit: Kit
     @Query(sort: \SupplyItem.name) private var allItems: [SupplyItem]
+    private var allItemCount: Int { allItems.count }
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
     @State private var showPicker = false
+    @State private var paywall: PaywallReason?
     @State private var showAdd = false
     @State private var checkedCount = 0
     private let library = KitLibrary.shared
@@ -19,7 +21,7 @@ struct KitDetailView: View {
         List {
             Section {
                 HStack {
-                    Image(systemName: kit.kind.symbol).font(.title2).foregroundStyle(Color.glow).frame(width: 36)
+                    Image(systemName: kit.kind.symbol).font(.title2).foregroundStyle(Color.ink).frame(width: 36)
                     VStack(alignment: .leading, spacing: 3) {
                         Text(kit.kind.title).font(.subheadline.weight(.semibold))
                         Text(kit.lastCheckedAt.map { "Checked \($0.formatted(.relative(presentation: .named)))" } ?? "Never checked")
@@ -55,6 +57,7 @@ struct KitDetailView: View {
                 Section {
                     ForEach(missing, id: \.self) { line in
                         Button {
+                            guard PlanStore.shared.canAddItem(currentCount: allItemCount) else { paywall = .itemLimit; return }
                             context.insert(SeedData.makeItem(from: line, location: locations.first { $0.name == kit.notes }, kit: kit))
                             try? context.save()
                         } label: {
@@ -73,6 +76,7 @@ struct KitDetailView: View {
         }
         .navigationTitle(kit.name)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.ink) }
         .sheet(isPresented: $showPicker) { KitPickItemsView(kit: kit) }
         .sheet(isPresented: $showAdd) {
             ItemEditView(draft: ItemDraft(location: locations.first { $0.name == kit.notes })) { item in item.kit = kit; try? context.save() }

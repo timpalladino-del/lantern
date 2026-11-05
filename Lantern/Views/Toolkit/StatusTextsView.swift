@@ -106,7 +106,11 @@ struct StatusTextsView: View {
             default: return "\(people.dropLast().joined(separator: ", ")) and \(people.last!) are"
             }
         }()
-        let since = outage.map { " since \($0.startedAt.formatted(date: .omitted, time: .shortened))" } ?? ""
+        let power = outage.map { " Power's out since \($0.startedAt.formatted(date: .omitted, time: .shortened))." } ?? ""
+        let powerHere = outage.map { " Power's out here since \($0.startedAt.formatted(date: .omitted, time: .shortened))." } ?? ""
+        let one = people.count == 1
+        let we = one ? "I'm" : "we're"
+        let our = one ? "My" : "Our"
         let next = now.addingTimeInterval(4 * 3600).formatted(date: .omitted, time: .shortened)
         let meet = plan?.meetNearHome.trimmingCharacters(in: .whitespaces) ?? ""
         let meetFar = plan?.meetOutsideNeighborhood.trimmingCharacters(in: .whitespaces) ?? ""
@@ -114,19 +118,19 @@ struct StatusTextsView: View {
 
         var list: [Message] = [
             Message(id: "safe", title: "We're safe", symbol: "checkmark.shield.fill",
-                    body: "\(who) safe at home. Power's out\(since). Phones are low, so we're texting instead of calling. Next check-in around \(next)."),
+                    body: "\(who) safe at home.\(power) \(one ? "My phone is" : "Phones are") low, so \(we) texting instead of calling. Next check-in around \(next)."),
             Message(id: "leaving", title: "We're leaving", symbol: "car.fill",
-                    body: "\(who) leaving the house now. Everyone's accounted for.\(meetFar.isEmpty ? "" : " Heading to \(meetFar).") Will text when we get there."),
+                    body: "\(who) leaving the house now.\(one ? "" : " Everyone's accounted for.")\(meetFar.isEmpty ? "" : " Heading to \(meetFar).") Will text \(one ? "when I get" : "when we get") there."),
             Message(id: "arrived", title: "We made it", symbol: "house.fill",
-                    body: "\(who) safe and settled.\(meetFar.isEmpty ? "" : " We're at \(meetFar).") Phones are low; one text every few hours."),
+                    body: "\(who) safe and settled.\(meetFar.isEmpty ? "" : " \(one ? "I'm" : "We're") at \(meetFar).") \(one ? "My phone is" : "Phones are") low; one text every few hours."),
             Message(id: "help", title: "We need a hand", symbol: "hand.raised.fill",
-                    body: "\(who) okay but could use help. Power's out\(since) and we're running short. Can you call or come by when you can?"),
+                    body: "\(who) okay but could use help.\(power) \(one ? "I'm" : "We're") running short. Can you call or come by when you can?"),
             Message(id: "checkin", title: "Checking on you", symbol: "person.2.fill",
-                    body: "Checking in. Are you okay? Power's out here\(since). Text back when you can, even one word."),
+                    body: "Checking in. Are you okay?\(powerHere) Text back when you can, even one word."),
         ]
         if !meet.isEmpty {
             list.append(Message(id: "meet", title: "Meet at our spot", symbol: "mappin.and.ellipse",
-                                body: "If we get separated, meet at \(meet)." + (meetFar.isEmpty ? "" : " If that's not safe, \(meetFar).") + (outOfTown.isEmpty ? "" : " Out-of-town check-in: \(outOfTown).")))
+                                body: "If we get separated, meet at \(meet)." + (meetFar.isEmpty ? "" : " If that's not safe, \(meetFar).") + (outOfTown.isEmpty ? "" : " \(our) out-of-town check-in: \(outOfTown).")))
         }
         return list
     }

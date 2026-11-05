@@ -16,7 +16,7 @@ struct ScavengerHuntView: View {
                     Label("\(found.count) of \(items.count) found", systemImage: found.count == items.count ? "party.popper.fill" : "flashlight.on.fill")
                         .font(.headline).symbolEffect(.bounce, value: found.count == items.count)
                     Spacer()
-                    CountdownTimer(seconds: 300, running: $running, remaining: $remaining) { timeUp = true }
+                    CountdownTimer(running: $running, remaining: $remaining) { timeUp = true }
                 }
                 ProgressView(value: Double(found.count), total: Double(items.count)).tint(Color.glow)
             }

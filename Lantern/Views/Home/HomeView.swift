@@ -167,7 +167,7 @@ struct HomeView: View {
                 }
                 HStack(spacing: 8) {
                     CountChip(symbol: "clock.badge.exclamationmark", text: r.itemsNeedingAttention == 0 ? "Nothing to use up" : "\(r.itemsNeedingAttention) to use or check")
-                    CountChip(symbol: "cart", text: shopping.isEmpty ? "Shopping list empty" : "\(shopping.count) on the list")
+                    CountChip(symbol: "cart", text: shopping.isEmpty ? "List is empty" : "\(shopping.count) on the list")
                     if r.gaps.isEmpty {
                         CountChip(symbol: "checkmark.circle.fill", text: "No gaps", tint: Color.moss)
                     } else {
@@ -446,6 +446,7 @@ struct CountChip: View {
         Label(text, systemImage: symbol)
             .font(.caption2.weight(.medium))
             .lineLimit(2)
+            .minimumScaleFactor(0.85)
             .multilineTextAlignment(.leading)
             .foregroundStyle(tint == .secondary ? Color.primary : tint)
             .padding(.horizontal, 8).padding(.vertical, 6)

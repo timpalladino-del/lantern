@@ -27,17 +27,10 @@ struct StatusTextsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Label(m.title, systemImage: m.symbol).font(.headline)
                         Text(m.body).font(.subheadline).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                        HStack(spacing: 10) {
-                            Button {
-                                open(sms: nil, body: m.body)
-                            } label: { Label("Text", systemImage: "message.fill") }
-                                .buttonStyle(.borderedProminent)
-                            ShareLink(item: m.body) { Label("Share", systemImage: "square.and.arrow.up") }
-                                .buttonStyle(.bordered)
-                            Button {
-                                UIPasteboard.general.string = m.body; copied = m.id
-                            } label: { Label(copied == m.id ? "Copied" : "Copy", systemImage: copied == m.id ? "checkmark" : "doc.on.doc") }
-                                .buttonStyle(.bordered)
+                        // Narrow screens (iPad compatibility window, small phones) get icon-only Share and Copy.
+                        ViewThatFits(in: .horizontal) {
+                            actions(for: m, iconOnly: false)
+                            actions(for: m, iconOnly: true)
                         }
                         .font(.subheadline)
                     }
@@ -79,6 +72,27 @@ struct StatusTextsView: View {
         }
         .navigationTitle("Ready-to-send texts")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    @ViewBuilder
+    private func actions(for m: Message, iconOnly: Bool) -> some View {
+        HStack(spacing: 10) {
+            Button { open(sms: nil, body: m.body) } label: { Label("Text", systemImage: "message.fill").lineLimit(1) }
+                .buttonStyle(.borderedProminent)
+            ShareLink(item: m.body) {
+                if iconOnly { Image(systemName: "square.and.arrow.up").accessibilityLabel("Share") }
+                else { Label("Share", systemImage: "square.and.arrow.up").lineLimit(1) }
+            }
+            .buttonStyle(.bordered)
+            Button {
+                UIPasteboard.general.string = m.body; copied = m.id
+            } label: {
+                if iconOnly { Image(systemName: copied == m.id ? "checkmark" : "doc.on.doc").accessibilityLabel(copied == m.id ? "Copied" : "Copy") }
+                else { Label(copied == m.id ? "Copied" : "Copy", systemImage: copied == m.id ? "checkmark" : "doc.on.doc").lineLimit(1) }
+            }
+            .buttonStyle(.bordered)
+        }
+        .fixedSize(horizontal: true, vertical: false)
     }
 
     private func open(sms number: String?, body: String) {

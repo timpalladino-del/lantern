@@ -27,17 +27,24 @@ struct StatusTextsView: View {
                     VStack(alignment: .leading, spacing: 8) {
                         Label(m.title, systemImage: m.symbol).font(.headline)
                         Text(m.body).font(.subheadline).foregroundStyle(.secondary).fixedSize(horizontal: false, vertical: true)
-                        // Narrow screens (iPad compatibility window, small phones) get icon-only Share and Copy.
-                        ViewThatFits(in: .horizontal) {
-                            actions(for: m, iconOnly: false)
-                            actions(for: m, iconOnly: true)
+                        HStack(spacing: 10) {
+                            Button { open(sms: nil, body: m.body) } label: { Label("Send as text", systemImage: "message.fill") }
+                                .buttonStyle(.borderedProminent)
+                            ShareLink(item: m.body) { Image(systemName: "square.and.arrow.up").frame(minWidth: 28) }
+                                .buttonStyle(.bordered)
+                                .accessibilityLabel("Share")
+                            Button {
+                                UIPasteboard.general.string = m.body; copied = m.id
+                            } label: { Image(systemName: copied == m.id ? "checkmark" : "doc.on.doc").frame(minWidth: 28) }
+                                .buttonStyle(.bordered)
+                                .accessibilityLabel(copied == m.id ? "Copied" : "Copy")
                         }
                         .font(.subheadline)
                     }
                     .padding(.vertical, 4)
                 }
             } header: { Text("Pick one, pick who, send") } footer: {
-                Text("Text opens Messages with the words filled in; you choose who. Names, the outage clock and your meeting place come from Lantern, so the message is right without typing in the dark.")
+                Text("Send as text opens Messages with the words filled in; you choose who. Names, the outage clock and your meeting place come from Lantern, so the message is right without typing in the dark.")
             }
 
             if !mine.isEmpty {
@@ -72,27 +79,6 @@ struct StatusTextsView: View {
         }
         .navigationTitle("Ready-to-send texts")
         .navigationBarTitleDisplayMode(.inline)
-    }
-
-    @ViewBuilder
-    private func actions(for m: Message, iconOnly: Bool) -> some View {
-        HStack(spacing: 10) {
-            Button { open(sms: nil, body: m.body) } label: { Label("Text", systemImage: "message.fill").lineLimit(1) }
-                .buttonStyle(.borderedProminent)
-            ShareLink(item: m.body) {
-                if iconOnly { Image(systemName: "square.and.arrow.up").accessibilityLabel("Share") }
-                else { Label("Share", systemImage: "square.and.arrow.up").lineLimit(1) }
-            }
-            .buttonStyle(.bordered)
-            Button {
-                UIPasteboard.general.string = m.body; copied = m.id
-            } label: {
-                if iconOnly { Image(systemName: copied == m.id ? "checkmark" : "doc.on.doc").accessibilityLabel(copied == m.id ? "Copied" : "Copy") }
-                else { Label(copied == m.id ? "Copied" : "Copy", systemImage: copied == m.id ? "checkmark" : "doc.on.doc").lineLimit(1) }
-            }
-            .buttonStyle(.bordered)
-        }
-        .fixedSize(horizontal: true, vertical: false)
     }
 
     private func open(sms number: String?, body: String) {

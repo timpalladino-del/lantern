@@ -9,6 +9,16 @@ enum HingeStatus { case unknown, closed, partiallyOpen, fullyOpen }
 final class HingeMonitor {
     var status: HingeStatus = .unknown
     var angle: Double = 0
+
+    init() {
+        #if DEBUG
+        // `-hinge partial` fakes the posture for screenshots on simulators that cannot fold.
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-hinge"), i + 1 < args.count {
+            status = ["closed": .closed, "partial": .partiallyOpen, "open": .fullyOpen][args[i + 1]] ?? .unknown
+        }
+        #endif
+    }
 }
 
 /// Invisible view that reports hinge changes into a HingeMonitor. Attach it as a background.

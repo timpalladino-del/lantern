@@ -22,7 +22,7 @@ struct RootView: View {
 
     enum ScreenshotSheet: String, Identifiable {
         case outage, kit, medcard, plan, household, person, item, games, texts, settings
-        case headsup, trivia, hangman, fourinarow, tictactoe, draw, wyr, twenty, story, hunt, puppets, memory, simon, first, rps, number, dice
+        case headsup, trivia, hangman, fourinarow, tictactoe, draw, wyr, twenty, story, hunt, puppets, memory, simon, first, rps, rps2, number, dice
         var id: String { rawValue }
     }
     @State private var screenshotScrollTarget: String?
@@ -113,6 +113,7 @@ struct RootView: View {
                 case .simon: SimonView()
                 case .first: WhoGoesFirstView()
                 case .rps: RockPaperScissorsView()
+                case .rps2: HeadToHeadRPS().navigationTitle("Rock, paper, scissors").navigationBarTitleDisplayMode(.inline)
                 case .number: NumberGuessView()
                 case .dice: DiceCardsView()
                 }

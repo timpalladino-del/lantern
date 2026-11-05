@@ -47,7 +47,7 @@ struct RootView: View {
         TabView(selection: $selectedTab) {
             Tab("Home", systemImage: "house.fill", value: "Home") { HomeView().tint(Color.accentColor) }
             Tab("Supplies", systemImage: "shippingbox.fill", value: "Supplies") { SuppliesListView().tint(Color.accentColor) }
-            Tab("Equipment", systemImage: "wrench.and.screwdriver.fill", value: "Equipment") { EquipmentListView().tint(Color.accentColor) }
+            Tab("Gear", systemImage: "wrench.and.screwdriver.fill", value: "Equipment") { EquipmentListView().tint(Color.accentColor) }
             Tab("Ready", systemImage: "checkmark.shield.fill", value: "Ready") { ReadinessView().tint(Color.accentColor) }
             Tab("Toolkit", systemImage: "flashlight.on.fill", value: "Toolkit") { ToolkitView().tint(Color.accentColor) }
         }

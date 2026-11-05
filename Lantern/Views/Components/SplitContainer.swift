@@ -9,6 +9,8 @@ struct SplitContainer<Sidebar: View, Detail: View>: View {
     var body: some View {
         NavigationSplitView {
             sidebar()
+                // Wide enough for a supply row with its badge; the detail keeps the rest.
+                .navigationSplitViewColumnWidth(min: 300, ideal: 330, max: 400)
         } detail: {
             detail()
         }

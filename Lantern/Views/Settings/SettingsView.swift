@@ -14,7 +14,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.digestHour) private var digestHour = 9
     @AppStorage(AppSettings.onlineLookupEnabled) private var onlineLookup = true
 
-    @State private var exportFile: ExportFile?
+    @State private var exportFile: ShareableFile?
     @State private var exportError: String?
     @State private var authDenied = false
 
@@ -76,7 +76,7 @@ struct SettingsView: View {
         .navigationTitle("Settings")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $exportFile) { file in
-            FileShareSheet(file: file)
+            FileShareSheet(file: file, title: "Export")
         }
     }
 
@@ -89,7 +89,7 @@ struct SettingsView: View {
 
     private func export(_ csv: String, name: String) {
         do {
-            exportFile = ExportFile(url: try ExportService.writeTemp(csv, filename: name))
+            exportFile = ShareableFile(url: try ExportService.writeTemp(csv, filename: name))
             exportError = nil
         } catch {
             exportError = "Could not write the file: \(error.localizedDescription)"
@@ -112,10 +112,6 @@ struct SettingsView: View {
 }
 
 /// Wrapper so a URL can drive `.sheet(item:)` without a retroactive Identifiable conformance.
-private struct ExportFile: Identifiable {
-    let id = UUID()
-    let url: URL
-}
 
 
 private struct SourcesView: View {

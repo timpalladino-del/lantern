@@ -45,11 +45,11 @@ struct RootView: View {
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            Tab("Home", systemImage: "house.fill", value: "Home") { HomeView().tint(Color.accentColor) }
-            Tab("Supplies", systemImage: "shippingbox.fill", value: "Supplies") { SuppliesListView().tint(Color.accentColor) }
-            Tab("Gear", systemImage: "wrench.and.screwdriver.fill", value: "Equipment") { EquipmentListView().tint(Color.accentColor) }
-            Tab("Ready", systemImage: "checkmark.shield.fill", value: "Ready") { ReadinessView().tint(Color.accentColor) }
-            Tab("Toolkit", systemImage: "flashlight.on.fill", value: "Toolkit") { ToolkitView().tint(Color.accentColor) }
+            Tab("Home", systemImage: "house.fill", value: "Home") { HomeView().tint(Color.ink) }
+            Tab("Supplies", systemImage: "shippingbox.fill", value: "Supplies") { SuppliesListView().tint(Color.ink) }
+            Tab("Gear", systemImage: "wrench.and.screwdriver.fill", value: "Equipment") { EquipmentListView().tint(Color.ink) }
+            Tab("Ready", systemImage: "checkmark.shield.fill", value: "Ready") { ReadinessView().tint(Color.ink) }
+            Tab("Toolkit", systemImage: "flashlight.on.fill", value: "Toolkit") { ToolkitView().tint(Color.ink) }
         }
         .tint(Color.glow)
         .wideWindowSizeClass()
@@ -61,7 +61,7 @@ struct RootView: View {
         .onChange(of: plan.pendingPaywall) { _, _ in presentPendingPaywall() }
         .onChange(of: showOnboarding) { _, shown in if !shown { presentPendingPaywall() } }
         .onChange(of: incomingRoute) { _, route in if route == nil { presentPendingPaywall() } }
-        .sheet(item: $paywallReason) { PaywallView(reason: $0).tint(Color.accentColor) }
+        .sheet(item: $paywallReason) { PaywallView(reason: $0).tint(Color.ink) }
         .sheet(isPresented: $showOnboarding, onDismiss: { hasSeenWelcome = true }) {
             OnboardingView()
         }
@@ -75,8 +75,8 @@ struct RootView: View {
         }
         .sheet(item: $incomingRoute) { route in
             switch route {
-            case .newProfile(let by, let f, let h): ProfileBuilderView(requestedBy: by, forName: f, householdToken: h).tint(Color.accentColor)
-            case .importProfile(let card): ProfileImportView(card: card).tint(Color.accentColor)
+            case .newProfile(let by, let f, let h): ProfileBuilderView(requestedBy: by, forName: f, householdToken: h).tint(Color.ink)
+            case .importProfile(let card): ProfileImportView(card: card).tint(Color.ink)
             }
         }
         .fullScreenCover(item: $screenshotSheet) { which in
@@ -118,10 +118,10 @@ struct RootView: View {
                 case .dice: DiceCardsView()
                 }
             }
-            .tint(Color.accentColor)
+            .tint(Color.ink)
         }
         .sheet(item: $screenshotMedication) { m in
-            if let p = m.person { MedicationEditView(person: p, medication: m, scrollTarget: screenshotScrollTarget).tint(Color.accentColor) }
+            if let p = m.person { MedicationEditView(person: p, medication: m, scrollTarget: screenshotScrollTarget).tint(Color.ink) }
         }
         .task { openScreenshotRoute() }
         .onChange(of: scenePhase) { _, phase in

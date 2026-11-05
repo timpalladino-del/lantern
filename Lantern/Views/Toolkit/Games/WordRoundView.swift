@@ -48,7 +48,7 @@ struct WordRoundView: View {
                         HStack {
                             Label(c.title, systemImage: c.symbol).foregroundStyle(.primary)
                             Spacer()
-                            if c.id == category.id { Image(systemName: "checkmark").foregroundStyle(Color.accentColor) }
+                            if c.id == category.id { Image(systemName: "checkmark").foregroundStyle(Color.ink) }
                         }
                     }
                 }

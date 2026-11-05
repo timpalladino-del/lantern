@@ -269,7 +269,7 @@ struct ItemEditView: View {
                 }
             }
             .navigationTitle(existing == nil ? "New item" : "Edit item")
-            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.ink) }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }

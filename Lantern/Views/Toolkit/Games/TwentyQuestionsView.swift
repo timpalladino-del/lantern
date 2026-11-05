@@ -25,9 +25,9 @@ struct TwentyQuestionsView: View {
                 .accessibilityLabel(revealed || peeking ? "The secret is \(secret.thing)" : "Secret hidden")
 
             Label("Hold to peek", systemImage: "eye.fill")
-                .font(.headline).foregroundStyle(revealed ? Color.secondary : Color.accentColor)
+                .font(.headline).foregroundStyle(revealed ? Color.secondary : Color.ink)
                 .frame(maxWidth: .infinity, minHeight: 44)
-                .background(Color.accentColor.opacity(revealed ? 0.06 : 0.12), in: RoundedRectangle(cornerRadius: 10))
+                .background(Color.ink.opacity(revealed ? 0.06 : 0.12), in: RoundedRectangle(cornerRadius: 10))
                 .gesture(DragGesture(minimumDistance: 0).onChanged { _ in if !revealed { peeking = true } }.onEnded { _ in peeking = false })
                 .gameContent()
                 .accessibilityAddTraits(.isButton)
@@ -37,7 +37,7 @@ struct TwentyQuestionsView: View {
                 Text("\(asked) of 20 questions").font(.headline).contentTransition(.numericText())
                 ProgressView(value: Double(asked), total: 20).tint(Color.glow).gameContent()
                 HStack(spacing: 12) {
-                    GameUI.bigButton("Asked one", symbol: "plus", tint: Color.accentColor) { if asked < 20 { asked += 1; taps += 1 } }
+                    GameUI.bigButton("Asked one", symbol: "plus", tint: Color.ink) { if asked < 20 { asked += 1; taps += 1 } }
                         .disabled(asked >= 20 || revealed)
                     GameUI.bigButton(revealed ? "New secret" : "Reveal", symbol: revealed ? "shuffle" : "eye", tint: Color.secondary) {
                         if revealed { secret = GamesLibrary.secretThings.randomElement()!; asked = 0; revealed = false }

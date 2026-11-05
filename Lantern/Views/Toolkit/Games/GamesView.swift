@@ -45,7 +45,7 @@ struct GamesView: View {
     private func row<D: View>(_ title: String, _ symbol: String, _ subtitle: String? = nil, @ViewBuilder destination: @escaping () -> D) -> some View {
         NavigationLink { destination() } label: {
             HStack(spacing: 12) {
-                Image(systemName: symbol).frame(width: 28).foregroundStyle(Color.accentColor)
+                Image(systemName: symbol).frame(width: 28).foregroundStyle(Color.ink)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
                     if let subtitle { Text(subtitle).font(.footnote).foregroundStyle(.secondary) }

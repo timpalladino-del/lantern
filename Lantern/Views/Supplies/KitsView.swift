@@ -35,7 +35,7 @@ struct KitsView: View {
         .navigationTitle("Kits")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showNew) { KitNewView() }
-        .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
+        .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.ink) }
     }
 
     private func addKit() {
@@ -112,7 +112,7 @@ struct KitNewView: View {
                                     Text("\(t.items.count) items · \(t.source)").font(.caption2).foregroundStyle(.tertiary)
                                 }
                                 Spacer()
-                                if selected?.key == t.key { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accentColor) }
+                                if selected?.key == t.key { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.ink) }
                             }
                         }
                     }
@@ -124,7 +124,7 @@ struct KitNewView: View {
                             Image(systemName: "bag").foregroundStyle(.secondary).frame(width: 28)
                             Text("Start empty").foregroundStyle(.primary)
                             Spacer()
-                            if selected == nil { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accentColor) }
+                            if selected == nil { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.ink) }
                         }
                     }
                 } header: { Text("Start from") }

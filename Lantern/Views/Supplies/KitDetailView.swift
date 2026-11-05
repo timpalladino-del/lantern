@@ -59,7 +59,7 @@ struct KitDetailView: View {
                             try? context.save()
                         } label: {
                             HStack {
-                                Image(systemName: "plus.circle").foregroundStyle(Color.accentColor)
+                                Image(systemName: "plus.circle").foregroundStyle(Color.ink)
                                 Text(line.name).foregroundStyle(.primary)
                                 Spacer()
                                 Text("\(Int(line.quantity)) \(line.unit)").font(.caption).foregroundStyle(.secondary)
@@ -106,7 +106,7 @@ struct KitPickItemsView: View {
                         ItemRow(item: item)
                         Spacer()
                         Image(systemName: chosen.contains(item.uuid) ? "checkmark.circle.fill" : "circle")
-                            .foregroundStyle(chosen.contains(item.uuid) ? Color.accentColor : Color.secondary)
+                            .foregroundStyle(chosen.contains(item.uuid) ? Color.ink : Color.secondary)
                     }
                 }
                 .foregroundStyle(.primary)

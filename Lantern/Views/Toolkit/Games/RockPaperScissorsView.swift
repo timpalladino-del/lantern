@@ -68,7 +68,7 @@ struct RockPaperScissorsView: View {
                         .frame(maxWidth: .infinity, minHeight: 72)
                     }
                     .buttonStyle(.bordered)
-                    .tint(mine == choice ? Color.accentColor : Color.secondary)
+                    .tint(mine == choice ? Color.ink : Color.secondary)
                 }
             }
             .gameContent()

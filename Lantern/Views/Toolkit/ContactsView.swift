@@ -72,7 +72,7 @@ struct ContactRow: View {
                 Link(destination: url) {
                     Text(contact.phone).font(.subheadline.weight(.semibold)).monospacedDigit()
                         .padding(.horizontal, 10).padding(.vertical, 6)
-                        .background(Color.accentColor.opacity(0.12), in: Capsule())
+                        .background(Color.ink.opacity(0.12), in: Capsule())
                 }
             }
         }

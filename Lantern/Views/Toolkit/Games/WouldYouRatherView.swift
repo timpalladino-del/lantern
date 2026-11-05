@@ -12,7 +12,7 @@ struct WouldYouRatherView: View {
     var body: some View {
         VStack(spacing: 20) {
             Text("Would you rather…").font(.title2.weight(.semibold)).padding(.top, 24)
-            choice(pair.0, votes: votesA, tint: Color.accentColor) { votesA += 1; taps += 1 }
+            choice(pair.0, votes: votesA, tint: Color.ink) { votesA += 1; taps += 1 }
             Text("or").foregroundStyle(.secondary)
             choice(pair.1, votes: votesB, tint: Color.moss) { votesB += 1; taps += 1 }
             Spacer()

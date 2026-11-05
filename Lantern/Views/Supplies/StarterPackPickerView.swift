@@ -31,7 +31,7 @@ struct StarterPackPickerView: View {
                                     Text("\(pack.items.count) items · \(pack.source)").font(.caption2).foregroundStyle(.tertiary)
                                 }
                                 Spacer()
-                                if selected?.key == pack.key { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.accentColor) }
+                                if selected?.key == pack.key { Image(systemName: "checkmark.circle.fill").foregroundStyle(Color.ink) }
                             }
                         }
                     }
@@ -44,7 +44,7 @@ struct StarterPackPickerView: View {
                 }
             }
             .navigationTitle("Starter packs")
-            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.ink) }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }

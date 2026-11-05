@@ -32,7 +32,7 @@ struct MemoryMatchView: View {
                     Button { flip(i) } label: {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
-                                .fill(t.matched ? Color.moss.opacity(0.25) : t.faceUp ? Color(uiColor: .secondarySystemGroupedBackground) : Color.accentColor.opacity(0.85))
+                                .fill(t.matched ? Color.moss.opacity(0.25) : t.faceUp ? Color(uiColor: .secondarySystemGroupedBackground) : Color.ink.opacity(0.85))
                             if t.faceUp || t.matched {
                                 Image(systemName: t.symbol).font(.title).foregroundStyle(Color.primary)
                                     .symbolEffect(.bounce, value: t.matched)

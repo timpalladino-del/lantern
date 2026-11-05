@@ -256,7 +256,7 @@ struct SuppliesListView: View {
             .tag(item.persistentModelID)
             .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                 Button { useOne(item) } label: { Label("Used 1", systemImage: "minus.circle") }
-                    .tint(Color.accentColor)
+                    .tint(Color.ink)
                 Button(role: .destructive) { context.delete(item); try? context.save() } label: { Label("Delete", systemImage: "trash") }
             }
             .swipeActions(edge: .leading) {

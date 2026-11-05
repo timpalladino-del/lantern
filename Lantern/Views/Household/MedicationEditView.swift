@@ -267,7 +267,7 @@ struct InstructionPicker: View {
                                     Label(ins.title, systemImage: ins.symbol).foregroundStyle(.primary)
                                     Spacer()
                                     if selected.contains(ins.rawValue) {
-                                        Image(systemName: "checkmark").foregroundStyle(Color.accentColor).fontWeight(.semibold)
+                                        Image(systemName: "checkmark").foregroundStyle(Color.ink).fontWeight(.semibold)
                                     }
                                 }
                             }

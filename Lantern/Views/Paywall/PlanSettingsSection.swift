@@ -19,6 +19,6 @@ struct PlanSettingsSection: View {
                  ? "Covers up to \(store.plan.maxPeople) people in your house. Shared with your Apple Family Sharing group."
                  : "Free covers one person and 50 items. Everything in the Toolkit is free on every plan.")
         }
-        .sheet(isPresented: $showPaywall) { PaywallView(reason: .plans).tint(Color.accentColor) }
+        .sheet(isPresented: $showPaywall) { PaywallView(reason: .plans).tint(Color.ink) }
     }
 }

@@ -115,7 +115,7 @@ struct PaywallView: View {
                 .padding(.vertical, 14)
             }
             .buttonStyle(.borderedProminent)
-            .tint(Color.accentColor)
+            .tint(Color.ink)
             .disabled(store.isWorking || offered.isEmpty)
 
             Text(store.trialEligible
@@ -193,12 +193,12 @@ private struct PlanCard: View {
                     Text("per year").font(.caption2).foregroundStyle(.secondary)
                 }
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(isSelected ? Color.accentColor : Color.secondary)
+                    .foregroundStyle(isSelected ? Color.ink : Color.secondary)
                     .padding(.leading, 6)
             }
             .padding(14)
             .background(RoundedRectangle(cornerRadius: 14).fill(Color(.secondarySystemGroupedBackground)))
-            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(isSelected ? Color.accentColor : Color.clear, lineWidth: 2))
+            .overlay(RoundedRectangle(cornerRadius: 14).strokeBorder(isSelected ? Color.ink : Color.clear, lineWidth: 2))
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
@@ -215,6 +215,6 @@ struct LockedRow: View {
         Button { showPaywall = true } label: {
             Label(title, systemImage: "lock.fill").foregroundStyle(.primary)
         }
-        .sheet(isPresented: $showPaywall) { PaywallView(reason: reason).tint(Color.accentColor) }
+        .sheet(isPresented: $showPaywall) { PaywallView(reason: reason).tint(Color.ink) }
     }
 }

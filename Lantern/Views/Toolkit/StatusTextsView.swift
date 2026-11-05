@@ -61,7 +61,7 @@ struct StatusTextsView: View {
                                     if !c.role.isEmpty { Text(c.role).font(.caption).foregroundStyle(.secondary) }
                                 }
                                 Spacer()
-                                Image(systemName: "message").foregroundStyle(Color.accentColor)
+                                Image(systemName: "message").foregroundStyle(Color.ink)
                             }
                         }
                     }

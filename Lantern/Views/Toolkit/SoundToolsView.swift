@@ -17,7 +17,7 @@ struct SoundToolsView: View {
                         .frame(maxWidth: .infinity, minHeight: 56)
                 }
                 .buttonStyle(.borderedProminent)
-                .tint(alarmOn ? Color.ember : Color.accentColor)
+                .tint(alarmOn ? Color.ember : Color.ink)
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets())
             } header: { Text("Attention") } footer: {

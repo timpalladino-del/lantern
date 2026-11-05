@@ -13,19 +13,19 @@ struct FourInARowView: View {
     }
 
     private func color(_ p: FourInARow.Piece?) -> Color {
-        switch p { case .a: return Color.accentColor; case .b: return Color.moss; case nil: return Color(uiColor: .tertiarySystemFill) }
+        switch p { case .a: return Color.ink; case .b: return Color.moss; case nil: return Color(uiColor: .tertiarySystemFill) }
     }
 
     var body: some View {
         VStack(spacing: 18) {
             if let w = game.winner {
-                GameUI.outcome(w == .a ? "Blue wins" : "Green wins", symbol: "star.fill", tint: w == .a ? Color.accentColor : Color.moss).padding(.top, 20)
+                GameUI.outcome(w == .a ? "Blue wins" : "Green wins", symbol: "star.fill", tint: w == .a ? Color.ink : Color.moss).padding(.top, 20)
             } else {
                 Text(status).font(.title2.weight(.bold)).padding(.top, 20).contentTransition(.numericText())
             }
 
             GeometryReader { geo in
-                let cell = min(geo.size.width / CGFloat(FourInARow.columns), geo.size.height / CGFloat(FourInARow.rows + 1))
+                let cell = min(geo.size.width / CGFloat(FourInARow.columns), geo.size.height / (CGFloat(FourInARow.rows) + 0.7))
                 let winning = game.winningCells?.cells ?? []
                 VStack(spacing: 0) {
                     HStack(spacing: 0) {
@@ -38,6 +38,7 @@ struct FourInARowView: View {
                                     .foregroundStyle(game.canDrop(c) ? color(game.turn) : Color.clear)
                                     .frame(width: cell, height: cell * 0.7)
                             }
+                            .buttonStyle(.plain)   // never a pill, even with Button Shapes on
                             .disabled(!game.canDrop(c))
                             .accessibilityLabel("Drop in column \(c + 1)")
                         }
@@ -53,7 +54,7 @@ struct FourInARowView: View {
                     }
                 }
                 .background(Color(uiColor: .secondarySystemGroupedBackground), in: RoundedRectangle(cornerRadius: 14))
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
             .frame(height: 360)
             .gameContent()
@@ -61,7 +62,7 @@ struct FourInARowView: View {
             .sensoryFeedback(.impact(weight: .medium), trigger: drops)
 
             HStack(spacing: 28) {
-                stat("Blue", scoreA, Color.accentColor); stat("Green", scoreB, Color.moss)
+                stat("Blue", scoreA, Color.ink); stat("Green", scoreB, Color.moss)
             }
             GameUI.bigButton(game.winner != nil || game.isFull ? "Play again" : "Start over", symbol: "arrow.counterclockwise") {
                 var next = FourInARow()

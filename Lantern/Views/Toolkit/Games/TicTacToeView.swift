@@ -34,7 +34,7 @@ struct TicTacToeView: View {
                             .overlay(
                                 Text(game.cells[i]?.rawValue ?? "")
                                     .font(.system(size: 48, weight: .bold, design: .rounded))
-                                    .foregroundStyle(game.cells[i] == .x ? Color.accentColor : Color.primary)
+                                    .foregroundStyle(game.cells[i] == .x ? Color.ink : Color.primary)
                             )
                     }
                     .buttonStyle(.plain)

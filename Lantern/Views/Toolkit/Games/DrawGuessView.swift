@@ -58,6 +58,7 @@ struct DrawGuessView: View {
                 Button { _ = strokes.popLast() } label: { Label("Undo", systemImage: "arrow.uturn.backward") }.disabled(strokes.isEmpty)
                 Button { strokes = [] } label: { Label("Clear", systemImage: "trash") }.disabled(strokes.isEmpty)
             }
+            .buttonStyle(.bordered)
             .labelStyle(.iconOnly).font(.title3)
             .padding(.horizontal)
 

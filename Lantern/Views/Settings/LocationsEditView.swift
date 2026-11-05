@@ -40,7 +40,7 @@ struct LocationsEditView: View {
                     .swipeActions {
                         Button(role: .destructive) { context.delete(loc); try? context.save() } label: { Label("Delete", systemImage: "trash") }
                         Button { renaming = loc; renameText = loc.name } label: { Label("Rename", systemImage: "pencil") }
-                        Button { addingTo = loc } label: { Label("Add supply", systemImage: "plus") }.tint(Color.accentColor)
+                        Button { addingTo = loc } label: { Label("Add supply", systemImage: "plus") }.tint(Color.ink)
                     }
                 }
                 .onMove { from, to in

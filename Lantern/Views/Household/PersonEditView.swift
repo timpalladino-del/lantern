@@ -372,7 +372,7 @@ struct MultiPickSheet: View {
                                     Label(title, systemImage: symbol)
                                     Spacer()
                                     if selection.contains(key) {
-                                        Image(systemName: "checkmark").foregroundStyle(Color.accentColor).fontWeight(.semibold)
+                                        Image(systemName: "checkmark").foregroundStyle(Color.ink).fontWeight(.semibold)
                                     }
                                 }
                             }

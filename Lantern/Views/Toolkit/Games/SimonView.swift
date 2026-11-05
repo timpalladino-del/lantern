@@ -10,7 +10,7 @@ struct SimonView: View {
     @State private var presses = 0
     @State private var best: Int = UserDefaults.standard.integer(forKey: "games.simonBest")
 
-    private let colors: [Color] = [Color.accentColor, Color.moss, Color.signal, Color.primary]
+    private let colors: [Color] = [Color.ink, Color.moss, Color.signal, Color.primary]
     private let names = ["blue", "green", "red", "dark"]
 
     var body: some View {

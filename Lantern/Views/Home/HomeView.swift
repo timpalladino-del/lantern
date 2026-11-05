@@ -69,7 +69,7 @@ struct HomeView: View {
             .sheet(isPresented: $showScanner) { ScanSheet() }
             .sheet(isPresented: $showAdd) { ItemEditView() }
             .sheet(isPresented: $showShopping) { ShoppingListView() }
-            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.accentColor) }
+            .sheet(item: $paywall) { PaywallView(reason: $0).tint(Color.ink) }
             .sheet(item: $editingPerson) { p in
                 if let h = households.first { PersonEditView(household: h, person: p) }
             }

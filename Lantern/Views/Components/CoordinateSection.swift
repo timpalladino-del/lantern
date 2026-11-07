@@ -34,7 +34,7 @@ struct CoordinateSection: View {
                     }
                 }
                 HStack(spacing: 10) {
-                    Link(destination: p.mapsURL) { Label("Open in Maps", systemImage: "map") }
+                    Link(destination: p.mapsURL) { Label("Maps", systemImage: "map") }
                         .buttonStyle(.bordered)
                     Link(destination: p.directionsURL) { Label("Directions", systemImage: "arrow.triangle.turn.up.right.diamond") }
                         .buttonStyle(.bordered)

@@ -21,7 +21,7 @@ struct RootView: View {
     @State private var screenshotSheet: ScreenshotSheet?
 
     enum ScreenshotSheet: String, Identifiable {
-        case outage, kit, medcard, plan, household, person, item, games, texts, settings
+        case outage, kit, medcard, plan, household, person, item, games, texts, settings, scan, locations, locationedit
         case headsup, trivia, hangman, fourinarow, tictactoe, draw, wyr, twenty, story, hunt, puppets, memory, simon, first, rps, rps2, number, dice
         var id: String { rawValue }
     }
@@ -96,6 +96,10 @@ struct RootView: View {
                         ItemDetailView(item: it)
                     }
                 case .settings: SettingsView()
+                case .scan: ScanSheet()
+                case .locations: LocationsEditView()
+                case .locationedit:
+                    if let loc = (try? context.fetch(FetchDescriptor<StorageLocation>()))?.first(where: { $0.name == "Mom's garage" }) { LocationEditView(location: loc) }
                 case .games: GamesView()
                 case .texts: StatusTextsView()
                 case .headsup: WordRoundView(mode: .headsUp)

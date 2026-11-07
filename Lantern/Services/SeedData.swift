@@ -75,6 +75,19 @@ extension SeedData {
         }()
         household.targetDays = 14
 
+        // Locations with directions, and one away from home with an address and coordinates.
+        let locs = (try? context.fetch(FetchDescriptor<StorageLocation>())) ?? []
+        locs.first { $0.name == "Basement or garage shelf" }?.notes = "Metal shelf by the water heater, top two shelves"
+        locs.first { $0.name == "Kitchen pantry" }?.notes = "Right of the fridge, bottom shelf is the storm shelf"
+        locs.first { $0.name == "Go-bag" }?.notes = "Hall closet, the orange backpack"
+        if !locs.contains(where: { $0.name == "Mom's garage" }) {
+            let away = StorageLocation(name: "Mom's garage", symbol: "door.garage.closed", sortOrder: locs.count)
+            away.notes = "Shelf behind the freezer. Spare key under the frog."
+            away.address = "412 Lakeview Dr, Winter Park"
+            away.latitude = 28.5997; away.longitude = -81.3393
+            context.insert(away)
+        }
+
         let tim = Person(name: "Tim", age: 44, weightKg: 86, heightCm: 180, sex: .male, activity: .light)
         let maria = Person(name: "Maria", age: 42, weightKg: 68, heightCm: 165, sex: .female, activity: .light)
         maria.allergies = "Penicillin"
@@ -114,6 +127,8 @@ extension SeedData {
 
         let plan = (try? context.fetch(FetchDescriptor<HouseholdPlan>()))?.first ?? { let p = HouseholdPlan(); context.insert(p); return p }()
         plan.meetNearHome = "The mailbox at the end of the driveway"
+        plan.meetNearHomeLatitude = 28.5386; plan.meetNearHomeLongitude = -81.3796
+        plan.meetOutsideLatitude = 28.5424; plan.meetOutsideLongitude = -81.3730
         plan.meetOutsideNeighborhood = "Library parking lot on Main"
         plan.outOfTownContact = "Aunt Pat in Ohio, (614) 555-0133"
         plan.petsPlan = "Carrier in the hall closet. Leo grabs Biscuit."

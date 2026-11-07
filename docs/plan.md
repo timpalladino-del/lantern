@@ -803,3 +803,20 @@ Tier 3: large, or a product decision
 - Sharing (medication card, profile links, status texts) moves health data off the device by user action; confirm before sending and say so in the privacy policy.
 - SOS strobe: no photosensitivity warning exists in the Toolkit today. Add one.
 - Ready.gov pages carry a notice that content is being updated under 2025 executive orders; recheck wording before quoting.
+
+## 28. Build 12 (November 7, 2026, for 1.0.1)
+
+Built from the research in section 27. Everything is additive; no new permission beyond Background App Refresh.
+
+- Expiry reminders for every supply category, not just medicine, baby and water. Items due the same morning fold into one notification; iOS keeps about 64 pending, so item reminders stop at 40 distinct mornings. Per-category switches in Settings, Reminders. `NotificationScheduler.reminderText` and `leadDays(for:)` are the testable pieces.
+- Weakest-link line under the Home tiles: "Water runs out first, in 6.1 days. Start there." or "Everything covers your 14-day target." `ReadinessReport.weakestLink`.
+- Cash gap: no item in the Cash category with quantity produces a gap and a shopping line.
+- Medications marked "Keep refrigerated" show on the outage screen beside the fridge clock, linking to a new card. Pharmacy and Rx number already existed; the edit form now explains why they matter.
+- Pet records: microchip and registry, vet and phone, vaccination photo, carrier location, caregiver, pet-friendly places. `Pet.planLine` prints on the plan PDF.
+- Car kit template gains cash and a paper phone list; outage basics gains stabilized gasoline with two new shelf-life entries (plain gas 30 days opened, stabilized a year).
+- Know-how cards: wildfire smoke and a clean room (EPA 2026), refrigerated medicine in an outage (CDC, FDA). The alerts card now covers county opt-in alerts, utility outage texts and medical programs.
+- Flashing light notice, shown once, before SOS, slow blink or the flashing screen.
+- Weather alerts. `AlertPlace` (ZIP geocoded once through CLGeocoder, or the phone's location), `NWSClient` (api.weather.gov active alerts by point, status actual, no key), `WeatherAlertStore` (UserDefaults, seen ids so a notification fires once, minimum severity default Severe), `WeatherRefreshTask` (BGAppRefreshTask `io.kismetstudio.lantern.weather`, scheduled when the app goes to background, cancelled when no places). Home banner at the top when anything is in effect; Settings, Weather; Signals row. Launch args `-weatherdemo`, `-screenshot weather|weatheradd|light|pet|reminders`. Verified live against a real High Wind Watch for Great Falls, MT.
+- Honest limits, stated in the UI: iOS decides when background refresh runs, usually a few times a day. Wireless Emergency Alerts and a weather radio remain the fastest warning. United States only. A true push-based early warning needs a server and APNs; that is a later decision.
+- Privacy page updated on the site (main and lantern-live): weather coordinates leave the phone; saved coordinates on places and spots.
+- Tests: 97 pass (10 new: reminder text, muted categories, cash gap, weakest link, NWS parsing, severity, diffing, ZIP validation, store persistence).

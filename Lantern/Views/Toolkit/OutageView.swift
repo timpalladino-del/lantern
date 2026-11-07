@@ -12,6 +12,10 @@ struct OutageView: View {
     @AppStorage(AppSettings.checkInHours) private var checkInHours = 4
 
     private var active: OutageEvent? { outages.first { $0.isActive } }
+    /// Medications marked "Keep refrigerated" under any person. Shown beside the fridge clock.
+    private var refrigeratedMedications: [Medication] {
+        (households.first?.sortedPeople ?? []).flatMap(\.medications).filter { $0.instructions.contains(.refrigerate) }
+    }
     private let library = KnowHowLibrary.shared
 
     var body: some View {
@@ -73,6 +77,19 @@ struct OutageView: View {
             Stepper("Fridge opened \(o.fridgeOpenedCount) time\(o.fridgeOpenedCount == 1 ? "" : "s")", value: Binding(get: { o.fridgeOpenedCount }, set: { o.fridgeOpenedCount = $0; try? context.save() }), in: 0...50)
             if o.fridgeOpenedCount >= 3 {
                 Text("Every opening lets the cold out. Treat the fridge window as shorter than 4 hours.").font(.footnote).foregroundStyle(Color.ember)
+            }
+            let cold = refrigeratedMedications
+            if !cold.isEmpty {
+                NavigationLink {
+                    if let card = library.card("refrigerated_meds") { KnowHowCardView(card: card) }
+                } label: {
+                    Label {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("In the fridge: \(cold.map { m in m.person.map { "\(m.name) (\($0.name))" } ?? m.name }.joined(separator: ", "))")
+                            Text("Most keep for days at room temperature in a cooler, away from ice. Check the label or call the pharmacy.").font(.footnote).foregroundStyle(.secondary)
+                        }
+                    } icon: { Image(systemName: "pills.fill").foregroundStyle(Color.ink) }
+                }
             }
         } header: { Text("Food clocks") } footer: {
             Text("USDA: fridge about 4 hours unopened; full freezer about 48 hours, half-full about 24. Never taste to check.")

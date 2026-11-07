@@ -6,6 +6,7 @@ struct LanternApp: App {
     let container: ModelContainer
 
     init() {
+        WeatherRefreshTask.register()
         do {
             container = try AppSchema.container()
         } catch {

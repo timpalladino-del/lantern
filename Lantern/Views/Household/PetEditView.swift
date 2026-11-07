@@ -16,6 +16,15 @@ struct PetEditView: View {
     @State private var cans: Double?
     @State private var foodBrand: String
     @State private var prescriptionDiet: Bool
+    @State private var microchip: String
+    @State private var microchipRegistry: String
+    @State private var vet: String
+    @State private var vetPhone: String
+    @State private var carrierLocation: String
+    @State private var caregiverName: String
+    @State private var caregiverPhone: String
+    @State private var lodgingNotes: String
+    @State private var vaccinationPhoto: Data?
 
     init(household: Household, pet: Pet? = nil) {
         self.household = household
@@ -29,6 +38,15 @@ struct PetEditView: View {
         _cans = State(initialValue: pet?.foodCansPerDay)
         _foodBrand = State(initialValue: pet?.foodBrand ?? "")
         _prescriptionDiet = State(initialValue: pet?.prescriptionDiet ?? false)
+        _microchip = State(initialValue: pet?.microchip ?? "")
+        _microchipRegistry = State(initialValue: pet?.microchipRegistry ?? "")
+        _vet = State(initialValue: pet?.vet ?? "")
+        _vetPhone = State(initialValue: pet?.vetPhone ?? "")
+        _carrierLocation = State(initialValue: pet?.carrierLocation ?? "")
+        _caregiverName = State(initialValue: pet?.caregiverName ?? "")
+        _caregiverPhone = State(initialValue: pet?.caregiverPhone ?? "")
+        _lodgingNotes = State(initialValue: pet?.lodgingNotes ?? "")
+        _vaccinationPhoto = State(initialValue: pet?.vaccinationPhotoData)
     }
 
     private var previewKcal: Double {
@@ -73,9 +91,29 @@ struct PetEditView: View {
                          ? "A cup of dry food is about 350 calories, a 13 oz can about 400. Pet food in Supplies is counted against this."
                          : "Estimated from weight until you enter cups or cans. Pet food in Supplies is counted against this.")
                 }
+                Section {
+                    TextField("Microchip number", text: $microchip).keyboardType(.numbersAndPunctuation)
+                    TextField("Registered with (HomeAgain, AKC Reunite)", text: $microchipRegistry)
+                    TextField("Vet", text: $vet)
+                    TextField("Vet phone", text: $vetPhone).keyboardType(.phonePad)
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Vaccination record").font(.subheadline)
+                        PhotoPickerButton(photoData: $vaccinationPhoto)
+                    }
+                } header: { Text("Records") } footer: {
+                    Text("Shelters that take pets ask for current vaccination records. Check that the chip registry has your current phone number; most do not.")
+                }
+                Section {
+                    TextField("Carrier or crate: where it is", text: $carrierLocation, axis: .vertical)
+                    TextField("Who takes \(name.isEmpty ? "them" : name) if we can't", text: $caregiverName)
+                    TextField("Their phone", text: $caregiverPhone).keyboardType(.phonePad)
+                    TextField("Pet-friendly places we could go", text: $lodgingNotes, axis: .vertical).lineLimit(2...4)
+                } header: { Text("If we have to leave") } footer: {
+                    Text("Pet-friendly rooms fill within hours of a warning. Pick two now and write them here. A photo of you with \(name.isEmpty ? "your pet" : name) proves ownership if you are separated.")
+                }
                 Section("Notes") {
                     TextField("Medications", text: $medications, axis: .vertical)
-                    TextField("Vet, microchip, food brand, carrier location", text: $notes, axis: .vertical).lineLimit(2...4)
+                    TextField("Anything else: habits, fears, food allergies", text: $notes, axis: .vertical).lineLimit(2...4)
                 }
             }
             .navigationTitle(existing == nil ? "Add a pet" : "Edit pet")
@@ -100,6 +138,15 @@ struct PetEditView: View {
         p.foodCansPerDay = cans
         p.foodBrand = foodBrand
         p.prescriptionDiet = prescriptionDiet
+        p.microchip = microchip.trimmingCharacters(in: .whitespaces)
+        p.microchipRegistry = microchipRegistry
+        p.vet = vet
+        p.vetPhone = vetPhone
+        p.carrierLocation = carrierLocation
+        p.caregiverName = caregiverName
+        p.caregiverPhone = caregiverPhone
+        p.lodgingNotes = lodgingNotes
+        p.vaccinationPhotoData = vaccinationPhoto
         if existing == nil {
             p.household = household
             context.insert(p)

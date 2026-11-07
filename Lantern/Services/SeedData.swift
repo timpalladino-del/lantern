@@ -114,6 +114,10 @@ extension SeedData {
         metformin.pharmacy = "CVS, Main St"; metformin.pharmacyPhone = "(305) 555-0199"; metformin.rxNumber = "7731904"
         metformin.remindersEnabled = true
         metformin.person = maria; context.insert(metformin)
+        let insulin = Medication(name: "Insulin glargine", dose: "20 units", dosesPerDay: 1, unitsPerDose: 20, unitsOnHand: 600, isCritical: true)
+        insulin.formRaw = MedicationForm.injection.rawValue; insulin.purpose = "Type 2 diabetes"; insulin.scheduleMinutes = [21 * 60]
+        insulin.instructionKeys = ["refrigerate", "sameTimeDaily", "lowSugar"]; insulin.pharmacy = "CVS, Main St"; insulin.pharmacyPhone = "(407) 555-0190"; insulin.rxNumber = "1184402"
+        insulin.person = maria; context.insert(insulin)
         let lisinopril = Medication(name: "Lisinopril", dose: "10 mg", dosesPerDay: 1, unitsPerDose: 1, unitsOnHand: 9, isCritical: true)
         lisinopril.purpose = "Blood pressure"; lisinopril.scheduleMinutes = [8 * 60]
         lisinopril.instructionKeys = ["sameTimeDaily", "noNSAIDs"]; lisinopril.prescriber = "Dr. Alvarez"; lisinopril.pharmacy = "CVS, Main St"
@@ -123,6 +127,11 @@ extension SeedData {
         inhaler.person = leo; context.insert(inhaler)
 
         let biscuit = Pet(name: "Biscuit", species: .dog, weightKg: 24)
+        biscuit.microchip = "985112003456789"; biscuit.microchipRegistry = "HomeAgain"
+        biscuit.vet = "Dr. Ruiz, Lake Eola Animal Hospital"; biscuit.vetPhone = "(407) 555-0101"
+        biscuit.carrierLocation = "Hall closet, top shelf"
+        biscuit.caregiverName = "Aunt Pat"; biscuit.caregiverPhone = "(614) 555-0133"
+        biscuit.lodgingNotes = "La Quinta on I-4 takes dogs; Pat's house in Ohio"
         biscuit.household = household; context.insert(biscuit)
 
         let plan = (try? context.fetch(FetchDescriptor<HouseholdPlan>()))?.first ?? { let p = HouseholdPlan(); context.insert(p); return p }()

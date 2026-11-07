@@ -5,6 +5,7 @@ struct PlanView: View {
     @Environment(\.modelContext) private var context
     @Query private var plans: [HouseholdPlan]
     @Query(sort: \EmergencyContact.sortOrder) private var contacts: [EmergencyContact]
+    @Query(sort: \Pet.createdAt) private var pets: [Pet]
     @State private var shareFile: ShareableFile?
 
     var body: some View {
@@ -26,7 +27,7 @@ struct PlanView: View {
                 "Near home: \(p.meetNearHome)" + (p.meetNearHomePoint.map { " (\($0.text), \($0.dms))" } ?? ""),
                 "Outside the neighborhood: \(p.meetOutsideNeighborhood)" + (p.meetOutsidePoint.map { " (\($0.text), \($0.dms))" } ?? ""),
                 "Out-of-town contact: \(p.outOfTownContact)"]),
-            .init(heading: "People and pets", lines: ["Kids: \(p.kidsPlan)", "Pets: \(p.petsPlan)", "Medical: \(p.medicalNotes)", "Documents: \(p.documentsLocation)"]),
+            .init(heading: "People and pets", lines: ["Kids: \(p.kidsPlan)", "Pets: \(p.petsPlan)"] + pets.map(\.planLine) + ["Medical: \(p.medicalNotes)", "Documents: \(p.documentsLocation)"]),
             .init(heading: "Shutoffs", lines: ["Gas: \(p.gasShutoffNote)", "Water: \(p.waterShutoffNote)", "Electrical panel: \(p.electricPanelNote)"]),
             .init(heading: "Weather radio", lines: [p.noaaStation.isEmpty ? "" : "Station: \(p.noaaStation)"]),
             .init(heading: "Who checks on us", lines: p.trustedContacts.map { "\($0.name): \($0.phone)" }),

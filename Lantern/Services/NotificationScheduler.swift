@@ -2,7 +2,7 @@ import Foundation
 import UserNotifications
 
 /// Local notifications only. Scheduled by iOS, so they fire with no network and no server.
-/// Default is one weekly digest. Per-item pings are reserved for medicine, water rotation and equipment.
+/// One weekly digest, plus one reminder the morning something is about to expire (same-day items fold together).
 @MainActor
 final class NotificationScheduler {
     static let shared = NotificationScheduler()
@@ -28,6 +28,7 @@ final class NotificationScheduler {
                     medications: [Medication] = [],
                     digestWeekday: Int,
                     digestHour: Int,
+                    mutedCategories: Set<SupplyCategory> = NotificationScheduler.mutedCategories(),
                     now: Date = Date()) async {
         let center = UNUserNotificationCenter.current()
         center.removeAllPendingNotificationRequests()
@@ -53,22 +54,28 @@ final class NotificationScheduler {
         let trigger = UNCalendarNotificationTrigger(dateMatching: comps, repeats: true)
         try? await center.add(UNNotificationRequest(identifier: NotificationScheduler.digestIdentifier, content: digest, trigger: trigger))
 
-        // Per-item: medicine, baby items, and water rotation only.
-        for item in items where [.medicine, .baby, .water].contains(item.category) {
+        // Per-item reminders for every category the user left on. Everything due the same morning
+        // folds into one notification, so a big pantry never turns into a stream of pings.
+        var byDay: [Date: [SupplyItem]] = [:]
+        for item in items where item.quantity > 0 && !mutedCategories.contains(item.category) {
             guard let exp = item.expirationDate, exp > now else { continue }
-            let leadDays = item.category == .water ? 7 : 14
-            guard let fire = Calendar.current.date(byAdding: .day, value: -leadDays, to: exp), fire > now else { continue }
+            let lead = NotificationScheduler.leadDays(for: item.category)
+            guard let fire = Calendar.current.date(byAdding: .day, value: -lead, to: exp), fire > now else { continue }
+            byDay[Calendar.current.startOfDay(for: fire), default: []].append(item)
+        }
+        for (day, group) in byDay.sorted(by: { $0.key < $1.key }).prefix(NotificationScheduler.maxReminderDays) {
+            let sorted = group.sorted { ($0.expirationDate ?? now) < ($1.expirationDate ?? now) }
+            let text = NotificationScheduler.reminderText(names: sorted.map(\.name),
+                                                          categories: sorted.map(\.category),
+                                                          firstExpiry: sorted.first?.expirationDate)
             let content = UNMutableNotificationContent()
-            content.title = item.category == .water ? "Time to rotate water" : "\(item.name) is due soon"
-            content.body = item.category == .water
-                ? "\(item.name) was filled or bought a while ago. Refill or replace it this week."
-                : "Expires \(exp.formatted(date: .abbreviated, time: .omitted)). Check it and restock if needed."
+            content.title = text.title
+            content.body = text.body
             content.sound = .default
-            let fireComps = Calendar.current.dateComponents([.year, .month, .day], from: fire)
-            var at = fireComps
+            var at = Calendar.current.dateComponents([.year, .month, .day], from: day)
             at.hour = digestHour
             let t = UNCalendarNotificationTrigger(dateMatching: at, repeats: false)
-            try? await center.add(UNNotificationRequest(identifier: "item-\(item.uuid.uuidString)", content: content, trigger: t))
+            try? await center.add(UNNotificationRequest(identifier: "items-\(Int(day.timeIntervalSince1970))", content: content, trigger: t))
         }
 
         // Equipment tasks: one notification on the due day. Part of Family; Free sees due dates in the app only.
@@ -84,6 +91,48 @@ final class NotificationScheduler {
             let t = UNCalendarNotificationTrigger(dateMatching: at, repeats: false)
             try? await center.add(UNNotificationRequest(identifier: "task-\(task.uuid.uuidString)", content: content, trigger: t))
         }
+    }
+
+    // MARK: Per-item reminder rules
+
+    /// iOS keeps about 64 pending notifications. The digest, dose reminders and equipment checks share
+    /// that budget, so item reminders stop at this many distinct mornings.
+    nonisolated static let maxReminderDays = 40
+
+    /// How far ahead the reminder lands. Water is a rotation, not a cliff, so a week is plenty.
+    nonisolated static func leadDays(for category: SupplyCategory) -> Int {
+        switch category {
+        case .water: return 7
+        default: return 14
+        }
+    }
+
+    /// Categories the user switched off in Settings. Stored as raw values joined by commas.
+    nonisolated static func mutedCategories(defaults: UserDefaults = .standard) -> Set<SupplyCategory> {
+        let raw = defaults.string(forKey: AppSettings.reminderMutedCategories) ?? ""
+        return Set(raw.split(separator: ",").compactMap { SupplyCategory(rawValue: String($0)) })
+    }
+
+    nonisolated static func setMutedCategories(_ set: Set<SupplyCategory>, defaults: UserDefaults = .standard) {
+        defaults.set(set.map(\.rawValue).sorted().joined(separator: ","), forKey: AppSettings.reminderMutedCategories)
+    }
+
+    /// One notification's words for everything due the same morning.
+    nonisolated static func reminderText(names: [String], categories: [SupplyCategory], firstExpiry: Date?) -> (title: String, body: String) {
+        let when = firstExpiry.map { $0.formatted(date: .abbreviated, time: .omitted) }
+        if names.count == 1, let name = names.first {
+            if categories.first == .water {
+                return ("Time to rotate water", "\(name) was filled or bought a while ago. Refill or replace it this week.")
+            }
+            return ("\(name) is due soon", when.map { "Expires \($0). Check it and restock if needed." } ?? "Check it and restock if needed.")
+        }
+        if categories.allSatisfy({ $0 == .water }) {
+            return ("Time to rotate water", "\(names.count) containers are due. Refill or replace them this week.")
+        }
+        let shown = names.prefix(3).joined(separator: ", ")
+        let rest = names.count - min(3, names.count)
+        let list = rest > 0 ? "\(shown) and \(rest) more" : shown
+        return ("\(names.count) supplies due soon", "\(list). Use them first or restock.")
     }
 
     static let medicationPrefix = "med-"

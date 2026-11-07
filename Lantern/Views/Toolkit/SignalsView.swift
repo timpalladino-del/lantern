@@ -16,6 +16,9 @@ struct SignalsView: View {
                     if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
                 } label: { Label("Open Settings", systemImage: "gear") }
                 Text("In Settings, go to Notifications and scroll to the bottom for Government Alerts.").font(.footnote).foregroundStyle(.secondary)
+                NavigationLink { WeatherAlertsView() } label: {
+                    Label("Weather alerts for the places you save", systemImage: "cloud.bolt.rain.fill")
+                }
             } header: { Text("Phone alerts") }
 
             Section {

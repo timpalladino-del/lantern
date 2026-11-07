@@ -44,6 +44,38 @@ struct ReadinessReport: Equatable {
     let infantCount: Int
 
     let gaps: [Gap]
+    /// True when at least one item in the Cash category is on hand.
+    var hasCash: Bool = true
+
+    /// The one line that runs out first, or nil when nothing is tracked.
+    struct WeakestLink: Equatable {
+        let title: String
+        let days: Double
+    }
+
+    /// Food, water, each medication and pet food compared on days. Only lines with something to measure count.
+    var weakestLink: WeakestLink? {
+        var lines: [WeakestLink] = []
+        if people > 0 {
+            lines.append(.init(title: "Food", days: foodDays))
+            lines.append(.init(title: "Water", days: waterDays))
+        }
+        for m in medications {
+            if let d = m.daysOfSupply { lines.append(.init(title: m.name, days: d)) }
+        }
+        if petFoodKcalPerDay > 0 { lines.append(.init(title: "Pet food", days: petFoodDays)) }
+        return lines.min { $0.days < $1.days }
+    }
+
+    /// "Water runs out first, in 4 days." or "Everything covers your 14-day target." Nil when nothing is tracked.
+    var weakestLinkLine: String? {
+        guard let w = weakestLink else { return nil }
+        if w.days >= Double(targetDays) {
+            return "Everything covers your \(targetDays)-day target. \(w.title) is the closest line."
+        }
+        let when = w.days < 1 ? "today" : "in \(ReadinessCalculator.formatDays(w.days))"
+        return "\(w.title) runs out first, \(when). Start there."
+    }
 
     static let litersPerPersonPerDay: Double = 3.785   // 1 US gallon, CDC/Ready.gov
 
@@ -162,6 +194,18 @@ enum ReadinessCalculator {
                 shoppingUnit: CommonUnit.kit.rawValue))
         }
 
+        // Cash. Cards and ATMs fail with the power; stores go cash-only within hours.
+        let hasCash = usable.contains { $0.category == .cash && $0.quantity > 0 }
+        if !hasCash, people > 0 {
+            gaps.append(.init(
+                id: "cash",
+                title: "No cash set aside",
+                detail: "Card readers and ATMs stop with the power. Keep small bills for a few days of fuel, groceries and ice, and log it under Cash.",
+                shoppingName: "Cash in small bills",
+                shoppingQuantity: 1,
+                shoppingUnit: CommonUnit.each.rawValue))
+        }
+
         // Pet food
         let petKcalPerDay = household.petList.reduce(0.0) { $0 + $1.foodKcalPerDay }
         let petFood = usable.reduce(0.0) { $0 + $1.totalPetFoodCalories }
@@ -183,6 +227,7 @@ enum ReadinessCalculator {
             medications: medStatuses, medicineItemsNeedingAttention: medicineAttention,
             itemsNeedingAttention: attention, tasksDue: due, infantCount: infants,
             gaps: gaps)
+        report.hasCash = hasCash
         report.petFoodKcalPerDay = petKcalPerDay
         report.petFoodCalories = petFood
         report.petFoodDays = petFoodDays

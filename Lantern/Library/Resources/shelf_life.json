@@ -1,5 +1,5 @@
 {
- "version": 1,
+ "version": 2,
  "note": "Days are quality guidelines, not safety limits, except where requiresPrintedDate is true. Deep storage assumes cool (below 75F), dry, dark, oxygen-free packaging. Sources are listed per entry. kcalPerUnit is a typical package figure from USDA FoodData Central, rounded; the label on the actual package is better.",
  "entries": [
   {
@@ -1445,6 +1445,37 @@
    "indefinite": true,
    "note": "Keep small bills. Card readers and ATMs fail in outages.",
    "source": "Ready.gov Build a Kit"
+  },
+  {
+   "key": "gasoline_stabilized",
+   "name": "Gasoline (with stabilizer)",
+   "category": "tools",
+   "keywords": [
+    "gasoline",
+    "gas can",
+    "fuel",
+    "petrol",
+    "generator fuel"
+   ],
+   "unopenedDays": 365,
+   "openedDays": 365,
+   "note": "Plain gasoline starts to degrade in about 30 days; a stabilizer stretches it to a year. Rotate it into the car, store it outside the house, never near the generator exhaust.",
+   "source": "STA-BIL and generator maker guidance"
+  },
+  {
+   "key": "gasoline_plain",
+   "name": "Gasoline (no stabilizer)",
+   "category": "tools",
+   "keywords": [
+    "gasoline",
+    "gas can",
+    "fuel",
+    "petrol"
+   ],
+   "unopenedDays": 90,
+   "openedDays": 30,
+   "note": "Fresh gasoline keeps about 3 months sealed, 30 days once opened. Old gas is why a generator dies ten minutes into an outage.",
+   "source": "Generator maker guidance (Honda, Generac)"
   }
  ]
 }

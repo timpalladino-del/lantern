@@ -21,7 +21,7 @@ struct RootView: View {
     @State private var screenshotSheet: ScreenshotSheet?
 
     enum ScreenshotSheet: String, Identifiable {
-        case outage, kit, medcard, plan, household, person, item, games, texts, settings, scan, locations, locationedit
+        case outage, kit, medcard, plan, household, person, item, games, texts, settings, scan, locations, locationedit, weather, weatheradd, light, pet, reminders
         case headsup, trivia, hangman, fourinarow, tictactoe, draw, wyr, twenty, story, hunt, puppets, memory, simon, first, rps, rps2, number, dice
         var id: String { rawValue }
     }
@@ -101,6 +101,12 @@ struct RootView: View {
                 case .locationedit:
                     if let loc = (try? context.fetch(FetchDescriptor<StorageLocation>()))?.first(where: { $0.name == "Mom's garage" }) { LocationEditView(location: loc) }
                 case .games: GamesView()
+                case .weather: WeatherAlertsView()
+                case .weatheradd: AddAlertPlaceView()
+                case .light: LightToolsView()
+                case .pet:
+                    if let h = households.first, let pet = h.petList.first { PetEditView(household: h, pet: pet) }
+                case .reminders: ReminderCategoriesView {}
                 case .texts: StatusTextsView()
                 case .headsup: WordRoundView(mode: .headsUp)
                 case .trivia: TriviaView()
@@ -129,6 +135,7 @@ struct RootView: View {
         }
         .task { openScreenshotRoute() }
         .onChange(of: scenePhase) { _, phase in
+            if phase == .background { WeatherRefreshTask.schedule() }
             guard phase == .background, notificationsEnabled else { return }
             let snapshotItems = items
             let snapshotTasks = tasks

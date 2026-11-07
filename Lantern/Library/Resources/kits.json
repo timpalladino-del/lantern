@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "templates": [
     {"key":"go_bag","kind":"goBag","name":"Go-bag","summary":"Three days, carried. Ready.gov's list, trimmed to what fits in a backpack.","source":"Ready.gov Build a Kit","items":[
       {"name":"Bottled water","category":"water","quantity":3,"unit":"L","shelfLifeKey":"water_bottled","litersPerUnit":1},
@@ -43,7 +43,9 @@
       {"name":"Cat litter or sand for traction","category":"tools","quantity":1,"unit":"bag"},
       {"name":"Basic tool kit","category":"tools","quantity":1,"unit":"each"},
       {"name":"Rain poncho","category":"tools","quantity":1,"unit":"each"},
-      {"name":"Paper towels","category":"hygiene","quantity":1,"unit":"roll"}
+      {"name":"Paper towels","category":"hygiene","quantity":1,"unit":"roll"},
+      {"name":"Cash in small bills","category":"cash","quantity":40,"unit":"each","shelfLifeKey":null,"litersPerUnit":null},
+      {"name":"Phone numbers on paper","category":"documents","quantity":1,"unit":"each","shelfLifeKey":null,"litersPerUnit":null}
     ]},
     {"key":"pet_bag","kind":"pet","name":"Pet bag","summary":"Shelters often cannot take pets without records and a carrier. Pack it once.","source":"Ready.gov Pets and Animals","items":[
       {"name":"Pet food, 3 days","category":"pet","quantity":1,"unit":"bag","shelfLifeKey":"pet_food_dry"},

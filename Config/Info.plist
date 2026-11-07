@@ -4,6 +4,14 @@
 <dict>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>io.kismetstudio.lantern.weather</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>fetch</string>
+	</array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

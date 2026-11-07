@@ -19,6 +19,7 @@ struct HomeView: View {
     @State private var doneCount = 0
     @State private var paywall: PaywallReason?
     @State private var plan = PlanStore.shared
+    @State private var weather = WeatherAlertStore.shared
 
     private var now: Date { Date() }
 
@@ -40,6 +41,7 @@ struct HomeView: View {
     var body: some View {
         SplitContainer {
             List {
+                weatherBanner
                 if let h = households.first {
                     householdStrip(h)
                 }
@@ -79,6 +81,9 @@ struct HomeView: View {
                 if let h = households.first { PersonEditView(household: h) }
             }
             .sensoryFeedback(.success, trigger: doneCount)
+            .task {
+                if weather.hasPlaces, weather.isStale() { await weather.refresh(notify: true) }
+            }
         } detail: {
             if let h = households.first {
                 HouseholdView(household: h)
@@ -170,6 +175,16 @@ struct HomeView: View {
                         StatTile(title: "Gear", value: r.tasksDue == 0 ? "All checked" : "\(r.tasksDue) due", subtitle: tasks.isEmpty ? "Nothing tracked yet" : "Checks this week", fraction: nil)
                     }
                 }
+                if let line = r.weakestLinkLine {
+                    HStack(alignment: .firstTextBaseline, spacing: 8) {
+                        Image(systemName: r.weakestLink.map { $0.days >= Double(r.targetDays) } == true ? "checkmark.circle.fill" : "arrow.down.right.circle.fill")
+                            .foregroundStyle(r.weakestLink.map { $0.days >= Double(r.targetDays) } == true ? Color.moss : Color.ember)
+                        Text(line).font(.subheadline)
+                        Spacer(minLength: 0)
+                    }
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .accessibilityElement(children: .combine)
+                }
                 HStack(spacing: 8) {
                     CountChip(symbol: "clock.badge.exclamationmark", text: r.itemsNeedingAttention == 0 ? "Nothing to use up" : "\(r.itemsNeedingAttention) to use or check")
                     CountChip(symbol: "cart", text: shopping.isEmpty ? "List is empty" : "\(shopping.count) on the list")
@@ -210,6 +225,27 @@ struct HomeView: View {
                     }
                 }
                 .foregroundStyle(.primary)
+            }
+        }
+    }
+
+    /// The worst alert in effect for a saved place. Nothing shows when the sky is quiet or no place is saved.
+    @ViewBuilder
+    private var weatherBanner: some View {
+        let active = weather.activeAlerts(now: now)
+        if let top = active.first {
+            Section {
+                NavigationLink { WeatherAlertsView() } label: {
+                    HStack(spacing: 12) {
+                        Image(systemName: top.isWarning ? "exclamationmark.triangle.fill" : "exclamationmark.circle.fill")
+                            .foregroundStyle(top.isWarning ? Color.ember : Color.ink)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(active.count > 1 ? "\(top.event) and \(active.count - 1) more" : top.event).font(.subheadline.weight(.semibold))
+                            Text([top.placeNames.joined(separator: ", "), top.untilText(now: now)].compactMap { $0 }.filter { !$0.isEmpty }.joined(separator: " · "))
+                                .font(.caption).foregroundStyle(.secondary)
+                        }
+                    }
+                }
             }
         }
     }

@@ -154,12 +154,14 @@ struct MedicationEditView: View {
                     if hasExpiration { DatePicker("Expires", selection: $expirationDate, displayedComponents: .date) }
                 }
 
-                Section("Prescriber and pharmacy") {
+                Section {
                     TextField("Prescriber (Dr. Alvarez)", text: $prescriber)
                     TextField("Prescriber phone", text: $prescriberPhone).keyboardType(.phonePad)
                     TextField("Pharmacy (CVS on Main St)", text: $pharmacy)
                     TextField("Pharmacy phone", text: $pharmacyPhone).keyboardType(.phonePad)
                     TextField("Rx number", text: $rxNumber)
+                } header: { Text("Prescriber and pharmacy") } footer: {
+                    Text("All of this prints on the medication card. Ask for 90-day fills where you can; a refill that falls in a storm week is the one that gets missed. Many states let pharmacies refill early once a warning is issued.")
                 }
 
                 Section("Notes") {

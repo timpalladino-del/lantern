@@ -15,6 +15,7 @@ struct SettingsView: View {
     @AppStorage(AppSettings.onlineLookupEnabled) private var onlineLookup = true
 
     @State private var exportFile: ShareableFile?
+    @State private var weather = WeatherAlertStore.shared
     @State private var exportError: String?
     @State private var authDenied = false
 
@@ -34,13 +35,30 @@ struct SettingsView: View {
                         Picker("Time", selection: $digestHour) {
                             ForEach(6...21, id: \.self) { h in Text(hourLabel(h)).tag(h) }
                         }
+                        NavigationLink("Which supplies get reminders") {
+                            ReminderCategoriesView { Task { await reschedule() } }
+                        }
                         Button("Refresh reminders now") { Task { await reschedule() } }
                     }
                     if authDenied {
                         Text("Notifications are off in iOS Settings. Turn them on there to get the digest.").font(.footnote).foregroundStyle(Color.ember)
                     }
                 } header: { Text("Reminders") } footer: {
-                    Text("One digest a week by default. Separate reminders only for medicine, water rotation and equipment checks. Scheduled on this phone, no server.")
+                    Text("One digest a week, plus a reminder the morning something is about to expire. Several on the same day arrive as one. Scheduled on this phone, no server.")
+                }
+
+                Section {
+                    NavigationLink { WeatherAlertsView() } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Weather alerts")
+                                Text(weather.hasPlaces ? (weather.places.count == 1 ? "1 place saved" : "\(weather.places.count) places saved") : "Save a ZIP code or your location")
+                                    .font(.caption).foregroundStyle(.secondary)
+                            }
+                        } icon: { Image(systemName: "cloud.bolt.rain.fill").foregroundStyle(Color.ink) }
+                    }
+                } header: { Text("Weather") } footer: {
+                    Text("Watches and warnings from the National Weather Service for the places you save, checked when the app opens and now and then in the background. Only coordinates are sent.")
                 }
 
                 Section {
@@ -135,6 +153,33 @@ private struct SourcesView: View {
             }
         }
         .navigationTitle("Sources")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+
+/// Per-category switches for the morning expiry reminders. All on by default; the digest is unaffected.
+struct ReminderCategoriesView: View {
+    let onChange: () -> Void
+    @State private var muted: Set<SupplyCategory> = NotificationScheduler.mutedCategories()
+
+    var body: some View {
+        Form {
+            Section {
+                ForEach(SupplyCategory.allCases) { c in
+                    Toggle(isOn: Binding(get: { !muted.contains(c) }, set: { on in
+                        if on { muted.remove(c) } else { muted.insert(c) }
+                        NotificationScheduler.setMutedCategories(muted)
+                        onChange()
+                    })) {
+                        Label(c.title, systemImage: c.symbol)
+                    }
+                }
+            } footer: {
+                Text("Water reminders come a week before a rotation is due; everything else two weeks before it expires. Medication doses are set under each person and are not affected here.")
+            }
+        }
+        .navigationTitle("Reminders")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "packs": [
     {"key":"readygov_basic","name":"Ready.gov basic kit","summary":"The federal starter list. Add quantities for your household.","source":"Ready.gov Build a Kit","items":[
       {"name":"Bottled water","category":"water","quantity":12,"unit":"gal","shelfLifeKey":"water_bottled","litersPerUnit":3.785},
@@ -50,6 +50,7 @@
       {"name":"Camp stove fuel","category":"power","quantity":4,"unit":"canister","shelfLifeKey":"butane_canisters"},
       {"name":"Matches","category":"tools","quantity":2,"unit":"box","shelfLifeKey":"matches"},
       {"name":"Hand warmers","category":"tools","quantity":10,"unit":"pair"},
+      {"name":"Gasoline, stabilized, in an approved can","category":"tools","quantity":5,"unit":"gal","shelfLifeKey":"gasoline_stabilized"},
       {"name":"Cash in small bills","category":"cash","quantity":200,"unit":"USD","shelfLifeKey":"cash"}]}
   ]
 }

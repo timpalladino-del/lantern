@@ -37,7 +37,32 @@ final class Pet {
     var notes: String = ""
     var createdAt: Date = Date()
 
+    // Records a shelter, a vet or a stranger will ask for.
+    var microchip: String = ""
+    var microchipRegistry: String = ""      // "HomeAgain", "AKC Reunite": where the chip number is registered
+    var vet: String = ""
+    var vetPhone: String = ""
+    var carrierLocation: String = ""        // "Hall closet, top shelf"
+    var caregiverName: String = ""          // who takes the pet if we cannot
+    var caregiverPhone: String = ""
+    var lodgingNotes: String = ""           // pet-friendly hotels, boarding, a relative's house
+    @Attribute(.externalStorage)
+    var vaccinationPhotoData: Data?
+
     var household: Household?
+
+    /// One line for the printed plan: "Biscuit (dog): chip 985112000, HomeAgain. Vet Dr. Ruiz (407) 555-0101. Carrier: hall closet."
+    var planLine: String {
+        var parts: [String] = []
+        if !microchip.isEmpty { parts.append("chip \(microchip)" + (microchipRegistry.isEmpty ? "" : ", \(microchipRegistry)")) }
+        if !vet.isEmpty { parts.append("Vet \(vet)" + (vetPhone.isEmpty ? "" : " \(vetPhone)")) }
+        if !carrierLocation.isEmpty { parts.append("Carrier: \(carrierLocation)") }
+        if !caregiverName.isEmpty { parts.append("If we can't: \(caregiverName)" + (caregiverPhone.isEmpty ? "" : " \(caregiverPhone)")) }
+        if !lodgingNotes.isEmpty { parts.append("Where we'd stay: \(lodgingNotes)") }
+        if !medications.isEmpty { parts.append("Meds: \(medications)") }
+        let head = "\(name) (\(species.title.lowercased()))"
+        return parts.isEmpty ? head : head + ": " + parts.joined(separator: ". ") + "."
+    }
 
     init(name: String, species: PetSpecies = .dog, weightKg: Double? = nil) {
         self.uuid = UUID()

@@ -325,7 +325,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -333,7 +333,7 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, and Use my location saves the coordinates of a storage spot or meeting place, only when you tap it. Nothing is sent anywhere.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor. Use my location saves the coordinates of a storage spot, a meeting place or a weather-alert place, only when you tap it. Weather alerts send those coordinates to weather.gov and nothing else.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -358,7 +358,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -366,7 +366,7 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, and Use my location saves the coordinates of a storage spot or meeting place, only when you tap it. Nothing is sent anywhere.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor. Use my location saves the coordinates of a storage spot, a meeting place or a weather-alert place, only when you tap it. Weather alerts send those coordinates to weather.gov and nothing else.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -390,7 +390,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.1;
@@ -408,7 +408,7 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 11;
+				CURRENT_PROJECT_VERSION = 12;
 				DEVELOPMENT_TEAM = 69MM5TC2UN;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0.1;

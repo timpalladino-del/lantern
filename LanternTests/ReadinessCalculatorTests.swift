@@ -36,7 +36,9 @@ final class ReadinessCalculatorTests: XCTestCase {
         XCTAssertEqual(r.foodDays, 2, accuracy: 0.01)
         XCTAssertTrue(r.foodIsAssumed)
         XCTAssertEqual(r.waterDays, 4, accuracy: 0.01)
-        XCTAssertEqual(r.gaps.map(\.id), ["food", "water", "medicine"])
+        XCTAssertEqual(r.gaps.map(\.id), ["food", "water", "medicine", "cash"])
+        XCTAssertEqual(r.weakestLink?.title, "Food")
+        XCTAssertEqual(r.weakestLinkLine, "Food runs out first, in 2.0 days. Start there.")
     }
 
     func testCaloriesPerUnitBeatsServings() {
@@ -114,8 +116,12 @@ final class ReadinessCalculatorTests: XCTestCase {
         _ = water("Water", gallons: 3)
         let med = SupplyItem(name: "First aid kit", category: .medicine)
         context.insert(med)
+        let cash = SupplyItem(name: "Small bills", category: .cash)
+        context.insert(cash)
         let r = ReadinessCalculator.compute(items: fetch(), tasks: [], household: household)
         XCTAssertTrue(r.gaps.isEmpty, "\(r.gaps)")
+        XCTAssertTrue(r.hasCash)
+        XCTAssertEqual(r.weakestLinkLine, "Everything covers your 3-day target. Food is the closest line.")
     }
 
     func testPetsAddWater() {
@@ -166,5 +172,33 @@ final class ReadinessCalculatorTests: XCTestCase {
 
     private func fetch() -> [SupplyItem] {
         (try? context.fetch(FetchDescriptor<SupplyItem>())) ?? []
+    }
+
+    func testCashGapOnlyWithoutCash() {
+        let household = Household(adults: 1, targetDays: 3)
+        context.insert(household)
+        let r = ReadinessCalculator.compute(items: fetch(), tasks: [], household: household)
+        XCTAssertTrue(r.gaps.contains { $0.id == "cash" })
+        XCTAssertFalse(r.hasCash)
+    }
+
+    func testReminderTextFoldsSameDayItems() {
+        let one = NotificationScheduler.reminderText(names: ["Canned beans"], categories: [.food], firstExpiry: nil)
+        XCTAssertEqual(one.title, "Canned beans is due soon")
+        let water = NotificationScheduler.reminderText(names: ["Jug A", "Jug B"], categories: [.water, .water], firstExpiry: nil)
+        XCTAssertEqual(water.title, "Time to rotate water")
+        let many = NotificationScheduler.reminderText(names: ["A", "B", "C", "D", "E"], categories: [.food, .food, .hygiene, .food, .power], firstExpiry: nil)
+        XCTAssertEqual(many.title, "5 supplies due soon")
+        XCTAssertEqual(many.body, "A, B, C and 2 more. Use them first or restock.")
+        XCTAssertEqual(NotificationScheduler.leadDays(for: .water), 7)
+        XCTAssertEqual(NotificationScheduler.leadDays(for: .food), 14)
+    }
+
+    func testMutedCategoriesRoundTrip() {
+        let d = UserDefaults(suiteName: "lantern-tests-muted")!
+        d.removePersistentDomain(forName: "lantern-tests-muted")
+        XCTAssertTrue(NotificationScheduler.mutedCategories(defaults: d).isEmpty)
+        NotificationScheduler.setMutedCategories([.hygiene, .tools], defaults: d)
+        XCTAssertEqual(NotificationScheduler.mutedCategories(defaults: d), [.hygiene, .tools])
     }
 }

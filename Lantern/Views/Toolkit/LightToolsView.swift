@@ -4,12 +4,38 @@ import UIKit
 struct LightToolsView: View {
     @State private var torch = TorchController.shared
     @State private var screenMode: LightScreenView.Mode?
+    @AppStorage(AppSettings.strobeWarningSeen) private var strobeWarningSeen = false
+    @State private var pendingFlash: PendingFlash?
+
+    /// What to start once the one-time flashing-light notice is acknowledged.
+    private enum PendingFlash: Identifiable {
+        case torch(TorchController.Pattern), screen(LightScreenView.Mode)
+        var id: String { switch self { case .torch(let p): return "torch-\(p.rawValue)"; case .screen(let m): return "screen-\(m.rawValue)" } }
+    }
+
+    private func startTorch(_ p: TorchController.Pattern) {
+        if (p == .sos || p == .slowBlink), !strobeWarningSeen { pendingFlash = .torch(p) } else { torch.set(p) }
+    }
+
+    private func startScreen(_ m: LightScreenView.Mode) {
+        if m == .flasher, !strobeWarningSeen { pendingFlash = .screen(m) } else { screenMode = m }
+    }
+
+    private func confirmPending() {
+        strobeWarningSeen = true
+        switch pendingFlash {
+        case .torch(let p): torch.set(p)
+        case .screen(let m): screenMode = m
+        case nil: break
+        }
+        pendingFlash = nil
+    }
 
     var body: some View {
         List {
             Section {
                 if torch.isAvailable {
-                    Picker("Camera light", selection: Binding(get: { torch.pattern }, set: { torch.set($0) })) {
+                    Picker("Camera light", selection: Binding(get: { torch.pattern }, set: { startTorch($0) })) {
                         ForEach(TorchController.Pattern.allCases) { p in Text(p.title).tag(p) }
                     }
                     .pickerStyle(.segmented)
@@ -34,7 +60,7 @@ struct LightToolsView: View {
                 Button { screenMode = .white } label: { Label("White screen light", systemImage: "sun.max.fill") }
                 Button { screenMode = .amber } label: { Label("Warm screen light", systemImage: "sun.min.fill") }
                 Button { screenMode = .candle } label: { Label("Candle", systemImage: "flame.fill") }
-                Button { screenMode = .flasher } label: { Label("Be seen: flashing screen", systemImage: "rays") }
+                Button { startScreen(.flasher) } label: { Label("Be seen: flashing screen", systemImage: "rays") }
             } header: { Text("Screen light") } footer: {
                 Text("The screen goes to full brightness and stays awake until you close it. Tap the screen to show the close button.")
             }
@@ -42,6 +68,12 @@ struct LightToolsView: View {
         .navigationTitle("Light")
         .navigationBarTitleDisplayMode(.inline)
         .fullScreenCover(item: $screenMode) { mode in LightScreenView(mode: mode) }
+        .alert("Flashing light", isPresented: Binding(get: { pendingFlash != nil }, set: { if !$0 { pendingFlash = nil } })) {
+            Button("Start") { confirmPending() }
+            Button("Cancel", role: .cancel) { pendingFlash = nil }
+        } message: {
+            Text("A flashing light can trigger a seizure in someone with photosensitive epilepsy. Point it away from faces and at the sky or a window. This notice shows once.")
+        }
     }
 }
 

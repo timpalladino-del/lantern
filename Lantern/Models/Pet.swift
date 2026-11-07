@@ -48,6 +48,9 @@ final class Pet {
     var lodgingNotes: String = ""           // pet-friendly hotels, boarding, a relative's house
     @Attribute(.externalStorage)
     var vaccinationPhotoData: Data?
+    /// The pet itself. Shelters and finders ask for one; a photo of you together proves ownership.
+    @Attribute(.externalStorage)
+    var photoData: Data?
 
     var household: Household?
 

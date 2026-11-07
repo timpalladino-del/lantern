@@ -64,6 +64,9 @@ final class Person {
 
     // Wellness: what keeps this person steady when routine breaks.
     var wellnessNotes: String = ""
+    /// A face for the bubble and the medication card. Kept on the phone; never in a profile link.
+    @Attribute(.externalStorage)
+    var photoData: Data?
     var comfortNeeds: String = ""
 
     // What they bring
@@ -123,7 +126,9 @@ final class Person {
     var dependsOnPower: Bool { !powerDeviceKeys.isEmpty }
 
     /// Two letters for the avatar circle.
-    var initials: String {
+    var initials: String { Person.initials(for: name) }
+
+    static func initials(for name: String) -> String {
         let parts = name.split(separator: " ").prefix(2)
         let letters = parts.compactMap { $0.first }.map { String($0).uppercased() }
         return letters.isEmpty ? "?" : letters.joined()

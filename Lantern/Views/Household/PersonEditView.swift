@@ -11,6 +11,7 @@ struct PersonEditView: View {
     private let existing: Person?
 
     @State private var name: String
+    @State private var photo: Data?
     @State private var hasAge: Bool
     @State private var age: Int
     @State private var sex: Sex
@@ -49,6 +50,7 @@ struct PersonEditView: View {
         self.household = household
         self.existing = person
         _name = State(initialValue: person?.name ?? initialName)
+        _photo = State(initialValue: person?.photoData)
         _hasAge = State(initialValue: person?.age != nil)
         _age = State(initialValue: person?.age ?? 35)
         _sex = State(initialValue: person?.sex ?? .unspecified)
@@ -141,6 +143,10 @@ struct PersonEditView: View {
 
     private var basics: some View {
         Section {
+            HStack(spacing: 14) {
+                Avatar(photoData: photo, fallback: .initials(Person.initials(for: name)), size: 60)
+                PhotoPickerButton(photoData: $photo, maxPixels: 800)
+            }
             TextField("Name", text: $name)
             Toggle("Age", isOn: $hasAge)
             if hasAge {
@@ -315,6 +321,7 @@ struct PersonEditView: View {
     private func save() {
         let p = existing ?? Person(name: name)
         p.name = name.trimmingCharacters(in: .whitespaces)
+        p.photoData = photo
         p.age = hasAge ? age : nil
         p.sex = sex
         p.activity = activity

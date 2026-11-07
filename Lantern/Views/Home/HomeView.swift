@@ -432,11 +432,7 @@ struct PersonBubble: View {
     var body: some View {
         VStack(spacing: 6) {
             ZStack(alignment: .bottomTrailing) {
-                Text(person.initials)
-                    .font(.headline)
-                    .frame(width: 56, height: 56)
-                    .background(Color.glow.opacity(0.22), in: Circle())
-                    .overlay(Circle().strokeBorder(Color.glow.opacity(0.6), lineWidth: 1.5))
+                Avatar(photoData: person.photoData, fallback: .initials(person.initials))
                 if let badge {
                     Image(systemName: badge)
                         .font(.system(size: 9, weight: .bold))
@@ -467,11 +463,7 @@ struct PetBubble: View {
     let pet: Pet
     var body: some View {
         VStack(spacing: 6) {
-            Image(systemName: pet.species == .cat ? "cat.fill" : pet.species == .dog ? "dog.fill" : "pawprint.fill")
-                .font(.title3)
-                .frame(width: 56, height: 56)
-                .background(Color.moss.opacity(0.22), in: Circle())
-                .overlay(Circle().strokeBorder(Color.moss.opacity(0.6), lineWidth: 1.5))
+            Avatar(photoData: pet.photoData, fallback: .symbol(pet.avatarSymbol), tint: Color.moss)
             Text(pet.name).font(.caption).lineLimit(1)
             Text(pet.species.title).font(.caption2).foregroundStyle(.secondary).lineLimit(1)
         }

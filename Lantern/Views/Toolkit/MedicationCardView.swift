@@ -31,7 +31,10 @@ struct MedicationCardView: View {
                                 .font(.footnote).foregroundStyle(Color.ember)
                         }
                     } header: {
-                        Text(person.name)
+                        HStack(spacing: 8) {
+                            Avatar(photoData: person.photoData, fallback: .initials(person.initials), size: 28)
+                            Text(person.name)
+                        }
                     }
                 }
                 if uncoveredCount > 0 {

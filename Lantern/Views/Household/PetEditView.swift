@@ -25,6 +25,7 @@ struct PetEditView: View {
     @State private var caregiverPhone: String
     @State private var lodgingNotes: String
     @State private var vaccinationPhoto: Data?
+    @State private var photo: Data?
 
     init(household: Household, pet: Pet? = nil) {
         self.household = household
@@ -47,6 +48,7 @@ struct PetEditView: View {
         _caregiverPhone = State(initialValue: pet?.caregiverPhone ?? "")
         _lodgingNotes = State(initialValue: pet?.lodgingNotes ?? "")
         _vaccinationPhoto = State(initialValue: pet?.vaccinationPhotoData)
+        _photo = State(initialValue: pet?.photoData)
     }
 
     private var previewKcal: Double {
@@ -61,6 +63,10 @@ struct PetEditView: View {
         NavigationStack {
             Form {
                 Section {
+                    HStack(spacing: 14) {
+                        Avatar(photoData: photo, fallback: .symbol(species == .cat ? "cat.fill" : species == .dog ? "dog.fill" : "pawprint.fill"), size: 60, tint: Color.moss)
+                        PhotoPickerButton(photoData: $photo, maxPixels: 800, title: "Add a photo of \(name.isEmpty ? "them" : name)")
+                    }
                     TextField("Name", text: $name)
                     Picker("Kind", selection: $species) { ForEach(PetSpecies.allCases) { Text($0.title).tag($0) } }
                     HStack {
@@ -147,6 +153,7 @@ struct PetEditView: View {
         p.caregiverPhone = caregiverPhone
         p.lodgingNotes = lodgingNotes
         p.vaccinationPhotoData = vaccinationPhoto
+        p.photoData = photo
         if existing == nil {
             p.household = household
             context.insert(p)

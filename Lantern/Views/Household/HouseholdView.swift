@@ -46,7 +46,7 @@ struct HouseholdView: View {
                 ForEach(household.petList.sorted { $0.createdAt < $1.createdAt }, id: \.uuid) { pet in
                     Button { editingPet = pet } label: {
                         HStack {
-                            Image(systemName: "pawprint.fill").foregroundStyle(.secondary).frame(width: 28)
+                            Avatar(photoData: pet.photoData, fallback: .symbol(pet.avatarSymbol), size: 36, tint: Color.moss)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text(pet.name)
                                 Text("\(pet.species.title)\(pet.weightKg.map { String(format: " · %.0f lb", $0 * 2.20462) } ?? "")").font(.caption).foregroundStyle(.secondary)
@@ -101,7 +101,7 @@ struct PersonRow: View {
     let person: Person
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: person.isChild ? "figure.child" : "person.fill").foregroundStyle(.secondary).frame(width: 28)
+            Avatar(photoData: person.photoData, fallback: .initials(person.initials), size: 36)
             VStack(alignment: .leading, spacing: 2) {
                 Text(person.name)
                 Text(subtitle).font(.caption).foregroundStyle(.secondary)

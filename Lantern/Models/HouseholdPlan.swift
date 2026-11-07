@@ -7,6 +7,10 @@ final class HouseholdPlan {
     var meetNearHome: String = ""          // "The mailbox at the end of the driveway"
     var meetOutsideNeighborhood: String = "" // "The library parking lot on Main"
     var outOfTownContact: String = ""      // "Aunt Pat in Ohio, 555-0100"
+    var meetNearHomeLatitude: Double?
+    var meetNearHomeLongitude: Double?
+    var meetOutsideLatitude: Double?
+    var meetOutsideLongitude: Double?
     var petsPlan: String = ""              // "Carriers in the hall closet. Sam grabs the cats."
     var kidsPlan: String = ""              // "School pickup: Jo if Sam is at work."
     var medicalNotes: String = ""          // "Dad's insulin is in the fridge door."
@@ -45,4 +49,13 @@ final class HouseholdPlan {
             .map { (name: $0.0.trimmingCharacters(in: .whitespaces), phone: $0.1) }
     }
     var hasTrustedContact: Bool { !trustedContacts.isEmpty }
+
+    var meetNearHomePoint: GeoPoint? {
+        guard let la = meetNearHomeLatitude, let lo = meetNearHomeLongitude else { return nil }
+        let p = GeoPoint(latitude: la, longitude: lo); return p.isValid ? p : nil
+    }
+    var meetOutsidePoint: GeoPoint? {
+        guard let la = meetOutsideLatitude, let lo = meetOutsideLongitude else { return nil }
+        let p = GeoPoint(latitude: la, longitude: lo); return p.isValid ? p : nil
+    }
 }

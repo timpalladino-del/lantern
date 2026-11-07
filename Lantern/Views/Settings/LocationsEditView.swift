@@ -1,78 +1,83 @@
 import SwiftUI
 import SwiftData
+import UIKit
 
+/// Every place supplies live. Tap one to edit it, add notes, a photo, an address or coordinates.
 struct LocationsEditView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
-
-    @State private var newName = ""
-    @State private var renaming: StorageLocation?
-    @State private var renameText = ""
+    @State private var editing: StorageLocation?
+    @State private var adding = false
     @State private var addingTo: StorageLocation?
 
-    private let symbols = ["cabinet.fill", "shippingbox.fill", "backpack.fill", "car.fill", "cross.case.fill", "house.fill", "snowflake", "archivebox.fill", "building.2.fill", "tent.fill"]
+    private var atHome: [StorageLocation] { locations.filter { !$0.isAwayFromHome } }
+    private var away: [StorageLocation] { locations.filter(\.isAwayFromHome) }
 
     var body: some View {
         List {
-            Section {
-                HStack {
-                    TextField("New location", text: $newName).onSubmit(add)
-                    Button("Add", action: add).disabled(newName.trimmingCharacters(in: .whitespaces).isEmpty)
+            if locations.isEmpty {
+                ContentUnavailableView {
+                    Label("No locations yet", systemImage: "mappin.and.ellipse")
+                } description: {
+                    Text("Add the pantry, the garage shelf, the car, the go-bag. A supply you cannot walk to is not useful.")
+                } actions: {
+                    Button { adding = true } label: { Label("Add a location", systemImage: "plus") }.buttonStyle(.borderedProminent)
                 }
             }
-            Section {
-                ForEach(locations, id: \.uuid) { loc in
-                    HStack {
-                        Menu {
-                            ForEach(symbols, id: \.self) { s in
-                                Button { loc.symbol = s; try? context.save() } label: { Label(s, systemImage: s) }
-                            }
-                        } label: {
-                            Image(systemName: loc.symbol).frame(width: 28)
-                        }
-                        .accessibilityLabel("Symbol for \(loc.name)")
-                        Text(loc.name)
-                        Spacer()
-                        Text("\(loc.items.count)").foregroundStyle(.secondary)
-                        Button { addingTo = loc } label: { Image(systemName: "plus.circle") }
-                            .buttonStyle(.borderless)
-                            .accessibilityLabel("Add a supply to \(loc.name)")
-                    }
-                    .swipeActions {
-                        Button(role: .destructive) { context.delete(loc); try? context.save() } label: { Label("Delete", systemImage: "trash") }
-                        Button { renaming = loc; renameText = loc.name } label: { Label("Rename", systemImage: "pencil") }
-                        Button { addingTo = loc } label: { Label("Add supply", systemImage: "plus") }.tint(Color.ink)
-                    }
+            if !atHome.isEmpty {
+                Section("In the house") { ForEach(atHome, id: \.uuid) { row($0) }.onMove(perform: move) }
+            }
+            if !away.isEmpty {
+                Section {
+                    ForEach(away, id: \.uuid) { row($0) }.onMove(perform: move)
+                } header: { Text("Away from home") } footer: {
+                    Text("Places with an address or coordinates. Open in Maps from the location.")
                 }
-                .onMove { from, to in
-                    var list = locations
-                    list.move(fromOffsets: from, toOffset: to)
-                    for (i, l) in list.enumerated() { l.sortOrder = i }
-                    try? context.save()
-                }
-            } footer: {
-                Text("Tap + to add a supply straight into a location. Deleting a location keeps its items; they just lose the label.")
             }
         }
-        .sheet(item: $addingTo) { loc in ItemEditView(draft: ItemDraft(location: loc)) }
         .navigationTitle("Locations")
-        .toolbar { EditButton() }
-        .alert("Rename", isPresented: Binding(get: { renaming != nil }, set: { if !$0 { renaming = nil } })) {
-            TextField("Name", text: $renameText)
-            Button("Save") {
-                renaming?.name = renameText.trimmingCharacters(in: .whitespaces)
-                try? context.save()
-                renaming = nil
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button { adding = true } label: { Image(systemName: "plus") }.accessibilityLabel("Add a location")
             }
-            Button("Cancel", role: .cancel) { renaming = nil }
+            ToolbarItem(placement: .topBarLeading) { EditButton() }
+        }
+        .sheet(item: $editing) { loc in LocationEditView(location: loc) }
+        .sheet(isPresented: $adding) { LocationEditView() }
+        .sheet(item: $addingTo) { loc in ItemEditView(draft: ItemDraft(location: loc)) }
+    }
+
+    private func row(_ loc: StorageLocation) -> some View {
+        Button { editing = loc } label: {
+            HStack(spacing: 12) {
+                if let data = loc.photo, let img = UIImage(data: data) {
+                    Image(uiImage: img).resizable().scaledToFill().frame(width: 40, height: 40).clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    Image(systemName: loc.symbol).frame(width: 40, height: 40).foregroundStyle(Color.ink)
+                        .background(Color(uiColor: .tertiarySystemFill), in: RoundedRectangle(cornerRadius: 8))
+                }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(loc.name).foregroundStyle(.primary)
+                    HStack(spacing: 6) {
+                        Text("\(loc.items.count) \(loc.items.count == 1 ? "item" : "items")")
+                        if !loc.notes.isEmpty { Text("·"); Text(loc.notes).lineLimit(1) }
+                        if loc.point != nil { Text("·"); Image(systemName: "mappin.and.ellipse") }
+                    }
+                    .font(.caption).foregroundStyle(.secondary)
+                }
+                Spacer()
+                Image(systemName: "chevron.right").font(.caption).foregroundStyle(.tertiary)
+            }
+        }
+        .swipeActions(edge: .trailing) {
+            Button { addingTo = loc } label: { Label("Add supply", systemImage: "plus") }.tint(Color.ink)
         }
     }
 
-    private func add() {
-        let n = newName.trimmingCharacters(in: .whitespaces)
-        guard !n.isEmpty else { return }
-        context.insert(StorageLocation(name: n, sortOrder: locations.count))
-        newName = ""
+    private func move(from: IndexSet, to: Int) {
+        var list = locations
+        list.move(fromOffsets: from, toOffset: to)
+        for (i, l) in list.enumerated() { l.sortOrder = i }
         try? context.save()
     }
 }

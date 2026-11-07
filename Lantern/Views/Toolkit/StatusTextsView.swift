@@ -128,9 +128,12 @@ struct StatusTextsView: View {
             Message(id: "checkin", title: "Checking on you", symbol: "person.2.fill",
                     body: "Checking in. Are you okay?\(powerHere) Text back when you can, even one word."),
         ]
-        if !meet.isEmpty {
+        if !meet.isEmpty || plan?.meetNearHomePoint != nil {
+            let near = meet.isEmpty ? "our spot" : meet
+            let nearLink = plan?.meetNearHomePoint.map { " \($0.mapsURL.absoluteString)" } ?? ""
+            let farLink = plan?.meetOutsidePoint.map { " \($0.mapsURL.absoluteString)" } ?? ""
             list.append(Message(id: "meet", title: "Meet at our spot", symbol: "mappin.and.ellipse",
-                                body: "If we get separated, meet at \(meet)." + (meetFar.isEmpty ? "" : " If that's not safe, \(meetFar).") + (outOfTown.isEmpty ? "" : " \(our) out-of-town check-in: \(outOfTown).")))
+                                body: "If we get separated, meet at \(near).\(nearLink)" + (meetFar.isEmpty ? "" : " If that's not safe, \(meetFar).\(farLink)") + (outOfTown.isEmpty ? "" : " \(our) out-of-town check-in: \(outOfTown).")))
         }
         return list
     }

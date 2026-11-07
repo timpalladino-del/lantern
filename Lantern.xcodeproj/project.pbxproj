@@ -333,7 +333,7 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, which iOS groups with location. Your location is never stored or sent anywhere.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, and Use my location saves the coordinates of a storage spot or meeting place, only when you tap it. Nothing is sent anywhere.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -366,7 +366,7 @@
 				INFOPLIST_FILE = Config/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Lantern";
 				INFOPLIST_KEY_NSCameraUsageDescription = "The camera reads barcodes and printed dates so you can add supplies without typing. Nothing is recorded or uploaded.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, which iOS groups with location. Your location is never stored or sent anywhere.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "The compass needs the phone's heading sensor, and Use my location saves the coordinates of a storage spot or meeting place, only when you tap it. Nothing is sent anywhere.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

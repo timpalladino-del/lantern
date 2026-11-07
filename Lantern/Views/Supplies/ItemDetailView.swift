@@ -46,7 +46,18 @@ struct ItemDetailView: View {
                     try? context.save()
                 }
                 LabeledContent("Category", value: item.category.title)
-                LabeledContent("Location", value: item.location?.name ?? "Not set")
+                if let loc = item.location {
+                    VStack(alignment: .leading, spacing: 3) {
+                        LabeledContent("Location", value: loc.name)
+                        if !loc.notes.isEmpty { Text(loc.notes).font(.caption).foregroundStyle(.secondary) }
+                        if !loc.address.isEmpty { Text(loc.address).font(.caption).foregroundStyle(.secondary) }
+                        if let p = loc.point {
+                            Link(destination: p.mapsURL) { Label("Open in Maps", systemImage: "map") }.font(.caption)
+                        }
+                    }
+                } else {
+                    LabeledContent("Location", value: "Not set")
+                }
                 if item.isDeepStorage { LabeledContent("Storage", value: "Deep storage") }
                 if item.isOpened { LabeledContent("Opened", value: item.openedDate?.formatted(date: .abbreviated, time: .omitted) ?? "Yes") }
             }

@@ -2,11 +2,14 @@ import SwiftUI
 import SwiftData
 import VisionKit
 import Vision
+import AVFoundation
 
 /// Camera wrapper. Barcodes and printed text, on-device, nothing recorded.
 struct DataScannerRepresentable: UIViewControllerRepresentable {
     var onBarcode: (String) -> Void
     var onText: (String) -> Void
+    /// Fraction of the view's height, from the top, that the scanner reads. The card below is ignored.
+    var activeHeightFraction: CGFloat = 0.6
 
     static var isSupported: Bool {
         DataScannerViewController.isSupported && DataScannerViewController.isAvailable
@@ -30,6 +33,8 @@ struct DataScannerRepresentable: UIViewControllerRepresentable {
 
     func updateUIViewController(_ vc: DataScannerViewController, context: Context) {
         context.coordinator.parent = self
+        let b = vc.view.bounds
+        if b.width > 0 { vc.regionOfInterest = CGRect(x: 0, y: 0, width: b.width, height: b.height * activeHeightFraction) }
         if !vc.isScanning { try? vc.startScanning() }
     }
 
@@ -66,11 +71,41 @@ struct DataScannerRepresentable: UIViewControllerRepresentable {
     }
 }
 
+/// The camera torch for reading a label in a dark pantry. Separate from the SOS strobe.
+@MainActor
+@Observable
+final class CameraTorch {
+    private(set) var isOn = false
+    var isAvailable: Bool { AVCaptureDevice.default(for: .video)?.hasTorch ?? false }
+
+    func toggle() {
+        guard let device = AVCaptureDevice.default(for: .video), device.hasTorch else { return }
+        do {
+            try device.lockForConfiguration()
+            device.torchMode = isOn ? .off : .on
+            device.unlockForConfiguration()
+            isOn.toggle()
+        } catch {}
+    }
+
+    func off() {
+        guard isOn, let device = AVCaptureDevice.default(for: .video), device.hasTorch else { return }
+        try? device.lockForConfiguration()
+        device.torchMode = .off
+        device.unlockForConfiguration()
+        isOn = false
+    }
+}
+
+/// Scan a barcode and the printed date, pick where it goes, add it. Stays open so a whole bag of
+/// groceries goes in without leaving the screen.
 struct ScanSheet: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Query private var items: [SupplyItem]
+    @Query(sort: \StorageLocation.sortOrder) private var locations: [StorageLocation]
     @AppStorage(AppSettings.onlineLookupEnabled) private var onlineLookup = true
+    @AppStorage("scan.lastLocation") private var lastLocationID = ""
 
     @State private var barcode: String?
     @State private var productName: String?
@@ -82,8 +117,14 @@ struct ScanSheet: View {
     @State private var isLookingUp = false
     @State private var bestDate: DateLabelParser.Candidate?
     @State private var manualBarcode = ""
+    @State private var showManual = false
     @State private var showEditor = false
+    @State private var showNewLocation = false
     @State private var addedToExisting: String?
+    @State private var addedThisSession = 0
+    @State private var location: StorageLocation?
+    @State private var torch = CameraTorch()
+    @State private var recognitions = 0
 
     private let parser = DateLabelParser()
 
@@ -92,84 +133,199 @@ struct ScanSheet: View {
         return items.filter { $0.barcode == barcode }
     }
 
+    private var guide: String {
+        if barcode == nil && bestDate == nil { return "Point at the barcode" }
+        if barcode != nil && bestDate == nil { return "Got it. Now the printed date, if there is one" }
+        if barcode == nil { return "Date read. Now the barcode" }
+        return "Barcode and date read"
+    }
+
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
+            ZStack(alignment: .bottom) {
                 if DataScannerRepresentable.isSupported {
                     DataScannerRepresentable(onBarcode: handleBarcode, onText: handleText)
-                        .ignoresSafeArea(edges: .top)
+                        .ignoresSafeArea()
+                    reticle
                 } else {
-                    ContentUnavailableView {
-                        Label("Camera scanning not available", systemImage: "camera.fill")
-                    } description: {
-                        Text("This device or simulator cannot scan. Type the barcode instead, or add the item by hand.")
-                    } actions: {
-                        HStack {
-                            TextField("Barcode digits", text: $manualBarcode).keyboardType(.numberPad).textFieldStyle(.roundedBorder)
-                            Button("Use") { handleBarcode(manualBarcode) }.disabled(manualBarcode.isEmpty)
-                        }.padding(.horizontal)
+                    Color(uiColor: .systemGroupedBackground).ignoresSafeArea()
+                    VStack {
+                        Spacer()
+                        ContentUnavailableView {
+                            Label("No camera here", systemImage: "camera.fill")
+                        } description: {
+                            Text("This device or simulator cannot scan. Type the barcode, or add the item by hand.")
+                        } actions: {
+                            Button { showManual = true } label: { Label("Type a barcode", systemImage: "keyboard") }.buttonStyle(.borderedProminent)
+                        }
+                        Spacer()
+                        Spacer()
                     }
-                    .frame(maxHeight: .infinity)
                 }
-                panel
+                card
             }
             .navigationTitle("Scan")
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } }
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    if torch.isAvailable {
+                        Button { torch.toggle() } label: { Image(systemName: torch.isOn ? "flashlight.on.fill" : "flashlight.off.fill") }
+                            .accessibilityLabel(torch.isOn ? "Turn the light off" : "Turn the light on")
+                    }
+                    Button { showManual = true } label: { Image(systemName: "keyboard") }
+                        .accessibilityLabel("Type a barcode")
+                }
             }
             .sheet(isPresented: $showEditor) {
-                ItemEditView(draft: draft) { _ in reset() }
+                ItemEditView(draft: draft) { _ in addedThisSession += 1; reset() }
             }
+            .sheet(isPresented: $showNewLocation) { LocationEditView() }
+            .alert("Type the barcode", isPresented: $showManual) {
+                TextField("Digits under the bars", text: $manualBarcode).keyboardType(.numberPad)
+                Button("Use") { handleBarcode(manualBarcode); manualBarcode = "" }
+                Button("Cancel", role: .cancel) { manualBarcode = "" }
+            }
+            .onAppear {
+                if location == nil {
+                    location = locations.first { $0.uuid.uuidString == lastLocationID } ?? locations.first
+                }
+            }
+            .onDisappear { torch.off() }
+            .sensoryFeedback(.success, trigger: recognitions)
         }
     }
 
-    private var panel: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            HStack(spacing: 8) {
-                Chip(symbol: "barcode", text: barcode.map { productName ?? "Barcode \($0)" } ?? "Point at a barcode", active: barcode != nil)
-                Chip(symbol: "calendar", text: bestDate.map { "Date: " + $0.date.formatted(date: .abbreviated, time: .omitted) } ?? "Point at the printed date", active: bestDate != nil)
+    /// The window the scanner reads. Dimmed outside, a bracket inside, the guide line above.
+    private var reticle: some View {
+        GeometryReader { geo in
+            let w = geo.size.width - 48
+            let h = min(w * 0.62, geo.size.height * 0.34)
+            let frame = CGRect(x: 24, y: geo.size.height * 0.16, width: w, height: h)
+            ZStack(alignment: .topLeading) {
+                Color.black.opacity(0.35)
+                    .mask(
+                        Rectangle().overlay(RoundedRectangle(cornerRadius: 22).frame(width: frame.width, height: frame.height)
+                            .position(x: frame.midX, y: frame.midY).blendMode(.destinationOut))
+                    )
+                    .allowsHitTesting(false)
+                RoundedRectangle(cornerRadius: 22)
+                    .strokeBorder(barcode != nil ? Color.moss : Color.white.opacity(0.9), lineWidth: 3)
+                    .frame(width: frame.width, height: frame.height)
+                    .position(x: frame.midX, y: frame.midY)
+                    .animation(.easeOut(duration: 0.2), value: barcode != nil)
+                Label(guide, systemImage: barcode == nil ? "barcode.viewfinder" : bestDate == nil ? "calendar" : "checkmark.circle.fill")
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.horizontal, 14).padding(.vertical, 8)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .position(x: geo.size.width / 2, y: frame.minY - 28)
+                    .contentTransition(.numericText())
+                    .animation(.easeOut(duration: 0.2), value: guide)
             }
-            if isLookingUp {
-                Label("Looking up product…", systemImage: "barcode.viewfinder")
-                    .font(.caption)
-                    .symbolEffect(.variableColor.iterative, isActive: isLookingUp)
+        }
+        .ignoresSafeArea()
+        .allowsHitTesting(false)
+    }
+
+    private var card: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // What the camera found
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: barcode == nil ? "barcode" : "shippingbox.fill")
+                    .font(.title2).foregroundStyle(barcode == nil ? Color.secondary : Color.ink).frame(width: 32)
+                    .symbolEffect(.bounce, value: barcode)
+                VStack(alignment: .leading, spacing: 2) {
+                    if let name = productName {
+                        Text(name).font(.headline).lineLimit(2)
+                        if let b = productBrand, !b.isEmpty { Text(b).font(.subheadline).foregroundStyle(.secondary) }
+                    } else if let barcode {
+                        Text(isLookingUp ? "Looking it up…" : "New to Lantern").font(.headline)
+                        Text("Barcode \(barcode)").font(.subheadline).foregroundStyle(.secondary).monospacedDigit()
+                    } else {
+                        Text("Nothing scanned yet").font(.headline).foregroundStyle(.secondary)
+                        Text(addedThisSession == 0 ? "Hold the barcode inside the frame." : "\(addedThisSession) added this session. Keep going.").font(.subheadline).foregroundStyle(.secondary)
+                    }
+                }
+                Spacer()
+                if isLookingUp { ProgressView() }
+            }
+            if let d = bestDate {
+                Label("Date \(d.date.formatted(date: .abbreviated, time: .omitted))", systemImage: "calendar")
+                    .font(.subheadline).foregroundStyle(Color.moss)
+                    .symbolEffect(.bounce, options: .nonRepeating)
             }
             if let added = addedToExisting {
                 Label("Added 1 to \(added)", systemImage: "checkmark.circle.fill").foregroundStyle(Color.moss).font(.subheadline)
+                    .symbolEffect(.bounce, options: .nonRepeating)
             }
+
+            // Where it goes
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    Text("Put it in").font(.caption).foregroundStyle(.secondary)
+                    ForEach(locations, id: \.uuid) { loc in
+                        Button {
+                            location = loc; lastLocationID = loc.uuid.uuidString
+                        } label: {
+                            Label(loc.name, systemImage: loc.symbol)
+                                .font(.caption.weight(.medium)).lineLimit(1)
+                                .padding(.horizontal, 10).padding(.vertical, 6)
+                                .background(location?.uuid == loc.uuid ? Color.ink : Color(uiColor: .tertiarySystemFill), in: Capsule())
+                                .foregroundStyle(location?.uuid == loc.uuid ? Color(uiColor: .systemBackground) : Color.primary)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(location?.uuid == loc.uuid ? .isSelected : [])
+                    }
+                    Button { showNewLocation = true } label: {
+                        Label("New", systemImage: "plus").font(.caption.weight(.medium))
+                            .padding(.horizontal, 10).padding(.vertical, 6)
+                            .background(Color(uiColor: .tertiarySystemFill), in: Capsule())
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("New location")
+                }
+            }
+
+            // Actions
             HStack(spacing: 10) {
                 if let first = existingMatches.first {
                     Button {
                         first.quantity += 1
                         first.touch()
+                        if first.location == nil { first.location = location }
                         if let d = bestDate?.date, first.expirationDate == nil || d > (first.expirationDate ?? d) {
                             first.expirationDate = d
                             first.dateSource = .printed
                         }
                         try? context.save()
                         addedToExisting = first.name
+                        addedThisSession += 1
                         barcode = nil
                         bestDate = nil
-                    } label: { Label("Add 1 to \(first.name)", systemImage: "plus.circle.fill") }
+                    } label: { Label("Add 1 to \(first.name)", systemImage: "plus.circle.fill").lineLimit(1) }
+                    .buttonStyle(.borderedProminent)
+                    Button { showEditor = true } label: { Label("New", systemImage: "square.and.pencil") }
+                        .buttonStyle(.bordered)
+                } else {
+                    Button { showEditor = true } label: {
+                        Label(barcode == nil && bestDate == nil ? "Add by hand" : "New item", systemImage: "square.and.pencil").frame(maxWidth: .infinity)
+                    }
                     .buttonStyle(.borderedProminent)
                 }
-                if existingMatches.isEmpty {
-                    Button { showEditor = true } label: { Label(barcode == nil && bestDate == nil ? "Add by hand" : "New item", systemImage: "square.and.pencil") }
-                        .buttonStyle(.borderedProminent)
-                } else {
-                    Button { showEditor = true } label: { Label("New item", systemImage: "square.and.pencil") }
-                        .buttonStyle(.bordered)
-                }
                 if barcode != nil || bestDate != nil {
-                    Button("Rescan") { reset() }.buttonStyle(.bordered)
+                    Button { reset() } label: { Image(systemName: "arrow.counterclockwise").frame(minWidth: 28) }
+                        .buttonStyle(.bordered).accessibilityLabel("Rescan")
                 }
             }
+            .controlSize(.large)
             Text(onlineLookup ? OpenFoodFactsClient.attribution : "Online barcode lookup is off. Names come from your own history.")
                 .font(.caption2).foregroundStyle(.tertiary)
         }
-        .padding()
-        .background(Color(uiColor: .systemGroupedBackground))
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(.regularMaterial, in: UnevenRoundedRectangle(topLeadingRadius: 22, topTrailingRadius: 22))
+        .ignoresSafeArea(edges: .bottom)
     }
 
     private var draft: ItemDraft {
@@ -180,6 +336,7 @@ struct ScanSheet: View {
         d.caloriesPerUnit = productCalories
         d.servingsPerUnit = productServings
         d.nutrition = productNutrition
+        d.location = location
         if let m = memory {
             d.category = m.category
             d.unit = m.unit
@@ -213,6 +370,7 @@ struct ScanSheet: View {
         guard barcode == nil, !clean.isEmpty else { return }
         barcode = clean
         addedToExisting = nil
+        recognitions += 1
 
         let descriptor = FetchDescriptor<ProductMemory>(predicate: #Predicate { $0.barcode == clean })
         if let m = (try? context.fetch(descriptor))?.first {
@@ -247,22 +405,6 @@ struct ScanSheet: View {
         guard let candidate = parser.parse(text).first, candidate.confidence >= 0.55 else { return }
         if let current = bestDate, current.confidence >= candidate.confidence { return }
         bestDate = candidate
-    }
-}
-
-private struct Chip: View {
-    let symbol: String
-    let text: String
-    let active: Bool
-
-    var body: some View {
-        Label(text, systemImage: symbol)
-            .font(.caption.weight(.medium))
-            .lineLimit(1)
-            .symbolEffect(.bounce, value: active)
-            .padding(.horizontal, 10)
-            .padding(.vertical, 6)
-            .background((active ? Color.glow : Color.secondary).opacity(0.18), in: Capsule())
-            .foregroundStyle(active ? Color.primary : Color.secondary)
+        recognitions += 1
     }
 }

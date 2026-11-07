@@ -726,3 +726,30 @@ A full read of Views and Services against §20 to §24 and hig.md turned up fort
 Left for later, in order: Home person bubbles open sheets rather than the detail column on the open Duo;
 "3d overdue" style durations are terse for VoiceOver; the per-position coverage rule (first N people in
 sort order are covered) is kept but not yet explained in Settings.
+
+## 26. Scanner, locations and coordinates (added November 7, 2026, for 1.0.1)
+
+**Scanner.** Full-screen camera with a reading window: the frame the scanner reads, dimmed outside,
+a guide line above it that walks through barcode then date, and a card over the bottom that shows what
+was found (name, brand, date), where it goes, and the one button that matters (Add 1 to the item you
+already have, or New item). The scanner only reads inside the window, so the card and anything on the
+counter below it are ignored. A torch button for the back of the pantry, a keyboard button to type a
+barcode, a running count for the session, and a success haptic on each read. The sheet stays open so a
+bag of groceries goes in without leaving it.
+
+**Put it in.** A row of location chips on the scanner card; the last one used is remembered, and New
+opens the location editor without leaving the scanner. New items take the chip; an existing item with no
+location gets it on "Add 1".
+
+**Locations.** Each one now has a name, a symbol from a grid of sixteen, one line of directions ("top
+shelf, left of the water heater"), a photo, and, for a place that is not the house, an address and
+coordinates. The list splits into In the house and Away from home. Item detail shows the directions,
+address and an Open in Maps link.
+
+**Coordinates.** `GeoPoint` holds a position, formats it as decimal and as degrees-minutes-seconds (the
+form a rescuer or a paper map uses), parses "lat, lon" and pasted Apple or Google Maps links, and gives
+Maps and Directions links. `CoordinateSection` is the reusable form section: Use my location (one fix
+through `LocationFix`, nothing in the background), type them in, open in Maps, directions, copy, clear,
+and distance from here once a fix exists. Used on storage locations and on both meeting spots in the
+plan. The printed plan carries both forms, and the "Meet at our spot" text includes a Maps link. The
+location permission string now explains both uses. Nothing is stored anywhere but the phone.

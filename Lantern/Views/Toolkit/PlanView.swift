@@ -22,7 +22,10 @@ struct PlanView: View {
 
     private func makePDF(_ p: HouseholdPlan) {
         let sections: [PrintService.Section] = [
-            .init(heading: "Where we meet", lines: ["Near home: \(p.meetNearHome)", "Outside the neighborhood: \(p.meetOutsideNeighborhood)", "Out-of-town contact: \(p.outOfTownContact)"]),
+            .init(heading: "Where we meet", lines: [
+                "Near home: \(p.meetNearHome)" + (p.meetNearHomePoint.map { " (\($0.text), \($0.dms))" } ?? ""),
+                "Outside the neighborhood: \(p.meetOutsideNeighborhood)" + (p.meetOutsidePoint.map { " (\($0.text), \($0.dms))" } ?? ""),
+                "Out-of-town contact: \(p.outOfTownContact)"]),
             .init(heading: "People and pets", lines: ["Kids: \(p.kidsPlan)", "Pets: \(p.petsPlan)", "Medical: \(p.medicalNotes)", "Documents: \(p.documentsLocation)"]),
             .init(heading: "Shutoffs", lines: ["Gas: \(p.gasShutoffNote)", "Water: \(p.waterShutoffNote)", "Electrical panel: \(p.electricPanelNote)"]),
             .init(heading: "Weather radio", lines: [p.noaaStation.isEmpty ? "" : "Station: \(p.noaaStation)"]),
@@ -50,6 +53,8 @@ private struct PlanForm: View {
             } header: { Text("Where we meet") } footer: {
                 Text("Local calls fail first in a disaster. A relative in another state can relay messages for the whole family.")
             }
+            CoordinateSection(title: "Near-home spot on the map", latitude: $plan.meetNearHomeLatitude, longitude: $plan.meetNearHomeLongitude) { try? context.save() }
+            CoordinateSection(title: "Outside-the-neighborhood spot on the map", latitude: $plan.meetOutsideLatitude, longitude: $plan.meetOutsideLongitude) { try? context.save() }
 
             Section("People and pets") {
                 TextField("Kids: who picks up, from where", text: $plan.kidsPlan, axis: .vertical)

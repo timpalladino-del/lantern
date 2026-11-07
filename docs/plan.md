@@ -753,3 +753,53 @@ through `LocationFix`, nothing in the background), type them in, open in Maps, d
 and distance from here once a fix exists. Used on storage locations and on both meeting spots in the
 plan. The printed plan carries both forms, and the "Meet at our spot" text includes a Maps link. The
 location permission string now explains both uses. Nothing is stored anywhere but the phone.
+
+## 27. What people want (research, November 7, 2026)
+
+Three passes: App Store and Play reviews of pantry, home-inventory and readiness apps (FEMA, Red Cross Emergency, Watch Duty, Pantry Check, NoWaste, Preppr, Provision Planner and others); forum and press coverage of Helene, the LA fires, Beryl and Fern survivors; and official guidance (Ready.gov, FEMA EFFAK, Red Cross, CDC, EPA 2026 smoke factsheet, ASPCA, AAP, NAIC) plus Apple and consumer-health rules. Most primary pages were blocked from the research container, so quotes come from search snippets and secondary coverage. Treat counts as approximate.
+
+### What Lantern already does well
+Barcode scanning with a product memory (manual entry is the documented reason pantry apps get abandoned), fridge and freezer clocks, shutoff photos, medication days and reminders, days-of-supply by person and pet, know-how cards, CSV and PDF export, local-first with no account (sync failures and lost logins are the top data-loss complaint elsewhere).
+
+### Gaps, ranked by how often people asked and how well it fits Lantern
+
+Tier 1: small, fits 1.0.1 or 1.1
+1. Expiry reminders for every category. Today per-item notifications fire only for medicine, baby and water; everything else is in the weekly digest. Reviewers of Pantry Check, Kitwise and FoodKeeper praise per-item reminders; NoWaste and PPantry are knocked for lacking native ones. Add a per-category toggle, dedupe into one morning notification per day, never more.
+2. Weakest-link readiness. Surveys: over 75 percent feel ready while 58 percent have no evacuation plan. The Home number should name the single shortest line (water, a medication, device hours) rather than only a total.
+3. Medication refill logistics. Add pharmacy name and phone, Rx number, a needs-refrigeration flag, and a nudge toward 90-day fills. Helene posts: "out, and the pharmacy was closed with no power." Florida and other states suspend refill-too-soon rejections once a warning is issued; say so in a card, hedged by state.
+4. Pet records. Microchip number and registry, vet and phone, vaccination photo, carrier per pet, pet caregiver, pet-friendly lodging list. Shelters (Miami-Dade) require current vaccination records; owners are measurably less likely to evacuate.
+5. Cash and vehicle fuel as readiness items, plus a car kit template. Asheville: cash-only grocery lines; Beryl: stations dry in 48 hours.
+6. A "storm is named" checklist mode for the 72 hours before an event: refill, cash, fuel, charge, freeze water, photograph rooms, send the plan. Prep is event-triggered (purchases peak the day before landfall), so meet people there. Plain language, no doomsday words.
+7. Escape plan and drills. Two ways out of every room, practice twice a year, smoke alarms tested monthly and replaced at 10 years (Red Cross). Lantern has alarm maintenance but no escape plan or drill reminder. Add a wallet-card PDF.
+8. New know-how cards: wildfire smoke and a clean room (EPA 2026), refrigerated medications in an outage (defer to the label and pharmacist), home oxygen, dialysis three-day diet and the KCER line, how to sign up for local alerts and utility outage alerts, insurance review (replacement cost, additional living expense, flood is separate). Attribute sources and date-stamp them.
+
+Tier 2: medium, 1.1 to 1.2
+9. Document wallet, on-device only. Insurance policy numbers with insurer and agent phone, IDs, deed or lease, advance directives and power of attorney, prescriptions, pet records. An off-site-copy checkbox and an annual review reminder. Evacuees left licenses behind; FEMA denials often come down to one missing document; cloud copies are unreachable without power.
+10. Outside helpers and check-in protocol. People outside the household: has a key, trained on equipment, backup caregiver, out-of-area relay. Agreed check-in times and what silence means. Buncombe County logged 11,000 "trying to reach a family member" requests. Extends Status texts, which already exist.
+11. Device runtime. Hours of battery per power-dependent device, a runtime clock in outage mode, supplier phone, utility medical-program enrolled flag. Oxygen deaths in Aiken County were from no power; only a small share of CPAP users have ever run on battery.
+12. CSV import and faster bulk entry (quantity steppers, multi-add). Importing is the most requested path after scanning; front-loading is where pantry apps lose people.
+13. Children: school or daycare and authorized pickup list per child, a child-carried card, infant consumables counted in days. Schools text parents to pick up immediately.
+14. A second household for an elderly parent at another address, with their helpers, devices and pharmacy. Long-distance caregivers want exactly this.
+
+Tier 3: large, or a product decision
+15. Shared household supplies across phones. The single most repeated want in pantry reviews ("my husband can't see my kitchen"). Possible without accounts through iCloud private database sharing, but it is a large change to the local-first model and must never gate already-entered data.
+16. Insurance belongings inventory, room by room with photos, serials and receipts, exporting to an insurer worksheet. Survivors call it "a total nightmare" after the fact. A separate module; likely its own tab or a Gear section.
+17. Hazard alerts for saved locations. The most praised feature of FEMA, Red Cross and Watch Duty, and the top complaint when it misfires or spams. Needs a network path and careful dedupe; consider linking to those apps first.
+18. Opt-in neighbor share card: who has a generator, chainsaw, first aid training, who lives alone. Only 12 percent plan with neighbors, yet Helene information flowed through whoever had Starlink. Export only, nothing stored about others without consent.
+19. Widgets, Siri and Apple Watch complications for days-of-supply and the next expiry. Cheap differentiation, few explicit requests.
+20. Skipped on purpose: recipes and meal planning, offline maps (link to Maps), mesh messaging promises, post-loss claim diaries, a web app.
+
+### Complaints to design against
+- Alert spam and alerts that only appear when the app is open. One digest a day, per-category switches, no repeats.
+- Paywall creep that strands data. Never gate access to anything already entered. The free limit of 50 items matches a cap another readiness app is criticized for; consider a soft limit (read everything, add beyond 50 with a plan) and say plainly on the paywall that data is never locked.
+- Tedious entry and wrong default dates. Keep the shelf-life library, offer a manual barcode fallback (done), add import.
+- Updates that make emergency screens harder. Keep outage mode plain; date-stamp guidance.
+- Subscriptions. Reviewers repeatedly prefer a one-time purchase; Kitwise, HAVEN and Watch Duty are praised for one-time or optional pricing. A lifetime unlock alongside Duo and Family is worth pricing.
+
+### Compliance notes to carry into 1.0.1
+- Apple 1.4.1: cards stay informational, attribute USDA, CDC, Red Cross, and include "check with your doctor or pharmacist" where medication is involved. No dosing or flow-rate instructions.
+- Apple 5.1.1(ix): apps handling sensitive health information should be submitted by a legal entity rather than an individual. Confirm the developer account type.
+- Washington My Health My Data Act and similar laws: a consumer-health privacy notice linked from the App Store page covering medications and conditions stored on device.
+- Sharing (medication card, profile links, status texts) moves health data off the device by user action; confirm before sending and say so in the privacy policy.
+- SOS strobe: no photosensitivity warning exists in the Toolkit today. Add one.
+- Ready.gov pages carry a notice that content is being updated under 2025 executive orders; recheck wording before quoting.

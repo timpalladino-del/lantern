@@ -1,123 +1,156 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
+<!--
+  Lantern explainer, 1080x1920, 53.5 s. Version 2 (type and spacing pass).
+  Layout rules, so the next edit keeps them:
+  - Content lives between y=230 and y=1370. Captions sit at y=1410..1590. Nothing essential above 220
+    or below 1590: Reels and Stories cover those bands with their own interface.
+  - No negative letter-spacing anywhere. Display lines use line-height 1.14 to 1.2, body 1.3 to 1.4.
+  - Fonts are bundled (Inter, Newsreader, both SIL Open Font License) so every machine renders the same.
+-->
 <style>
-  :root { --cream:#F4EFE6; --ink:#1C2230; --ember:#C8642E; --moss:#4F6F52; --glow:#D08A1C; --paper:#FBF8F2; }
+  @font-face { font-family: "Inter"; font-weight: 400; src: url("fonts/inter-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 500; src: url("fonts/inter-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 600; src: url("fonts/inter-latin-600-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Inter"; font-weight: 700; src: url("fonts/inter-latin-700-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Newsreader"; font-weight: 400; src: url("fonts/newsreader-latin-400-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Newsreader"; font-weight: 500; src: url("fonts/newsreader-latin-500-normal.woff2") format("woff2"); }
+  @font-face { font-family: "Newsreader"; font-weight: 600; src: url("fonts/newsreader-latin-600-normal.woff2") format("woff2"); }
+
+  :root { --cream:#F4EFE6; --ink:#1C2230; --ember:#C8642E; --moss:#4F6F52; --gold:#E9B86A; --paper:#FBF8F2; }
+  * { box-sizing: border-box; }
   html,body { margin:0; width:1080px; height:1920px; overflow:hidden; background:var(--cream); }
-  body { font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Inter, Arial, sans-serif; color:var(--ink); -webkit-font-smoothing:antialiased; }
-  .serif { font-family: "New York", "Iowan Old Style", "Palatino", Georgia, serif; }
-  .stage { position:absolute; inset:0; }
-  .scene { position:absolute; inset:0; opacity:0; }
-  .center { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
-  .pad { padding: 0 96px; }
+  body { font-family: "Inter", "Helvetica Neue", Arial, sans-serif; color:var(--ink); letter-spacing:0; font-kerning:normal; text-rendering:optimizeLegibility; -webkit-font-smoothing:antialiased; }
+  .serif { font-family: "Newsreader", Georgia, serif; font-weight:500; letter-spacing:0; }
+  .stage, .scene { position:absolute; inset:0; }
+  .scene { opacity:0; }
+  .zone { position:absolute; left:96px; right:96px; top:230px; height:1140px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; }
+
+  /* shared pieces */
+  .kicker { font-size:34px; line-height:1.3; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--ember); }
+  .headline { position:absolute; left:96px; right:96px; top:236px; }
+  .headline h1 { margin:26px 0 0; font-size:80px; line-height:1.16; font-weight:700; }
+
   /* scene 1 */
   #s1 { background:var(--ink); color:var(--cream); }
-  .kicker { font-size:40px; letter-spacing:0.22em; text-transform:uppercase; opacity:.7; font-weight:600; }
-  .hook { font-size:112px; line-height:1.02; font-weight:700; letter-spacing:-0.02em; margin-top:18px; }
-  .stat { position:absolute; left:96px; right:96px; border-top:2px solid rgba(244,239,230,.25); padding-top:28px; }
-  .stat .when { font-size:34px; letter-spacing:.18em; text-transform:uppercase; color:#E9B86A; font-weight:700; }
-  .stat .num { font-size:128px; line-height:1; font-weight:600; margin:10px 0 6px; letter-spacing:-0.03em; }
-  .stat .what { font-size:44px; line-height:1.15; font-weight:500; }
-  .stat .src { font-size:28px; opacity:.55; margin-top:14px; }
+  #s1 .kicker { color:var(--gold); }
+  .hook { font-size:108px; line-height:1.14; margin-top:34px; }
+  .stat { position:absolute; left:96px; right:96px; border-top:2px solid rgba(244,239,230,.22); padding-top:30px; }
+  .stat .when { font-size:30px; line-height:1.3; font-weight:600; letter-spacing:0.14em; text-transform:uppercase; color:var(--gold); }
+  .stat .num { font-size:132px; line-height:1.08; margin-top:18px; }
+  .stat .what { font-size:42px; line-height:1.3; font-weight:500; margin-top:10px; }
+  .stat .src { font-size:26px; line-height:1.3; opacity:.6; margin-top:14px; }
+
   /* scene 2 */
-  .big { font-size:120px; line-height:1.0; font-weight:700; letter-spacing:-0.025em; }
-  .big em { font-style:normal; color:var(--ember); }
-  .icons { display:flex; gap:56px; margin-bottom:70px; }
-  .icons svg { width:150px; height:150px; stroke:var(--ink); fill:none; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
-  /* phone */
-  .phone { position:absolute; left:50%; width:640px; height:1392px; margin-left:-320px; transform-origin:50% 0; border-radius:92px; background:#0b0e14; padding:18px; box-shadow:0 60px 120px rgba(28,34,48,.28), 0 10px 30px rgba(28,34,48,.18); }
+  .icons { display:flex; gap:64px; margin-bottom:84px; }
+  .icons svg { width:132px; height:132px; stroke:var(--ink); fill:none; stroke-width:6; stroke-linecap:round; stroke-linejoin:round; }
+  .statement { font-size:100px; line-height:1.16; }
+  .statement + .statement { margin-top:48px; color:var(--ember); }
+
+  /* phone scenes */
+  .phone { position:absolute; left:50%; top:548px; width:640px; height:1392px; margin-left:-320px; transform-origin:50% 0; border-radius:92px; background:#0b0e14; padding:18px; box-shadow:0 60px 120px rgba(28,34,48,.26), 0 10px 30px rgba(28,34,48,.16); }
   .phone img { width:100%; height:100%; object-fit:cover; border-radius:76px; display:block; }
   .phone .notch { position:absolute; top:34px; left:50%; width:190px; height:52px; margin-left:-95px; background:#0b0e14; border-radius:30px; }
-  .headline { position:absolute; left:96px; right:96px; top:150px; font-size:84px; line-height:1.04; font-weight:700; letter-spacing:-0.02em; }
-  .headline small { display:block; font-size:38px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:var(--ember); margin-bottom:22px; }
-  .chip { position:absolute; display:flex; align-items:center; gap:18px; background:var(--paper); border:2px solid rgba(28,34,48,.12); border-radius:999px; padding:22px 38px; font-size:40px; font-weight:600; box-shadow:0 14px 40px rgba(28,34,48,.14); white-space:nowrap; }
-  .chip .dot { width:22px; height:22px; border-radius:50%; background:var(--ember); }
+  .chip { position:absolute; display:flex; align-items:center; gap:18px; background:var(--paper); border:2px solid rgba(28,34,48,.10); border-radius:999px; padding:20px 34px 20px 28px; font-size:38px; line-height:1.25; font-weight:600; box-shadow:0 14px 40px rgba(28,34,48,.16); white-space:nowrap; }
+  .chip .dot { width:20px; height:20px; border-radius:50%; background:var(--ember); flex:none; }
   .chip.moss .dot { background:var(--moss); }
-  .check { display:flex; align-items:center; gap:34px; font-size:72px; font-weight:600; margin:54px 0; line-height:1.1; }
+  .chip.l { left:56px; } .chip.r { right:56px; }
+  #s4 { background:#2A2F3A; color:var(--cream); }
+  #s4 .kicker { color:var(--gold); }
+  #s4 .chip { color:var(--ink); }
+  .vignette { position:absolute; inset:0; background: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 45%, rgba(10,12,18,.5) 100%); }
+
+  /* scene 6 */
+  .checks { position:absolute; left:96px; right:96px; top:660px; }
+  .check { display:flex; align-items:center; gap:36px; font-size:62px; line-height:1.22; font-weight:600; }
+  .check + .check { margin-top:64px; }
   .check .box { width:96px; height:96px; border-radius:50%; background:var(--moss); display:flex; align-items:center; justify-content:center; flex:none; }
-  .check .box svg { width:54px; height:54px; stroke:#fff; fill:none; stroke-width:8; stroke-linecap:round; stroke-linejoin:round; }
-  /* captions */
-  #cap { position:absolute; left:72px; right:72px; bottom:118px; text-align:center; font-size:46px; line-height:1.25; font-weight:600; }
-  #cap span { display:inline; background:rgba(28,34,48,.92); color:var(--cream); padding:10px 22px; box-decoration-break:clone; -webkit-box-decoration-break:clone; border-radius:14px; }
-  #s1 ~ #cap span, body.dark #cap span { background:rgba(244,239,230,.94); color:var(--ink); }
-  /* end */
-  .appicon { width:300px; height:300px; border-radius:68px; box-shadow:0 30px 80px rgba(28,34,48,.25); }
-  .appname { font-size:84px; font-weight:700; letter-spacing:-0.02em; margin-top:46px; }
-  .tag { font-size:56px; margin-top:16px; color:var(--ember); font-weight:600; }
-  .store { margin-top:70px; display:inline-flex; align-items:center; gap:22px; background:var(--ink); color:var(--cream); border-radius:28px; padding:26px 46px; font-size:40px; font-weight:600; }
-  .url { margin-top:26px; font-size:34px; opacity:.6; letter-spacing:.02em; }
-  .vignette { position:absolute; inset:0; background: radial-gradient(ellipse at 50% 40%, rgba(0,0,0,0) 45%, rgba(10,12,18,.55) 100%); pointer-events:none; }
+  .check .box svg { width:52px; height:52px; stroke:#fff; fill:none; stroke-width:7; stroke-linecap:round; stroke-linejoin:round; }
+
+  /* scene 7 */
+  .quote { font-size:92px; line-height:1.18; }
+  .quote em { font-style:normal; color:var(--ember); }
+  .appicon { width:260px; height:260px; border-radius:58px; box-shadow:0 30px 80px rgba(28,34,48,.22); }
+  .appname { font-size:104px; line-height:1.1; font-weight:700; margin-top:52px; }
+  .appsub { font-size:50px; line-height:1.3; font-weight:500; letter-spacing:0.01em; margin-top:12px; }
+  .tag { font-size:58px; line-height:1.25; margin-top:48px; color:var(--ember); }
+  .store { margin-top:76px; display:inline-block; background:var(--ink); color:var(--cream); border-radius:28px; padding:26px 50px; font-size:38px; line-height:1.3; font-weight:600; }
+  .url { margin-top:30px; font-size:30px; line-height:1.3; opacity:.6; letter-spacing:0.01em; }
+
+  /* captions: one box around the whole caption, never per-line pills */
+  #cap { position:absolute; left:96px; right:96px; bottom:330px; display:flex; justify-content:center; z-index:10; }
+  #capt { display:inline-block; max-width:860px; padding:18px 32px; border-radius:22px; font-size:42px; line-height:1.4; font-weight:600; text-align:center; text-wrap:balance; box-shadow:0 10px 30px rgba(0,0,0,.18); }
 </style></head>
 <body>
 <div class="stage">
 
 <section class="scene" id="s1">
-  <div class="center" style="position:absolute; left:0; right:0; top:170px; height:420px;">
-    <div class="kicker" id="s1k">May to November 2026</div>
-    <div class="hook serif" id="s1h">Six months.<br>Three reminders.</div>
+  <div class="zone" id="s1hook">
+    <div class="kicker">May to November 2026</div>
+    <div class="hook serif">Six months.<br>Three reminders.</div>
   </div>
-  <div class="stat" id="st1" style="top:600px"><div class="when">Oct 2026 · Hurricane Isaias</div><div class="num serif">860,000</div><div class="what">homes in the dark across three states</div><div class="src">CBS News, Oct 10</div></div>
-  <div class="stat" id="st2" style="top:960px"><div class="when">June 2026 · One Midwest storm</div><div class="num serif">2 million</div><div class="what">customers lost power</div><div class="src">PowerOutage.us</div></div>
-  <div class="stat" id="st3" style="top:1320px"><div class="when">Oct 2026 · National survey</div><div class="num serif">5%</div><div class="what">of homes have a complete emergency kit</div><div class="src">SafeHome, Oct 14</div></div>
+  <div class="stat" id="st1" style="top:250px"><div class="when">Oct 2026 · Hurricane Isaias</div><div class="num serif">860,000</div><div class="what">homes in the dark across three states</div><div class="src">CBS News, Oct 10</div></div>
+  <div class="stat" id="st2" style="top:620px"><div class="when">June 2026 · One Midwest storm</div><div class="num serif">2 million</div><div class="what">customers lost power</div><div class="src">PowerOutage.us</div></div>
+  <div class="stat" id="st3" style="top:990px"><div class="when">Oct 2026 · National survey</div><div class="num serif">5%</div><div class="what">of homes have a complete emergency kit</div><div class="src">SafeHome, Oct 14</div></div>
 </section>
 
 <section class="scene" id="s2">
-  <div class="center pad" style="position:absolute; inset:0;">
+  <div class="zone">
     <div class="icons" id="s2i">
       <svg viewBox="0 0 100 100"><rect x="22" y="14" width="56" height="72" rx="8"/><path d="M22 30h56M22 70h56"/></svg>
       <svg viewBox="0 0 100 100"><path d="M38 12h24v12l10 10v50a8 8 0 0 1-8 8H36a8 8 0 0 1-8-8V34l10-10z"/><path d="M28 60h44"/></svg>
       <svg viewBox="0 0 100 100"><rect x="14" y="30" width="62" height="40" rx="8"/><path d="M76 42h10v16H76M24 50h30"/></svg>
     </div>
-    <div class="big serif" id="s2t">You already own the supplies.<br><em>You don't have the list.</em></div>
+    <div class="statement serif" id="s2a">You already own<br>the supplies.</div>
+    <div class="statement serif" id="s2b">You don't have<br>the list.</div>
   </div>
 </section>
 
 <section class="scene" id="s3">
-  <div class="headline" id="s3h"><small>Lantern keeps it</small>Scan it once.<br>Know your days.</div>
-  <div class="phone" id="s3p" style="top:430px"><img src="assets/home.png"><div class="notch"></div></div>
-  <div class="chip" id="c31" style="left:60px; top:700px"><span class="dot"></span>Scan a barcode</div>
-  <div class="chip" id="c32" style="right:60px; top:1040px"><span class="dot"></span>Days covered, per person</div>
-  <div class="chip moss" id="c33" style="left:60px; top:1380px"><span class="dot"></span>Pets count too</div>
+  <div class="headline" id="s3h"><div class="kicker">Lantern keeps it</div><h1>Scan it once.<br>Know your days.</h1></div>
+  <div class="phone" id="s3p"><img src="assets/home.png"><div class="notch"></div></div>
+  <div class="chip l" id="c31" style="top:690px"><span class="dot"></span>Scan a barcode</div>
+  <div class="chip r" id="c32" style="top:900px"><span class="dot"></span>Days covered, per person</div>
+  <div class="chip l moss" id="c33" style="top:1140px"><span class="dot"></span>Pets count too</div>
 </section>
 
-<section class="scene" id="s4" style="background:#2A2F3A;">
+<section class="scene" id="s4">
   <div class="vignette"></div>
-  <div class="headline" id="s4h" style="color:var(--cream)"><small style="color:#E9B86A">When the power goes out</small>The one app<br>you open.</div>
-  <div class="phone" id="s4p" style="top:430px"><img src="assets/outage.png"><div class="notch"></div></div>
-  <div class="chip" id="c41" style="left:60px; top:680px"><span class="dot"></span>Fridge and freezer clocks</div>
-  <div class="chip" id="c42" style="right:60px; top:940px"><span class="dot"></span>SOS light</div>
-  <div class="chip" id="c43" style="left:60px; top:1200px"><span class="dot"></span>Medication card</div>
-  <div class="chip" id="c44" style="right:60px; top:1460px"><span class="dot"></span>Texts, already written</div>
+  <div class="headline" id="s4h"><div class="kicker">When the power goes out</div><h1>The one app<br>you open.</h1></div>
+  <div class="phone" id="s4p"><img src="assets/outage.png"><div class="notch"></div></div>
+  <div class="chip l" id="c41" style="top:640px"><span class="dot"></span>Fridge and freezer clocks</div>
+  <div class="chip r" id="c42" style="top:810px"><span class="dot"></span>SOS light</div>
+  <div class="chip r" id="c43" style="top:980px"><span class="dot"></span>Medication card</div>
+  <div class="chip l" id="c44" style="top:1170px"><span class="dot"></span>Texts, already written</div>
 </section>
 
 <section class="scene" id="s5">
-  <div class="headline" id="s5h"><small>Weather alerts</small>For the places<br>you love.</div>
-  <div class="phone" id="s5p" style="top:430px"><img src="assets/weather.png"><div class="notch"></div></div>
-  <div class="chip" id="c51" style="left:60px; top:740px"><span class="dot"></span>Home</div>
-  <div class="chip" id="c52" style="right:60px; top:980px"><span class="dot"></span>Mom's house</div>
-  <div class="chip" id="c53" style="left:60px; top:1220px"><span class="dot"></span>The kids' school</div>
-  <div class="chip moss" id="c54" style="right:60px; top:1460px"><span class="dot"></span>One notification, never ten</div>
+  <div class="headline" id="s5h"><div class="kicker">Weather alerts</div><h1>For the places<br>you love.</h1></div>
+  <div class="phone" id="s5p"><img src="assets/weather.png"><div class="notch"></div></div>
+  <div class="chip l" id="c51" style="top:690px"><span class="dot"></span>Home</div>
+  <div class="chip r" id="c52" style="top:850px"><span class="dot"></span>Mom's house</div>
+  <div class="chip l" id="c53" style="top:1010px"><span class="dot"></span>The kids' school</div>
+  <div class="chip l moss" id="c54" style="top:1190px"><span class="dot"></span>One notification, never ten</div>
 </section>
 
 <section class="scene" id="s6">
-  <div class="headline" id="s6h"><small>Private by design</small>Yours from<br>day one.</div>
-  <div class="phone" id="s6p" style="display:none"></div>
-  <div id="s6c" style="position:absolute; left:110px; right:60px; top:720px;">
-    <div class="check" id="k1"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div>No account</div>
-    <div class="check" id="k2"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div>Nothing leaves your phone</div>
-    <div class="check" id="k3"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div>The whole Toolkit,<br>from day one</div>
+  <div class="headline" id="s6h"><div class="kicker">Private by design</div><h1>Yours from<br>day one.</h1></div>
+  <div class="checks">
+    <div class="check" id="k1"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div><div>No account</div></div>
+    <div class="check" id="k2"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div><div>Nothing leaves<br>your phone</div></div>
+    <div class="check" id="k3"><div class="box"><svg viewBox="0 0 48 48"><path d="M10 25l9 9 19-20"/></svg></div><div>The whole Toolkit,<br>from day one</div></div>
   </div>
 </section>
 
 <section class="scene" id="s7">
-  <div class="center" style="position:absolute; inset:0;">
-    <div id="s7q" class="big serif" style="font-size:96px; margin-bottom:120px; padding:0 90px;">The next outage<br>is not a question of <em>if.</em></div>
-    <div id="s7b" class="center">
-      <img class="appicon" src="assets/icon.png">
-      <div class="appname">Lantern: Household Readiness</div>
-      <div class="tag serif">Be the house that's ready.</div>
-      <div class="store">Download on the App Store</div>
-      <div class="url">apps.apple.com/app/id6830418364</div>
-    </div>
+  <div class="zone" id="s7q"><div class="quote serif">The next outage<br>is not a question<br>of <em>if.</em></div></div>
+  <div class="zone" id="s7b">
+    <img class="appicon" src="assets/icon.png">
+    <div class="appname">Lantern</div>
+    <div class="appsub">Household Readiness</div>
+    <div class="tag serif">Be the house that's ready.</div>
+    <div class="store">Download on the App Store</div>
+    <div class="url">apps.apple.com/app/id6830418364</div>
   </div>
 </section>
 
@@ -126,28 +159,31 @@
 
 <script>
 // Deterministic timeline: seek(t) sets every property from t in seconds.
-const B = [0, 6.4, 9.98, 20.03, 29.62, 37.48, 43.35, 53.5]; // scene boundaries
+const B = [0, 6.6, 9.98, 20.03, 29.62, 37.48, 43.35, 53.5]; // scene boundaries
 const CAPS = [
-  [0.1,"Six months."],[1.58,"Three reminders."],
-  [3.3,"Most of us already own a week of food, a case of water, a drawer of batteries."],[8.4,"We just don't have the list."],
-  [9.98,"Lantern keeps it."],[11.15,"Scan a barcode."],[12.2,"It knows the shelf life."],[13.58,"And it tells you how many days your actual family is covered."],[16.85,"Food. Water. Medication. Even the dog."],
-  [20.03,"When the power goes out, Lantern is the one thing you open."],[23.55,"Fridge and freezer clocks."],[24.8,"An SOS light."],[25.98,"The medication card you hand a paramedic."],[28.3,"Texts to your people, already written."],
-  [29.62,"Weather alerts for the places you love."],[32.8,"Home. Mom's house. The kids' school."],[36.55,"One notification, never ten."],
-  [37.48,"No account."],[38.43,"Nothing leaves your phone."],[39.9,"And the whole Toolkit works from day one, no purchase needed."],
+  [0.1,"Six months."],[1.58,"Three reminders."],[2.3,""],
+  [3.3,"Most of us already own a week of food,"],[5.5,"a case of water, a drawer of batteries."],[8.4,"We just don't have the list."],
+  [9.98,"Lantern keeps it."],[11.15,"Scan a barcode."],[12.2,"It knows the shelf life."],[13.58,"And it tells you how many days"],[15.0,"your actual family is covered."],[16.85,"Food. Water. Medication."],[18.93,"Even the dog."],
+  [20.03,"When the power goes out,"],[21.23,"Lantern is the one thing you open."],[23.55,"Fridge and freezer clocks."],[24.8,"An SOS light."],[25.98,"The medication card you hand a paramedic."],[28.3,"Texts to your people, already written."],
+  [29.62,"Weather alerts for the places you love."],[32.8,"Home."],[34.23,"Mom's house."],[35.35,"The kids' school."],[36.55,"One notification, never ten."],
+  [37.48,"No account."],[38.43,"Nothing leaves your phone."],[39.9,"And the whole Toolkit works from day one,"],[42.12,"no purchase needed."],
   [43.35,"The next outage is not a question of if."],[46.05,"Be the house that's ready."],[47.53,"Lantern: Household Readiness."],[49.6,"On the App Store."],[50.6,""]
 ];
+const PHONE = 0.74; // phone scale: 474 x 1030, spanning y 548 to 1578
 const $ = id => document.getElementById(id);
 const clamp = (x,a,b) => Math.max(a, Math.min(b, x));
-const ease = x => 1 - Math.pow(1 - clamp(x,0,1), 3);           // ease-out cubic
-const easeIO = x => { x = clamp(x,0,1); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2,3)/2; };
+const ease = x => 1 - Math.pow(1 - clamp(x,0,1), 3);
 function fadeIn(el, t, t0, dur, dy=40, scale=1) {
   const p = ease((t - t0) / dur);
   el.style.opacity = p;
   el.style.transform = `translateY(${(1-p)*dy}px) scale(${scale + (1-scale)*p})`;
 }
-function show(el, on) { el.style.opacity = on ? 1 : 0; }
+function phoneIn(el, t, t0) {
+  const p = ease((t - t0) / 1.0);
+  el.style.opacity = p;
+  el.style.transform = `translateY(${(1-p)*200}px) scale(${PHONE - 0.03 + 0.03*p})`;
+}
 function sceneFade(t) {
-  // crossfade 0.35 s at each boundary
   for (let i = 0; i < 7; i++) {
     const el = $('s' + (i+1)); const a = B[i], b = B[i+1];
     let o = 0;
@@ -156,43 +192,38 @@ function sceneFade(t) {
     el.style.opacity = clamp(o, 0, 1);
     el.style.zIndex = (t >= a && t < b) ? 2 : 1;
   }
-  document.body.classList.toggle('dark', t < B[1] || (t >= B[3] && t < B[4]));
 }
 function seek(t) {
   sceneFade(t);
-  // scene 1
-  fadeIn($('s1k'), t, 0.0, 0.5, 20); fadeIn($('s1h'), t, 0.15, 0.7, 50, .96);
-  // stats roll in during the first beat's end and sit under the hook: timed to 1.0 / 1.8 / 2.5 so all three are visible before scene 2
-  fadeIn($('st1'), t, 0.9, 0.6, 60); fadeIn($('st2'), t, 1.6, 0.6, 60); fadeIn($('st3'), t, 2.3, 0.6, 60);
+  // scene 1: the hook alone, then the three numbers with room to breathe
+  const hookIn = ease((t - 0.1) / 0.7), hookOut = 1 - ease((t - 2.2) / 0.35);
+  $('s1hook').style.opacity = Math.min(hookIn, hookOut);
+  $('s1hook').style.transform = `translateY(${(1-hookIn)*40}px)`;
+  fadeIn($('st1'), t, 2.5, 0.6, 50); fadeIn($('st2'), t, 3.3, 0.6, 50); fadeIn($('st3'), t, 4.1, 0.6, 50);
   // scene 2
-  fadeIn($('s2i'), t, B[1]+0.1, 0.8, 30); fadeIn($('s2t'), t, B[1]+0.6, 0.8, 50, .97);
+  fadeIn($('s2i'), t, B[1]+0.1, 0.7, 30); fadeIn($('s2a'), t, B[1]+0.35, 0.7, 40); fadeIn($('s2b'), t, 8.3, 0.6, 40);
   // scene 3
-  fadeIn($('s3h'), t, B[2]+0.1, 0.7, 40);
-  const p3 = ease((t - (B[2]+0.3)) / 1.0); $('s3p').style.opacity = p3; $('s3p').style.transform = `translateY(${(1-p3)*220}px) scale(${.78+.04*p3})`;
-  fadeIn($('c31'), t, 11.15, 0.5, 30, .9); fadeIn($('c32'), t, 13.6, 0.5, 30, .9); fadeIn($('c33'), t, 18.9, 0.5, 30, .9);
+  fadeIn($('s3h'), t, B[2]+0.1, 0.7, 40); phoneIn($('s3p'), t, B[2]+0.3);
+  fadeIn($('c31'), t, 11.15, 0.5, 30, .92); fadeIn($('c32'), t, 13.6, 0.5, 30, .92); fadeIn($('c33'), t, 18.9, 0.5, 30, .92);
   // scene 4
-  fadeIn($('s4h'), t, B[3]+0.1, 0.7, 40);
-  const p4 = ease((t - (B[3]+0.3)) / 1.0); $('s4p').style.opacity = p4; $('s4p').style.transform = `translateY(${(1-p4)*220}px) scale(${.78+.04*p4})`;
-  fadeIn($('c41'), t, 23.55, 0.5, 30, .9); fadeIn($('c42'), t, 24.8, 0.5, 30, .9); fadeIn($('c43'), t, 25.98, 0.5, 30, .9); fadeIn($('c44'), t, 28.3, 0.5, 30, .9);
+  fadeIn($('s4h'), t, B[3]+0.1, 0.7, 40); phoneIn($('s4p'), t, B[3]+0.3);
+  fadeIn($('c41'), t, 23.55, 0.5, 30, .92); fadeIn($('c42'), t, 24.8, 0.5, 30, .92); fadeIn($('c43'), t, 25.98, 0.5, 30, .92); fadeIn($('c44'), t, 28.3, 0.5, 30, .92);
   // scene 5
-  fadeIn($('s5h'), t, B[4]+0.1, 0.7, 40);
-  const p5 = ease((t - (B[4]+0.3)) / 1.0); $('s5p').style.opacity = p5; $('s5p').style.transform = `translateY(${(1-p5)*220}px) scale(${.78+.04*p5})`;
-  fadeIn($('c51'), t, 32.8, 0.4, 30, .9); fadeIn($('c52'), t, 34.23, 0.4, 30, .9); fadeIn($('c53'), t, 35.35, 0.4, 30, .9); fadeIn($('c54'), t, 36.55, 0.5, 30, .9);
+  fadeIn($('s5h'), t, B[4]+0.1, 0.7, 40); phoneIn($('s5p'), t, B[4]+0.3);
+  fadeIn($('c51'), t, 32.8, 0.4, 30, .92); fadeIn($('c52'), t, 34.23, 0.4, 30, .92); fadeIn($('c53'), t, 35.35, 0.4, 30, .92); fadeIn($('c54'), t, 36.55, 0.5, 30, .92);
   // scene 6
   fadeIn($('s6h'), t, B[5]+0.1, 0.7, 40);
-  const p6 = ease((t - (B[5]+0.3)) / 1.0); $('s6p').style.opacity = p6; $('s6p').style.transform = `translateY(${(1-p6)*160}px) scale(.86)`;
   fadeIn($('k1'), t, 37.6, 0.45, 30); fadeIn($('k2'), t, 38.5, 0.45, 30); fadeIn($('k3'), t, 40.0, 0.45, 30);
   // scene 7
   const q = t < 46.0 ? ease((t - (B[6]+0.1)) / 0.7) : 1 - ease((t - 46.0) / 0.4);
   $('s7q').style.opacity = clamp(q,0,1); $('s7q').style.transform = `translateY(${(1-clamp(q,0,1))*40}px)`;
-  $('s7q').style.display = t < 46.5 ? 'block' : 'none';
-  const b7 = ease((t - 46.3) / 0.9); $('s7b').style.opacity = b7; $('s7b').style.transform = `translateY(${(1-b7)*60}px) scale(${.96+.04*b7})`;
+  const b7 = ease((t - 46.3) / 0.9); $('s7b').style.opacity = b7; $('s7b').style.transform = `translateY(${(1-b7)*50}px)`;
   // captions
   let text = ''; for (const [ct, ctext] of CAPS) if (t >= ct) text = ctext;
+  const dark = (t < B[1] || (t >= B[3] && t < B[4]));
   $('capt').textContent = text; $('cap').style.opacity = text ? 1 : 0;
-  const capDark = (t < B[1] || (t >= B[3] && t < B[4]));
-  $('capt').style.background = capDark ? 'rgba(244,239,230,.94)' : 'rgba(28,34,48,.92)';
-  $('capt').style.color = capDark ? '#1C2230' : '#F4EFE6';
+  $('capt').style.background = dark ? 'rgba(244,239,230,.96)' : 'rgba(28,34,48,.94)';
+  $('capt').style.color = dark ? '#1C2230' : '#F4EFE6';
   return true;
 }
 window.seek = seek; window.TOTAL = B[B.length-1];

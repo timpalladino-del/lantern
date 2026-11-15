@@ -156,3 +156,23 @@ Agreement, App Review contact phone number, then Submit for Review.
   from the first pass). Uploaded the paywall capture (`-plan free -screenshot paywall`, which shows Duo
   selected) through `subscriptionAppStoreReviewScreenshots`: reserve, PUT the bytes to the upload
   operations, PATCH uploaded with the MD5. Script: `~/.appstoreconnect/lantern_duo_shot.py`.
+
+## Fourth submission, 1.0.1 build 12 (November 15, 2026, 00:35 UTC)
+
+- The 1.0 rejection (submission f28461ea, Nov 5) was Guideline 2.1 "Information Needed", not a defect: App Review asked
+  for a screen recording, purpose and audience, setup steps, external services, regional differences and any
+  regulated-industry documentation, all in the Notes field.
+- Answered all of it in the review notes, renamed the version to 1.0.1, attached build 12, and uploaded
+  `lantern-walkthrough.mp4` as the App Review attachment (`~/.appstoreconnect/jobs/attach_review_video.py`; the
+  5 MB parts go up with curl, urllib broke the pipe).
+- The recording is a simulator capture made by the `LanternUITests` scheme (`ReviewWalkthrough.testWalkthrough`,
+  Xcode screen recording, exported with `xcrun xcresulttool export attachments`). The notes say so plainly. If Apple
+  insists on a physical device, record the same flow on the iPhone and replace the attachment.
+- A rejected submission will not take new items. Cancelled f28461ea, created 6a4da96b through the API with the
+  version, then added Duo, Family 6, Family 10 and the Lantern Plan group in the web UI ("Add for Review", then
+  "Draft iOS Submission"). The group must be in the submission or the API refuses with
+  SUBSCRIPTION_SUBMISSION_REQUIRES_GROUP_VERSION.
+- That dropdown only opens when the Chrome tab has focus. `~/.appstoreconnect/browser/addforreview.js` turns on
+  `Emulation.setFocusEmulationEnabled` and then it works every time.
+- State after submit: version 1.0.1 and the three subscriptions WAITING_FOR_REVIEW. Group 50 left out on purpose.
+  Release type is manual.

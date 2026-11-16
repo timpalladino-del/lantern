@@ -24,8 +24,7 @@ family tracking is what the plan pays for.
 - Business, Agreements: Paid Apps must read Active. Without it the subscription fails silently on launch
   day and you find out from a stranger.
 - Tax forms: W-9 on file. A missing one stalled a CastleWise review for weeks.
-- Small Business Program: enroll the day Paid Apps goes Active. 85 percent instead of 70, and it is not
-  retroactive.
+- Small Business Program: enrolled (done, confirmed by the owner November 16, 2026). 85 percent instead of 70.
 - Distribution, 1.0: confirm Manually release this version (it is set; glance at it).
 - Monetization, Subscriptions: Family 6 and Family 10 read Waiting for Review since 18:05 UTC (third
   submission, f28461ea, 4 items). They must read Approved after review, with the 7-day trial attached in

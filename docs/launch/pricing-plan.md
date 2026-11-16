@@ -17,6 +17,12 @@ Subscription group 22542888. Duo reasoning: plan.md §23.
 The paywall appears at the second person and the 51st item (Duo leads, Family 6 beside it), at the third
 person on Duo (Family 6 leads), never during Outage mode and never on anything in the Toolkit. That rule is in the code and in the store copy. Keep it.
 
+## Decisions (November 16, 2026, from the owner)
+
+- No lifetime price. Plans stay yearly subscriptions only. Do not raise it again.
+- The free tier keeps a hard cap at 50 items. The paywall at the 51st item stays as built. No soft limit.
+- Small Business Program: enrolled, done well before launch. Do not list it as a to-do.
+
 ## Where money is and is not mentioned
 
 - App Store listing: "Free until you need it" and the plan names, no numbers in the description. Prices

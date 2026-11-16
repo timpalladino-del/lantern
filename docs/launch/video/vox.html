@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>Lantern explainer, editorial collage cut</title>
+<style>
+@font-face{font-family:Franklin;font-weight:500;src:url(fonts/libre-franklin-latin-500-normal.woff2)}
+@font-face{font-family:Franklin;font-weight:700;src:url(fonts/libre-franklin-latin-700-normal.woff2)}
+@font-face{font-family:Franklin;font-weight:900;src:url(fonts/libre-franklin-latin-900-normal.woff2)}
+@font-face{font-family:Hand;font-weight:700;src:url(fonts/caveat-latin-700-normal.woff2)}
+@font-face{font-family:Mono;font-weight:500;src:url(fonts/ibm-plex-mono-latin-500-normal.woff2)}
+@font-face{font-family:Mono;font-weight:600;src:url(fonts/ibm-plex-mono-latin-600-normal.woff2)}
+:root{--paper:#F2EDE1;--card:#FFFDF7;--ink:#1C2230;--night:#141823;--hl:#FFCB3D;--ember:#D2602A;--moss:#4F7A56;--grey:#7C8088;--blue:#9DB4C4}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#000}
+#stage{position:absolute;inset:0;width:1080px;height:1920px;overflow:hidden;font-family:Franklin,sans-serif;color:var(--ink)}
+.scene{position:absolute;inset:0;overflow:hidden;background:var(--paper)}
+.scene.dark{background:var(--night);color:#F4EFE6}
+.cam{position:absolute;inset:0;transform-origin:50% 45%}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(28,34,48,.055) 2px,transparent 2px),linear-gradient(90deg,rgba(28,34,48,.055) 2px,transparent 2px);background-size:90px 90px}
+.dark .grid{background-image:linear-gradient(rgba(255,255,255,.035) 2px,transparent 2px),linear-gradient(90deg,rgba(255,255,255,.035) 2px,transparent 2px)}
+.a{position:absolute}
+.lab{position:absolute;left:80px;top:236px;font-family:Mono;font-weight:600;font-size:25px;letter-spacing:.14em;color:var(--ember)}
+.dark .lab{color:var(--hl)}
+.h{position:absolute;left:80px;top:286px;width:940px;font-weight:900;font-size:84px;line-height:1.14;letter-spacing:.005em;text-transform:uppercase}
+.hl{background-image:linear-gradient(var(--hl),var(--hl));background-repeat:no-repeat;background-position:0 50%;background-size:0% 82%;padding:0 .14em;margin:0 -.14em}
+.dark .hl{color:var(--ink)}
+.hand{font-family:Hand;font-weight:700;color:var(--ember);line-height:1.05}
+.mono{font-family:Mono;font-weight:500;letter-spacing:.06em}
+.card{position:absolute;background:var(--card);box-shadow:10px 12px 0 rgba(28,34,48,.17);padding:24px 30px 22px}
+.tape{position:absolute;width:150px;height:40px;background:rgba(255,203,61,.78);top:-20px;left:50%;margin-left:-75px;transform:rotate(-3deg)}
+.tag{font-family:Mono;font-weight:600;font-size:22px;letter-spacing:.1em;color:var(--ember)}
+.num{font-weight:900;font-size:88px;line-height:1.1;letter-spacing:.005em}
+.desc{font-weight:500;font-size:35px;line-height:1.25}
+.src{font-family:Mono;font-weight:500;font-size:20px;letter-spacing:.05em;color:var(--grey);margin-top:8px}
+.stk{position:absolute;border-radius:50%;border:10px solid #fff;box-shadow:10px 12px 0 rgba(28,34,48,.17);overflow:hidden}
+.stk svg{position:absolute;inset:0;width:100%;height:100%}
+svg.draw{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible;pointer-events:none}
+svg.draw path{fill:none;stroke:var(--ember);stroke-width:7;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;stroke-dashoffset:1}
+.phone{position:absolute;width:640px;height:1392px;transform-origin:0 0;border-radius:92px;background:#0b0e14;padding:18px;box-shadow:22px 26px 0 rgba(28,34,48,.2)}
+.phone img{width:100%;height:100%;object-fit:cover;border-radius:76px;display:block}
+.phone .notch{position:absolute;top:34px;left:50%;width:190px;height:52px;margin-left:-95px;background:#0b0e14;border-radius:30px}
+#cap{position:absolute;left:0;width:1080px;top:1418px;height:170px;display:flex;align-items:center;justify-content:center;z-index:50}
+#capbox{max-width:900px;padding:16px 30px 18px;font-weight:700;font-size:43px;line-height:1.28;text-align:center;background:var(--ink);color:#F7F3EA;transform:rotate(-.6deg);box-shadow:7px 8px 0 rgba(28,34,48,.2)}
+#capbox.light{background:#F7F3EA;color:var(--ink);box-shadow:7px 8px 0 rgba(0,0,0,.35)}
+#grain{position:absolute;left:0;top:0;z-index:60;pointer-events:none;opacity:.38;mix-blend-mode:multiply}
+#vig{position:absolute;inset:0;z-index:61;pointer-events:none;box-shadow:inset 0 0 260px rgba(28,34,48,.22)}
+.row{position:absolute;left:330px;width:700px;font-weight:900;font-size:54px;line-height:1.14;text-transform:uppercase;letter-spacing:.005em}
+.bar{position:absolute;height:46px;background:rgba(28,34,48,.1)}
+.bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ink);width:0}
+.blab{position:absolute;font-family:Mono;font-weight:600;font-size:24px;letter-spacing:.1em}
+.bval{position:absolute;font-weight:900;font-size:34px;text-align:right;width:240px}
+.pin{position:absolute;width:64px;height:84px;margin:-84px 0 0 -32px;transform-origin:50% 100%}
+.ptag{position:absolute;background:#fff;font-weight:900;font-size:30px;padding:8px 16px 9px;text-transform:uppercase;letter-spacing:.02em;box-shadow:6px 7px 0 rgba(28,34,48,.2);white-space:nowrap}
+</style></head><body>
+<div id="stage">
+<svg width="0" height="0" style="position:absolute"><defs>
+  <filter id="glow" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="14" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <pattern id="hatch" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(40)"><rect width="14" height="14" fill="#5E6B7E"/><rect width="5" height="14" fill="#465064"/></pattern>
+</defs></svg>
+
+<!-- 1. Six months, three reminders -->
+<div class="scene" id="s1"><div class="cam" id="k1"><div class="grid"></div>
+  <div class="lab" id="s1l">MAY TO NOVEMBER 2026</div>
+  <div class="h" id="s1h"><span id="s1h1">Six months.</span><br><span id="s1h2"><span class="hl" id="s1hl">Three</span> reminders.</span></div>
+  <svg class="a" id="tl" style="left:0;top:500px" width="1080" height="110" viewBox="0 0 1080 110"></svg>
+  <svg class="draw" id="d1"><path id="d1a" pathLength="1" d="M240 584 C237 600 244 618 241 640"/><path id="d1b" pathLength="1" d="M840 584 C846 660 832 790 842 892"/></svg>
+  <div class="card" id="c1" style="left:70px;top:634px;width:650px" data-rot="-1.6"><div class="tape"></div>
+    <div class="tag">JUNE 2026 · MIDWEST STORMS</div><div class="num" id="n1">2 MILLION</div><div class="desc">customers lost power</div><div class="src">SOURCE: POWEROUTAGE.US</div></div>
+  <div class="card" id="c2" style="left:360px;top:886px;width:650px" data-rot="1.3"><div class="tape" style="transform:rotate(4deg)"></div>
+    <div class="tag">OCT 2026 · HURRICANE ISAIAS</div><div class="num" id="n2">860,000</div><div class="desc">homes in the dark, three states</div><div class="src">SOURCE: CBS NEWS</div></div>
+  <div class="card" id="c3" style="left:70px;top:1136px;width:760px" data-rot="-.9"><div class="tape" style="transform:rotate(-5deg)"></div>
+    <div class="tag">OCT 2026 · NATIONAL SURVEY</div>
+    <div style="display:flex;align-items:center;gap:30px"><div class="num" id="n3">5%</div><div id="dots" style="display:grid;grid-template-columns:repeat(20,15px);gap:6px"></div></div>
+    <div class="desc">of homes have a complete emergency kit</div><div class="src">SOURCE: SAFEHOME SURVEY</div></div>
+</div></div>
+
+<!-- 2. You already own the supplies -->
+<div class="scene" id="s2"><div class="cam" id="k2"><div class="grid"></div>
+  <div class="lab">WHAT MOST HOMES ALREADY HAVE</div>
+  <div class="h" id="s2h">You already own<br>the <span class="hl" id="s2hl">supplies.</span></div>
+  <div class="stk" id="k21" style="left:55px;top:540px;width:300px;height:300px;background:#E9C9A2" data-rot="-5">
+    <svg viewBox="0 0 300 300"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round"><rect x="62" y="150" width="82" height="96" rx="8" fill="#D2602A"/><rect x="156" y="150" width="82" height="96" rx="8" fill="#4F7A56"/><rect x="109" y="56" width="82" height="96" rx="8" fill="#FFFDF7"/><rect x="62" y="172" width="82" height="40" fill="#FFFDF7"/><rect x="156" y="172" width="82" height="40" fill="#FFFDF7"/><rect x="109" y="78" width="82" height="40" fill="#FFCB3D"/></g></svg></div>
+  <div class="stk" id="k22" style="left:390px;top:590px;width:300px;height:300px;background:#C4D6E0" data-rot="3">
+    <svg viewBox="0 0 300 300"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round"><path d="M70 120 q0-22 14-30 v-22 h28 v22 q14 8 14 30 v118 h-56z" fill="#EEF6FA"/><path d="M174 120 q0-22 14-30 v-22 h28 v22 q14 8 14 30 v118 h-56z" fill="#EEF6FA"/><rect x="82" y="54" width="32" height="16" rx="4" fill="#1C2230"/><rect x="186" y="54" width="32" height="16" rx="4" fill="#1C2230"/><rect x="70" y="150" width="56" height="44" fill="#9DB4C4"/><rect x="174" y="150" width="56" height="44" fill="#9DB4C4"/></g></svg></div>
+  <div class="stk" id="k23" style="left:725px;top:540px;width:300px;height:300px;background:#D9D2C2" data-rot="6">
+    <svg viewBox="0 0 300 300"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round"><rect x="74" y="92" width="50" height="140" rx="8" fill="#1C2230"/><rect x="74" y="92" width="50" height="46" rx="8" fill="#FFCB3D"/><rect x="89" y="76" width="20" height="16" rx="3" fill="#B8B4A8"/><rect x="134" y="92" width="50" height="140" rx="8" fill="#1C2230"/><rect x="134" y="92" width="50" height="46" rx="8" fill="#FFCB3D"/><rect x="149" y="76" width="20" height="16" rx="3" fill="#B8B4A8"/><rect x="194" y="92" width="50" height="140" rx="8" fill="#1C2230"/><rect x="194" y="92" width="50" height="46" rx="8" fill="#FFCB3D"/><rect x="209" y="76" width="20" height="16" rx="3" fill="#B8B4A8"/></g></svg></div>
+  <div class="a hand" id="h21" style="left:40px;top:858px;width:330px;text-align:center;font-size:52px">a week of food</div>
+  <div class="a hand" id="h22" style="left:375px;top:908px;width:330px;text-align:center;font-size:52px">a case of water</div>
+  <div class="a hand" id="h23" style="left:680px;top:862px;width:390px;text-align:center;font-size:48px;white-space:nowrap">a drawer of batteries</div>
+  <svg class="draw" id="d2"><path id="d2a" style="stroke:var(--moss);stroke-width:12" pathLength="1" d="M272 566 l26 30 l52 -66"/><path id="d2b" style="stroke:var(--moss);stroke-width:12" pathLength="1" d="M608 616 l26 30 l52 -66"/><path id="d2c" style="stroke:var(--moss);stroke-width:12" pathLength="1" d="M942 566 l26 30 l52 -66"/></svg>
+  <div class="a" id="list" style="left:170px;top:1010px;width:740px;height:350px;border:7px dashed rgba(28,34,48,.5);border-radius:18px" data-rot="1.6">
+    <div class="mono" style="position:absolute;left:36px;top:26px;font-size:30px;font-weight:600;letter-spacing:.14em;color:rgba(28,34,48,.6)">THE LIST</div>
+    <div style="position:absolute;left:36px;right:230px;top:104px;height:200px;background:repeating-linear-gradient(transparent 0 52px,rgba(28,34,48,.22) 52px 56px)"></div>
+    <div class="hand" id="qm" style="position:absolute;right:56px;top:28px;font-size:300px;line-height:1">?</div></div>
+</div></div>
+
+<!-- 3. Scan it once, know your days -->
+<div class="scene" id="s3"><div class="cam" id="k3"><div class="grid"></div>
+  <div class="lab">LANTERN KEEPS IT</div>
+  <div class="h">Scan it once.<br>Know your <span class="hl" id="s3hl">days.</span></div>
+  <div class="phone" id="p3" style="left:64px;top:560px" data-rot="-3" data-s=".5"><img src="assets/home.png"><div class="notch"></div></div>
+  <div class="card" id="bc" style="left:470px;top:560px;width:540px;height:250px;padding:26px 34px" data-rot="2"><div class="tape"></div>
+    <div id="bars" style="position:absolute;left:34px;right:34px;top:36px;height:140px;display:flex;align-items:stretch"></div>
+    <div class="mono" style="position:absolute;left:34px;right:34px;bottom:18px;font-size:27px;text-align:center;letter-spacing:.3em">0 51000 01261 3</div>
+    <div id="scan" style="position:absolute;left:14px;right:14px;top:36px;height:7px;background:var(--ember);box-shadow:0 0 18px var(--ember)"></div></div>
+  <div class="card" id="sl" style="left:480px;top:860px;width:530px" data-rot="-1.6">
+    <div class="tag">SHELF LIFE</div><div style="font-weight:900;font-size:40px;line-height:1.2;margin-top:6px">CHICKEN NOODLE SOUP</div>
+    <div class="mono" style="font-size:23px;color:var(--grey);margin-top:4px">8 CANS · KITCHEN PANTRY</div>
+    <div style="position:relative;height:22px;background:rgba(28,34,48,.1);margin-top:18px"><i id="slb" style="position:absolute;left:0;top:0;bottom:0;background:var(--hl);width:0"></i></div>
+    <div style="font-weight:700;font-size:28px;margin-top:10px;color:var(--ember)">9 days left</div></div>
+  <svg class="draw" id="d3"><path id="d3a" pathLength="1" d="M468 700 C440 716 424 740 398 752 M398 752 l30 -4 M398 752 l16 -26"/></svg>
+  <div class="a" id="chart" style="left:450px;top:560px;width:570px;height:640px">
+    <div class="mono" style="position:absolute;left:0;top:0;font-size:25px;font-weight:600;letter-spacing:.12em">DAYS COVERED, PER PERSON</div>
+    <div id="ppl" style="position:absolute;left:0;top:50px;height:120px;display:flex;gap:16px;align-items:flex-end"></div>
+    <div class="a" style="left:520px;top:196px;width:0;height:380px;border-left:5px dashed var(--ember)"></div>
+    <div class="a mono" style="left:300px;top:158px;width:270px;text-align:right;font-size:21px;font-weight:600;color:var(--ember)">GOAL: 14 DAYS</div>
+    <div class="blab" style="left:0;top:206px" id="bl1">FOOD</div><div class="bval" style="left:280px;top:196px" id="bv1">9.9 days</div><div class="bar" style="left:0;top:246px;width:520px"><i id="b1"></i></div>
+    <div class="blab" style="left:0;top:332px" id="bl2">WATER</div><div class="bval" style="left:280px;top:322px" id="bv2">6.1 days</div><div class="bar" style="left:0;top:372px;width:520px"><i id="b2"></i></div>
+    <div class="blab" style="left:0;top:458px" id="bl3">MEDICATION</div><div class="bval" style="left:280px;top:448px" id="bv3">12 days</div><div class="bar" style="left:0;top:498px;width:520px"><i id="b3"></i></div>
+  </div>
+  <div class="stk" id="dog" style="left:800px;top:1150px;width:220px;height:220px;background:#E9C9A2" data-rot="7">
+    <svg viewBox="0 0 220 220"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><ellipse cx="62" cy="104" rx="26" ry="50" fill="#8A5A3C" transform="rotate(14 62 104)"/><ellipse cx="158" cy="104" rx="26" ry="50" fill="#8A5A3C" transform="rotate(-14 158 104)"/><ellipse cx="110" cy="112" rx="56" ry="60" fill="#D9A46C"/><ellipse cx="110" cy="142" rx="30" ry="24" fill="#FFFDF7"/><circle cx="90" cy="100" r="7" fill="#1C2230"/><circle cx="130" cy="100" r="7" fill="#1C2230"/><ellipse cx="110" cy="130" rx="11" ry="8" fill="#1C2230"/><path d="M110 138 v10 M98 152 q12 10 24 0" fill="none"/></g></svg></div>
+  <div class="a hand" id="h3d" style="left:470px;top:1226px;width:320px;font-size:58px;text-align:center;transform:rotate(-3deg)">even the dog</div>
+</div></div>
+
+<!-- 4. When the power goes out -->
+<div class="scene dark" id="s4"><div class="cam" id="k4"><div class="grid"></div>
+  <div class="lab">WHEN THE POWER GOES OUT</div>
+  <div class="h">The <span class="hl" id="s4hl">one app</span><br>you open.</div>
+  <div class="a" id="p4g" style="left:300px;top:520px;width:480px;height:880px;border-radius:50%;background:radial-gradient(closest-side,rgba(255,203,61,.34),rgba(255,203,61,0))"></div>
+  <div class="phone" id="p4" style="left:361px;top:540px;box-shadow:0 0 0 3px rgba(255,255,255,.12),18px 22px 0 rgba(0,0,0,.45)" data-rot="0" data-s=".56"><img src="assets/outage.png"><div class="notch"></div></div>
+  <div class="card" id="q1" style="left:36px;top:570px;width:300px;height:262px;padding:20px 18px" data-rot="-3">
+    <svg viewBox="0 0 264 160" width="264" height="160"><g fill="none" stroke="#1C2230" stroke-width="6" stroke-linecap="round"><circle cx="66" cy="80" r="56" fill="#FFFDF7"/><circle cx="198" cy="80" r="56" fill="#FFFDF7"/><path d="M66 32v10M66 118v10M18 80h10M104 80h10M198 32v10M198 118v10M150 80h10M236 80h10" stroke-width="5"/><path id="ck1" d="M66 80 L66 42" stroke="#D2602A" stroke-width="7"/><path id="ck2" d="M198 80 L198 42" stroke="#D2602A" stroke-width="7"/><circle cx="66" cy="80" r="6" fill="#1C2230"/><circle cx="198" cy="80" r="6" fill="#1C2230"/></g></svg>
+    <div class="mono" style="display:flex;justify-content:space-around;font-size:17px;font-weight:600;letter-spacing:.02em;color:#1C2230;margin-top:8px;text-align:center;line-height:1.3"><span>FRIDGE<br>ABOUT 4 H</span><span>FREEZER<br>ABOUT 48 H</span></div></div>
+  <div class="card" id="q2" style="left:744px;top:556px;width:300px;height:236px;background:#262D3D;padding:22px" data-rot="3">
+    <svg viewBox="0 0 256 130" width="256" height="130"><circle id="lampg" cx="128" cy="56" r="52" fill="#FFCB3D" opacity=".25"/><circle id="lamp" cx="128" cy="56" r="34" fill="#FFF3C4"/><g id="morse" fill="#F4EFE6"></g></svg>
+    <div class="mono" style="font-size:22px;font-weight:600;color:#F4EFE6;text-align:center;letter-spacing:.14em;margin-top:14px">SOS LIGHT</div></div>
+  <div class="card" id="q3" style="left:748px;top:900px;width:296px;height:300px;padding:0" data-rot="-2">
+    <div style="background:var(--ember);color:#fff;font-family:Mono;font-weight:600;font-size:21px;letter-spacing:.1em;padding:14px 20px">MEDICATION CARD</div>
+    <div style="padding:20px;color:#1C2230"><div style="font-weight:900;font-size:27px">FOR A PARAMEDIC</div>
+      <div style="height:13px;background:rgba(28,34,48,.75);margin-top:20px;width:86%"></div><div style="height:13px;background:rgba(28,34,48,.28);margin-top:13px;width:62%"></div><div style="height:13px;background:rgba(28,34,48,.75);margin-top:24px;width:74%"></div><div style="height:13px;background:rgba(28,34,48,.28);margin-top:13px;width:90%"></div><div style="height:13px;background:rgba(28,34,48,.28);margin-top:13px;width:48%"></div></div></div>
+  <div class="card" id="q4" style="left:36px;top:930px;width:300px;height:290px;padding:22px 20px" data-rot="2.5">
+    <div style="background:#4F7A56;color:#fff;font-weight:700;font-size:25px;line-height:1.25;padding:13px 17px;border-radius:22px 22px 6px 22px;margin-left:34px">Power is out here. We are OK.</div>
+    <div style="background:#E4E0D6;padding:17px;border-radius:22px 22px 22px 6px;margin-top:14px;margin-right:70px"><div style="height:11px;background:rgba(28,34,48,.4);width:90%"></div><div style="height:11px;background:rgba(28,34,48,.4);width:56%;margin-top:10px"></div></div>
+    <div class="mono" style="font-size:19px;font-weight:600;color:#1C2230;margin-top:16px;letter-spacing:.08em">TEXTS, ALREADY WRITTEN</div></div>
+  <svg class="draw" id="d4"><path id="d4a" style="stroke:#F4EFE6" pathLength="1" d="M330 690 C350 684 356 700 372 708"/><path id="d4b" style="stroke:#F4EFE6" pathLength="1" d="M748 690 C730 690 724 704 708 714"/><path id="d4c" style="stroke:#F4EFE6" pathLength="1" d="M752 1050 C736 1046 728 1034 710 1030"/><path id="d4d" style="stroke:#F4EFE6" pathLength="1" d="M332 1070 C348 1072 356 1058 374 1054"/></svg>
+</div></div>
+
+<!-- 5. Weather alerts for the places you love -->
+<div class="scene" id="s5"><div class="cam" id="k5"><div class="grid"></div>
+  <div class="lab">WEATHER ALERTS</div>
+  <div class="h">Alerts for the<br>places you <span class="hl" id="s5hl">love.</span></div>
+  <div class="a" id="map" style="left:56px;top:540px;width:968px;height:600px;background:#E4DCC8;border:12px solid #fff;box-shadow:12px 14px 0 rgba(28,34,48,.17);overflow:hidden" data-rot="-1">
+    <svg viewBox="0 0 944 616" width="944" height="616"><rect width="944" height="616" fill="#E4DCC8"/>
+      <path d="M-20 470 C140 400 220 520 380 470 S640 330 760 400 S900 470 980 420" fill="none" stroke="#9DB4C4" stroke-width="54"/>
+      <path d="M560 -20 q40 90 150 110 t260 40 v-150z" fill="#BFD0B0"/>
+      <g fill="none" stroke="#fff" stroke-width="16"><path d="M-10 150 L960 96"/><path d="M-10 300 L960 250"/><path d="M180 -10 L250 640"/><path d="M470 -10 L520 640"/><path d="M770 -10 L800 640"/><path d="M-10 560 L960 540"/></g>
+      <g fill="none" stroke="rgba(28,34,48,.3)" stroke-width="3" stroke-dasharray="14 12"><path d="M-10 150 L960 96"/><path d="M470 -10 L520 640"/></g>
+      <g id="storm"><circle r="150" fill="url(#hatch)" opacity=".5"/><circle r="100" fill="#465064" opacity=".55"/><circle id="ring1" r="190" fill="none" stroke="#465064" stroke-width="5" stroke-dasharray="22 16" opacity=".7"/><path d="M-14 -46 l-22 50 h26 l-14 44 l44 -60 h-26 l18 -34z" fill="#FFCB3D" stroke="#1C2230" stroke-width="5" stroke-linejoin="round"/></g>
+    </svg>
+    <div class="pin" id="pn1" style="left:270px;top:400px"><svg viewBox="0 0 64 84"><path d="M32 82 C10 52 4 44 4 30 a28 28 0 0 1 56 0 c0 14 -6 22 -28 52z" fill="#D2602A" stroke="#1C2230" stroke-width="5"/><circle cx="32" cy="30" r="10" fill="#fff"/></svg></div>
+    <div class="pin" id="pn2" style="left:690px;top:230px"><svg viewBox="0 0 64 84"><path d="M32 82 C10 52 4 44 4 30 a28 28 0 0 1 56 0 c0 14 -6 22 -28 52z" fill="#D2602A" stroke="#1C2230" stroke-width="5"/><circle cx="32" cy="30" r="10" fill="#fff"/></svg></div>
+    <div class="pin" id="pn3" style="left:560px;top:540px"><svg viewBox="0 0 64 84"><path d="M32 82 C10 52 4 44 4 30 a28 28 0 0 1 56 0 c0 14 -6 22 -28 52z" fill="#D2602A" stroke="#1C2230" stroke-width="5"/><circle cx="32" cy="30" r="10" fill="#fff"/></svg></div>
+    <div class="ptag" id="pt1" style="left:100px;top:412px">Home</div>
+    <div class="ptag" id="pt2" style="left:612px;top:244px">Mom's house</div>
+    <div class="ptag" id="pt3" style="left:600px;top:478px">The kids' school</div>
+  </div>
+  <div class="a" id="note" style="left:80px;top:1222px;width:920px;height:140px;background:#fff;border-radius:36px;box-shadow:10px 12px 0 rgba(28,34,48,.17)">
+    <img src="assets/icon.png" style="position:absolute;left:24px;top:24px;width:92px;height:92px;border-radius:22px">
+    <div style="position:absolute;left:140px;top:26px;font-weight:900;font-size:34px">Tornado Watch · Mom's house</div>
+    <div style="position:absolute;left:140px;top:76px;font-weight:500;font-size:29px;color:#555B66">Until 6:27 PM. Review your safety plan.</div>
+    <div class="mono" style="position:absolute;right:28px;top:30px;font-size:22px;color:var(--grey)">now</div></div>
+  <div class="a hand" id="h5" style="left:640px;top:1150px;width:380px;text-align:center;font-size:60px;transform:rotate(-3deg)">one, never ten</div>
+</div></div>
+
+<!-- 6. Private by design -->
+<div class="scene" id="s6"><div class="cam" id="k6"><div class="grid"></div>
+  <div class="lab">PRIVATE BY DESIGN</div>
+  <div class="h">Yours from<br><span class="hl" id="s6hl">day one.</span></div>
+  <div class="stk" id="r1s" style="left:70px;top:560px;width:220px;height:220px;background:#D9D2C2" data-rot="-5">
+    <svg viewBox="0 0 220 220"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round"><rect x="46" y="52" width="128" height="116" rx="10" fill="#FFFDF7"/><rect x="62" y="76" width="96" height="22" rx="5" fill="#E4E0D6"/><rect x="62" y="108" width="96" height="22" rx="5" fill="#E4E0D6"/><rect x="62" y="140" width="56" height="16" rx="5" fill="#1C2230"/></g></svg></div>
+  <div class="row" id="r1t" style="top:638px">No account.</div>
+  <div class="stk" id="r2s" style="left:70px;top:820px;width:220px;height:220px;background:#C4D6E0" data-rot="4">
+    <svg viewBox="0 0 220 220"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round"><rect x="74" y="36" width="72" height="148" rx="14" fill="#1C2230"/><rect x="82" y="50" width="56" height="120" rx="6" fill="#FFFDF7"/><rect x="92" y="98" width="36" height="30" rx="5" fill="#FFCB3D"/><path d="M98 98 v-10 a12 12 0 0 1 24 0 v10" fill="none"/></g></svg></div>
+  <div class="row" id="r2t" style="top:868px">Nothing leaves<br>your phone.</div>
+  <div class="stk" id="r3s" style="left:70px;top:1080px;width:220px;height:220px;background:#E9C9A2" data-rot="-3">
+    <svg viewBox="0 0 220 220"><g stroke="#1C2230" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"><rect x="44" y="84" width="132" height="92" rx="10" fill="#D2602A"/><path d="M84 84 v-18 a8 8 0 0 1 8 -8 h36 a8 8 0 0 1 8 8 v18" fill="none"/><rect x="44" y="116" width="132" height="14" fill="#1C2230"/><rect x="98" y="108" width="24" height="30" rx="4" fill="#FFCB3D"/></g></svg></div>
+  <div class="row" id="r3t" style="top:1118px">The whole Toolkit,<br>from day one.</div>
+  <div class="a hand" id="h6" style="left:330px;top:1268px;width:560px;font-size:62px">no purchase needed</div>
+  <svg class="draw" id="d6"><path id="d6x" style="stroke-width:11" pathLength="1" d="M92 592 L268 752 M270 586 L96 756"/><path id="d6c" pathLength="1" d="M52 932 C44 850 120 796 190 800 C278 806 328 872 316 944 C304 1016 232 1064 160 1056 C96 1050 52 1004 52 932"/><path id="d6k" style="stroke:var(--moss);stroke-width:12" pathLength="1" d="M214 1104 l24 28 l50 -64"/><path id="d6u" pathLength="1" d="M334 1338 C440 1326 620 1346 780 1330"/></svg>
+</div></div>
+
+<!-- 7. Be the house that's ready -->
+<div class="scene dark" id="s7"><div class="cam" id="k7"><div class="grid"></div>
+  <div class="a" id="e1" style="inset:0">
+    <div class="lab">THE NEXT OUTAGE</div>
+    <div class="h" id="s7h">Not a question<br>of <span id="ifw">if.</span></div>
+    <div class="h" id="s7h2" style="top:560px;font-size:70px">Be the house<br>that's <span class="hl" id="s7hl">ready.</span></div>
+    <svg class="draw" id="d7"><path id="d7c" style="stroke:var(--hl);stroke-width:9" pathLength="1" d="M196 440 C190 392 250 372 300 376 C356 380 388 410 382 446 C376 486 316 500 262 494 C218 490 198 470 200 436"/></svg>
+  </div>
+  <div class="a" id="e2" style="inset:0">
+    <img id="e2i" src="assets/icon.png" style="position:absolute;left:420px;top:270px;width:240px;height:240px;border-radius:54px;box-shadow:12px 14px 0 rgba(0,0,0,.4)">
+    <div id="e2n" style="position:absolute;left:0;width:1080px;top:548px;text-align:center;font-weight:900;font-size:124px;line-height:1.1;letter-spacing:.01em">LANTERN</div>
+    <div id="e2t" class="mono" style="position:absolute;left:0;width:1080px;top:700px;text-align:center;font-size:34px;font-weight:600;letter-spacing:.2em;color:var(--hl)">HOUSEHOLD READINESS</div>
+    <div id="e2b" style="position:absolute;left:250px;width:580px;top:800px;height:104px;background:#F4EFE6;color:var(--ink);font-weight:900;font-size:36px;line-height:104px;text-align:center;box-shadow:9px 10px 0 rgba(0,0,0,.4)">Download on the App Store</div>
+    <div id="e2u" class="mono" style="position:absolute;left:0;width:1080px;top:934px;text-align:center;font-size:25px;color:#A9AEB8">apps.apple.com/app/id6830418364</div>
+  </div>
+  <svg class="a" id="street" style="left:0;top:980px" width="1080" height="420" viewBox="0 0 1080 420"></svg>
+  <div class="a hand" id="h7" style="left:596px;top:960px;width:300px;font-size:58px;color:var(--hl);transform:rotate(-5deg)">this one</div>
+  <svg class="draw" id="d7b"><path id="d7a" style="stroke:var(--hl)" pathLength="1" d="M640 1030 C600 1046 580 1070 566 1100 M566 1100 l-4 -30 M566 1100 l28 -12"/></svg>
+</div></div>
+
+<div id="cap"><div id="capbox"></div></div>
+<canvas id="grain" width="540" height="960" style="width:1080px;height:1920px"></canvas>
+<div id="vig"></div>
+</div>
+<script>
+// Deterministic timeline: seek(t) sets every property from t (seconds). No CSS animations, no timers.
+const TOTAL = 53.5;
+const B = [0, 4.4, 9.98, 20.03, 29.62, 37.48, 43.35, 53.5];
+const CAPS = [
+  [0.1,"Six months."],[1.58,"Three reminders."],[2.3,""],
+  [3.3,"Most of us already own a week of food,"],[5.5,"a case of water, a drawer of batteries."],[8.4,"We just don't have the list."],
+  [9.98,"Lantern keeps it."],[11.15,"Scan a barcode."],[12.2,"It knows the shelf life."],[13.58,"And it tells you how many days"],[15.0,"your actual family is covered."],[16.85,"Food. Water. Medication."],[18.93,"Even the dog."],
+  [20.03,"When the power goes out,"],[21.23,"Lantern is the one thing you open."],[23.55,"Fridge and freezer clocks."],[24.8,"An SOS light."],[25.98,"The medication card you hand a paramedic."],[28.3,"Texts to your people, already written."],
+  [29.62,"Weather alerts for the places you love."],[32.8,"Home."],[34.23,"Mom's house."],[35.35,"The kids' school."],[36.55,"One notification, never ten."],
+  [37.48,"No account."],[38.43,"Nothing leaves your phone."],[39.9,"And the whole Toolkit works from day one,"],[42.12,"no purchase needed."],
+  [43.35,"The next outage is not a question of if."],[46.05,"Be the house that's ready."],[47.53,"Lantern: Household Readiness."],[49.6,"On the App Store."],[50.6,""]
+];
+const $ = id => document.getElementById(id);
+const clamp = (x,a=0,b=1) => Math.max(a, Math.min(b, x));
+const lin = (t,t0,d) => clamp((t - t0) / d);
+const ease = x => 1 - Math.pow(1 - clamp(x), 3);
+const inout = x => { x = clamp(x); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; };
+const back = x => { x = clamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
+const rnd = n => { const x = Math.sin(n * 127.1) * 43758.5453; return x - Math.floor(x); };
+// tiny cut-paper wobble, stepped at 8 fps so it reads as hand-made
+const wob = (t, k) => (rnd(Math.floor(t * 8) + k * 31) - .5);
+function pop(el, t, t0, d = .45, k = 1) { // sticker pop with overshoot
+  const p = lin(t, t0, d), s = back(p), r = Number(el.dataset.rot || 0), bs = Number(el.dataset.s || 1);
+  el.style.opacity = p > 0 ? 1 : 0;
+  el.style.transform = `rotate(${r + (1 - ease(p)) * 9 * k + wob(t, k) * .5}deg) scale(${bs * Math.max(0, s)})`;
+}
+function rise(el, t, t0, d = .5, dy = 50) { const p = ease(lin(t, t0, d)); el.style.opacity = p; el.style.transform = `translateY(${(1 - p) * dy}px)`; }
+function draw(el, t, t0, d = .4) { el.style.strokeDashoffset = 1 - inout(lin(t, t0, d)); }
+function hl(el, t, t0, d = .35) { el.style.backgroundSize = `${inout(lin(t, t0, d)) * 100}% 82%`; }
+function count(el, t, t0, d, to, fmt) { el.textContent = fmt(to * ease(lin(t, t0, d))); }
+
+// --- build repeated bits
+(function build() {
+  { // paper grain, drawn once from a fixed seed
+    const c = $('grain'), x = c.getContext('2d'), im = x.createImageData(540, 960); let sd = 7;
+    for (let i = 0; i < im.data.length; i += 4) { sd = (sd * 1664525 + 1013904223) >>> 0; const v = 96 + (sd >>> 24) * .62; im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 120; }
+    x.putImageData(im, 0, 0); }
+  let s = '<line x1="90" y1="64" x2="990" y2="64" stroke="#1C2230" stroke-width="6" stroke-linecap="round" id="tll" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>';
+  ['MAY','JUN','JUL','AUG','SEP','OCT','NOV'].forEach((m, i) => { const x = 90 + i * 150;
+    s += `<g class="tk" data-i="${i}"><line x1="${x}" y1="48" x2="${x}" y2="80" stroke="#1C2230" stroke-width="6" stroke-linecap="round"/><text x="${x}" y="30" text-anchor="middle" font-family="Mono" font-weight="600" font-size="23" letter-spacing="2" fill="#1C2230">${m}</text></g>`; });
+  s += '<circle id="ev1" cx="240" cy="64" r="17" fill="#D2602A" stroke="#1C2230" stroke-width="5"/><circle id="ev2" cx="840" cy="64" r="17" fill="#D2602A" stroke="#1C2230" stroke-width="5"/>';
+  $('tl').innerHTML = s;
+  let d = ''; for (let i = 0; i < 100; i++) d += `<i style="width:15px;height:15px;border-radius:50%;background:${i < 5 ? '#D2602A' : 'rgba(28,34,48,.2)'}" class="${i < 5 ? 'dh' : ''}"></i>`; $('dots').innerHTML = d;
+  let b = ''; for (let i = 0; i < 46; i++) { const w = [3,6,3,9,3,5,12,3][Math.floor(rnd(i + 3) * 8)]; b += `<i style="flex:0 0 ${w}px;background:${i % 2 ? 'transparent' : '#1C2230'};margin-right:${i % 2 ? 0 : 2}px"></i>`; } $('bars').innerHTML = b;
+  const person = (h, c) => `<svg width="${h * .52}" height="${h}" viewBox="0 0 52 100" class="pp"><circle cx="26" cy="18" r="15" fill="${c}" stroke="#1C2230" stroke-width="5"/><path d="M6 96 V58 a20 20 0 0 1 40 0 V96z" fill="${c}" stroke="#1C2230" stroke-width="5" stroke-linejoin="round"/></svg>`;
+  $('ppl').innerHTML = person(118, '#D2602A') + person(110, '#4F7A56') + person(82, '#FFCB3D') + person(68, '#9DB4C4');
+  // morse: dot dot dot, dash dash dash, dot dot dot
+  let m = '', x = 19; [1,1,1,0,3,3,3,0,1,1,1].forEach(u => { if (!u) { x += 10; return; } const w = u === 1 ? 12 : 24; m += `<rect x="${x}" y="112" width="${w}" height="12" rx="6"/>`; x += w + 6; }); $('morse').innerHTML = m;
+  // street of cut-paper houses; index 3 is the one that is ready
+  const H = [[20,150,150,0],[185,130,200,1],[330,170,130,0],[515,190,220,1],[720,140,160,0],[875,120,210,1],[1010,150,140,0]];
+  let st = '<rect x="0" y="372" width="1080" height="48" fill="#0D1018"/>';
+  H.forEach(([x, w, h, roof], i) => { const y = 372 - h, fill = ['#2B3244','#232A3A','#30384C','#394258','#262D3E','#2E3548','#232A3A'][i];
+    st += `<g class="hs" data-i="${i}"><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}"/>` + (roof ? `<path d="M${x - 14} ${y} L${x + w / 2} ${y - 78} L${x + w + 14} ${y}z" fill="${fill}"/>` : `<rect x="${x - 8}" y="${y - 16}" width="${w + 16}" height="18" fill="${fill}"/>`);
+    const cols = w > 160 ? 3 : 2, ww = 30, gap = (w - cols * ww) / (cols + 1);
+    for (let r = 0; r < Math.floor((h - 70) / 62); r++) for (let c = 0; c < cols; c++) st += `<rect class="${i === 3 ? 'win' : ''}" x="${x + gap + c * (ww + gap)}" y="${y + 26 + r * 62}" width="${ww}" height="38" fill="#141823"/>`;
+    st += `<rect class="${i === 3 ? 'win' : ''}" x="${x + w / 2 - 17}" y="${372 - 58}" width="34" height="58" fill="#141823"/></g>`; });
+  $('street').innerHTML = st;
+})();
+
+function scenes(t) {
+  for (let i = 0; i < 7; i++) {
+    const el = $('s' + (i + 1)), a = B[i];
+    el.style.zIndex = i + 1;
+    let y = 0, vis = t >= a - .22;
+    if (i === 0) { vis = true; }
+    else if (i === 3) { vis = t >= a; el.style.opacity = (t < a + .08 || (t >= a + .14 && t < a + .22)) ? .35 : 1; } // lights flick off
+    else y = (1 - inout(lin(t, a - .22, .5))) * 1920;
+    el.style.visibility = vis ? 'visible' : 'hidden';
+    el.style.transform = `translateY(${y}px)`;
+    const k = $('k' + (i + 1)); const p = lin(t, a, B[i + 1] - a);
+    k.style.transform = `scale(${1 + .03 * p})`;
+  }
+}
+function seek(t) {
+  // hand-drawn marks shiver a little, stepped at 8 fps
+  document.querySelectorAll('svg.draw').forEach((e, i) => { e.style.transform = `translate(${wob(t, 40 + i) * 3}px, ${wob(t, 60 + i) * 3}px) rotate(${wob(t, 80 + i) * .3}deg)`; });
+  scenes(t);
+  // captions
+  let txt = ''; for (const [s, c] of CAPS) if (t >= s) txt = c;
+  const cb = $('capbox'); cb.textContent = txt; cb.style.display = txt ? 'block' : 'none';
+  cb.className = (t >= B[3] && t < B[4]) || t >= B[6] ? 'light' : '';
+
+  // 1
+  rise($('s1l'), t, 0, .4, 20); rise($('s1h1'), t, .1, .45, 40); $('s1h1').style.display = 'inline-block';
+  rise($('s1h2'), t, 1.5, .4, 40); $('s1h2').style.display = 'inline-block'; hl($('s1hl'), t, 1.75, .3);
+  $('tll').style.strokeDashoffset = 1 - inout(lin(t, .25, .9));
+  document.querySelectorAll('#tl .tk').forEach(g => { g.style.opacity = lin(t, .3 + g.dataset.i * .12, .15); });
+  [['ev1', .75], ['ev2', 1.75]].forEach(([id, t0]) => { const e = $(id), s = back(lin(t, t0, .35)); e.style.transformBox = 'fill-box'; e.style.transformOrigin = 'center'; e.style.transform = `scale(${Math.max(0, s)})`; });
+  draw($('d1a'), t, .85, .3); draw($('d1b'), t, 1.85, .4);
+  pop($('c1'), t, .95, .45, 1); pop($('c2'), t, 2.05, .45, -1); pop($('c3'), t, 2.85, .45, 1);
+  count($('n1'), t, .95, .7, 2, v => (v >= 1.95 ? '2' : v.toFixed(1)) + ' MILLION');
+  count($('n2'), t, 2.05, .7, 860000, v => (Math.round(v / 1000) * 1000).toLocaleString('en-US'));
+  count($('n3'), t, 2.85, .5, 5, v => Math.round(v) + '%');
+  document.querySelectorAll('#dots .dh').forEach((d, i) => { d.style.transform = `scale(${.4 + .6 * back(lin(t, 3.1 + i * .08, .25)) + (lin(t, 3.1 + i * .08, .25) >= 1 ? .25 : 0)})`; });
+
+  // 2
+  hl($('s2hl'), t, 4.75, .35);
+  pop($('k21'), t, 4.55, .45, 1); pop($('k22'), t, 5.6, .45, -1); pop($('k23'), t, 6.9, .45, 1);
+  rise($('h21'), t, 4.8, .35, 20); rise($('h22'), t, 5.85, .35, 20); rise($('h23'), t, 7.15, .35, 20);
+  draw($('d2a'), t, 5.0, .3); draw($('d2b'), t, 6.05, .3); draw($('d2c'), t, 7.35, .3);
+  pop($('list'), t, 8.3, .5, -1);
+  { const p = lin(t, 8.65, .35); $('qm').style.opacity = p > 0 ? 1 : 0; $('qm').style.transform = `scale(${Math.max(0, back(p))}) rotate(${8 + wob(t, 9) * 5}deg)`; }
+
+  // 3
+  hl($('s3hl'), t, 13.6, .35);
+  { const el = $('p3'), p = lin(t, B[2] + .1, .6), s = .5; el.style.opacity = p > 0 ? 1 : 0; el.style.transform = `translateY(${(1 - back(p)) * 700}px) rotate(${-3 + (1 - ease(p)) * -8}deg) scale(${s})`; }
+  const out3 = inout(lin(t, 13.2, .4));
+  [['bc', 11.1, 1], ['sl', 12.15, -1]].forEach(([id, t0, k]) => { const el = $(id); pop(el, t, t0, .45, k); el.style.transform += ` translateX(${out3 * 760}px)`; });
+  $('scan').style.top = (36 + 150 * (.5 - .5 * Math.cos(lin(t, 11.3, 1.6) * Math.PI * 3))) + 'px';
+  $('slb').style.width = (inout(lin(t, 12.4, .6)) * 22) + '%';
+  draw($('d3a'), t, 11.5, .4); $('d3a').style.opacity = 1 - out3;
+  { const c = $('chart'), p = ease(lin(t, 13.55, .45)); c.style.opacity = p; c.style.transform = `translateX(${(1 - p) * 80}px)`; }
+  document.querySelectorAll('#ppl .pp').forEach((e, i) => { const p = lin(t, 15.0 + i * .16, .35); e.style.transformOrigin = '50% 100%'; e.style.transform = `scale(${Math.max(0, back(p))}) rotate(${wob(t, 20 + i) * 2}deg)`; });
+  [[1, 16.85, 9.9], [2, 17.55, 6.1], [3, 18.2, 12]].forEach(([i, t0, v]) => {
+    const p = lin(t, t0, .55); $('b' + i).style.width = (inout(p) * v / 14 * 100) + '%';
+    $('bl' + i).style.opacity = .35 + .65 * lin(t, t0, .15); $('bv' + i).style.opacity = lin(t, t0, .2);
+    $('bv' + i).textContent = (i === 3 ? Math.round(v * ease(p)) : (v * ease(p)).toFixed(1)) + ' days'; });
+  pop($('dog'), t, 18.9, .45, 1); $('h3d').style.opacity = lin(t, 19.1, .25);
+
+  // 4
+  hl($('s4hl'), t, 21.3, .4);
+  { const el = $('p4'), p = lin(t, B[3] + .35, .6); el.style.opacity = p > 0 ? 1 : 0; el.style.transform = `translateY(${(1 - back(p)) * 500}px) scale(.56)`; }
+  $('p4g').style.opacity = ease(lin(t, 21.2, .8)) * (.85 + .15 * Math.sin(t * 2.2));
+  pop($('q1'), t, 23.5, .45, 1); pop($('q2'), t, 24.75, .45, -1); pop($('q3'), t, 25.95, .45, 1); pop($('q4'), t, 28.25, .45, -1);
+  draw($('d4a'), t, 23.9, .3); draw($('d4b'), t, 25.15, .3); draw($('d4c'), t, 26.35, .3); draw($('d4d'), t, 28.65, .3);
+  $('ck1').setAttribute('transform', `rotate(${(t - 23.5) * 70} 66 80)`); $('ck2').setAttribute('transform', `rotate(${(t - 23.5) * 22} 198 80)`);
+  { // S O S on a slow, calm cadence (unit .22 s), repeats
+    const u = .22, seq = [1,1,1,3,3,3,1,1,1]; let tt = ((t - 24.9) % (u * 34) + u * 34) % (u * 34), on = false, acc = 0;
+    for (let i = 0; i < seq.length; i++) { const len = seq[i] * u; if (tt >= acc && tt < acc + len) on = true; acc += len + u + (i === 2 || i === 5 ? u * 2 : 0); }
+    if (t < 24.9) on = false;
+    $('lamp').setAttribute('fill', on ? '#FFF3C4' : '#4A5266'); $('lampg').setAttribute('opacity', on ? .45 : 0); }
+
+  // 5
+  hl($('s5hl'), t, 30.6, .35);
+  pop($('map'), t, B[4] + .15, .5, 1);
+  { const p = lin(t, 30.4, 6.4), x = -220 + p * 1010, y = 120 + Math.sin(p * 3) * 50 + p * 90; $('storm').setAttribute('transform', `translate(${x} ${y})`); $('ring1').setAttribute('transform', `rotate(${t * 40}) scale(${1 + .06 * Math.sin(t * 3)})`); }
+  [['pn1', 'pt1', 32.75], ['pn2', 'pt2', 34.2], ['pn3', 'pt3', 35.3]].forEach(([p, g, t0]) => {
+    const q = lin(t, t0, .4), e = $(p); e.style.opacity = q > 0 ? 1 : 0; e.style.transform = `translateY(${(1 - back(q)) * -260}px) scale(${.6 + .4 * ease(q)})`;
+    const l = $(g), q2 = lin(t, t0 + .2, .3); l.style.opacity = q2 > 0 ? 1 : 0; l.style.transformOrigin = '0 50%'; l.style.transform = `scale(${Math.max(0, back(q2))}) rotate(${-2 + wob(t, t0) * 1}deg)`; });
+  { const el = $('note'), p = lin(t, 36.5, .5); el.style.opacity = p > 0 ? 1 : 0; el.style.transform = `translateY(${(1 - back(p)) * 260}px) rotate(.6deg)`; }
+  { const el = $('h5'), p = lin(t, 36.9, .3); el.style.opacity = p; }
+
+  // 6
+  hl($('s6hl'), t, B[5] + .3, .35);
+  pop($('r1s'), t, 37.5, .4, 1); rise($('r1t'), t, 37.55, .35, 30); draw($('d6x'), t, 37.85, .35);
+  pop($('r2s'), t, 38.45, .4, -1); rise($('r2t'), t, 38.5, .35, 30); draw($('d6c'), t, 38.9, .55);
+  pop($('r3s'), t, 39.9, .4, 1); rise($('r3t'), t, 39.95, .35, 30); draw($('d6k'), t, 40.6, .3);
+  rise($('h6'), t, 42.1, .3, 20); draw($('d6u'), t, 42.35, .4);
+
+  // 7
+  const toEnd = inout(lin(t, 47.3, .5));
+  $('e1').style.opacity = 1 - toEnd; $('e1').style.transform = `translateY(${-toEnd * 120}px)`;
+  rise($('s7h'), t, B[6] + .1, .45, 40); draw($('d7c'), t, 45.0, .5);
+  rise($('s7h2'), t, 46.0, .4, 40); hl($('s7hl'), t, 46.6, .35);
+  { const p = ease(lin(t, B[6] + .3, .8)); $('street').style.transform = `translateY(${(1 - p) * 460 + toEnd * 120}px)`; }
+  const lit = lin(t, 46.15, .5), flick = (t > 46.15 && t < 46.3) ? .4 : 1;
+  document.querySelectorAll('#street .win').forEach(w => { w.setAttribute('fill', lit > 0 ? '#FFCB3D' : '#141823'); w.style.opacity = lit > 0 ? flick * (.55 + .45 * lit) : 1; w.style.filter = lit > 0 ? 'url(#glow)' : ''; });
+  $('h7').style.opacity = lin(t, 46.5, .25) * (1 - toEnd); draw($('d7a'), t, 46.6, .35); $('d7a').style.opacity = 1 - toEnd;
+  $('e2').style.opacity = toEnd > 0 ? 1 : 0;
+  { const p = lin(t, 47.45, .5); $('e2i').style.transform = `scale(${Math.max(0, back(p))}) rotate(${(1 - ease(p)) * -12}deg)`; }
+  rise($('e2n'), t, 47.6, .45, 40); rise($('e2t'), t, 48.0, .4, 30);
+  { const p = lin(t, 49.5, .45); $('e2b').style.opacity = p > 0 ? 1 : 0; $('e2b').style.transform = `scale(${Math.max(0, back(p))}) rotate(-1deg)`; }
+  rise($('e2u'), t, 49.9, .4, 20);
+}
+window.TOTAL = TOTAL; window.seek = seek; seek(0);
+</script></body></html>

@@ -232,8 +232,8 @@ const ease = x => 1 - Math.pow(1 - clamp(x), 3);
 const inout = x => { x = clamp(x); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; };
 const back = x => { x = clamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
 const rnd = n => { const x = Math.sin(n * 127.1) * 43758.5453; return x - Math.floor(x); };
-// tiny cut-paper wobble, stepped at 8 fps so it reads as hand-made
-const wob = (t, k) => (rnd(Math.floor(t * 8) + k * 31) - .5);
+// no stepped wobble: it read as flicker on a phone, so everything holds still once it lands
+const wob = () => 0;
 function pop(el, t, t0, d = .45, k = 1) { // sticker pop with overshoot
   const p = lin(t, t0, d), s = back(p), r = Number(el.dataset.rot || 0), bs = Number(el.dataset.s || 1);
   el.style.opacity = p > 0 ? 1 : 0;
@@ -278,7 +278,7 @@ function scenes(t) {
     el.style.zIndex = i + 1;
     let y = 0, vis = t >= a - .22;
     if (i === 0) { vis = true; }
-    else if (i === 3) { vis = t >= a; el.style.opacity = (t < a + .08 || (t >= a + .14 && t < a + .22)) ? .35 : 1; } // lights flick off
+    else if (i === 3) { vis = t >= a - .05; el.style.opacity = inout(lin(t, a - .05, .4)); } // the lights dim once, no strobe
     else y = (1 - inout(lin(t, a - .22, .5))) * 1920;
     el.style.visibility = vis ? 'visible' : 'hidden';
     el.style.transform = `translateY(${y}px)`;
@@ -287,8 +287,6 @@ function scenes(t) {
   }
 }
 function seek(t) {
-  // hand-drawn marks shiver a little, stepped at 8 fps
-  document.querySelectorAll('svg.draw').forEach((e, i) => { e.style.transform = `translate(${wob(t, 40 + i) * 3}px, ${wob(t, 60 + i) * 3}px) rotate(${wob(t, 80 + i) * .3}deg)`; });
   scenes(t);
   // captions
   let txt = ''; for (const [s, c] of CAPS) if (t >= s) txt = c;
@@ -335,15 +333,13 @@ function seek(t) {
   // 4
   hl($('s4hl'), t, 21.3, .4);
   { const el = $('p4'), p = lin(t, B[3] + .35, .6); el.style.opacity = p > 0 ? 1 : 0; el.style.transform = `translateY(${(1 - back(p)) * 500}px) scale(.56)`; }
-  $('p4g').style.opacity = ease(lin(t, 21.2, .8)) * (.85 + .15 * Math.sin(t * 2.2));
+  $('p4g').style.opacity = ease(lin(t, 21.2, .8));
   pop($('q1'), t, 23.5, .45, 1); pop($('q2'), t, 24.75, .45, -1); pop($('q3'), t, 25.95, .45, 1); pop($('q4'), t, 28.25, .45, -1);
   draw($('d4a'), t, 23.9, .3); draw($('d4b'), t, 25.15, .3); draw($('d4c'), t, 26.35, .3); draw($('d4d'), t, 28.65, .3);
   $('ck1').setAttribute('transform', `rotate(${(t - 23.5) * 70} 66 80)`); $('ck2').setAttribute('transform', `rotate(${(t - 23.5) * 22} 198 80)`);
-  { // S O S on a slow, calm cadence (unit .22 s), repeats
-    const u = .22, seq = [1,1,1,3,3,3,1,1,1]; let tt = ((t - 24.9) % (u * 34) + u * 34) % (u * 34), on = false, acc = 0;
-    for (let i = 0; i < seq.length; i++) { const len = seq[i] * u; if (tt >= acc && tt < acc + len) on = true; acc += len + u + (i === 2 || i === 5 ? u * 2 : 0); }
-    if (t < 24.9) on = false;
-    $('lamp').setAttribute('fill', on ? '#FFF3C4' : '#4A5266'); $('lampg').setAttribute('opacity', on ? .45 : 0); }
+  { // the lamp comes on and breathes slowly; no blinking
+    const on = ease(lin(t, 24.9, .5)), br = .5 + .5 * Math.sin((t - 24.9) * Math.PI / 1.6 - Math.PI / 2);
+    $('lamp').setAttribute('fill', '#FFF3C4'); $('lamp').setAttribute('opacity', .25 + on * (.55 + .2 * br)); $('lampg').setAttribute('opacity', on * (.25 + .2 * br)); }
 
   // 5
   hl($('s5hl'), t, 30.6, .35);
@@ -368,8 +364,8 @@ function seek(t) {
   rise($('s7h'), t, B[6] + .1, .45, 40); draw($('d7c'), t, 45.0, .5);
   rise($('s7h2'), t, 46.0, .4, 40); hl($('s7hl'), t, 46.6, .35);
   { const p = ease(lin(t, B[6] + .3, .8)); $('street').style.transform = `translateY(${(1 - p) * 460 + toEnd * 120}px)`; }
-  const lit = lin(t, 46.15, .5), flick = (t > 46.15 && t < 46.3) ? .4 : 1;
-  document.querySelectorAll('#street .win').forEach(w => { w.setAttribute('fill', lit > 0 ? '#FFCB3D' : '#141823'); w.style.opacity = lit > 0 ? flick * (.55 + .45 * lit) : 1; w.style.filter = lit > 0 ? 'url(#glow)' : ''; });
+  const lit = inout(lin(t, 46.15, .6)), flick = 1;
+  document.querySelectorAll('#street .win').forEach(w => { w.setAttribute('fill', lit > 0 ? '#FFCB3D' : '#141823'); w.style.opacity = lit > 0 ? Math.max(.04, lit) : 1; w.style.filter = lit > 0 ? 'url(#glow)' : ''; });
   $('h7').style.opacity = lin(t, 46.5, .25) * (1 - toEnd); draw($('d7a'), t, 46.6, .35); $('d7a').style.opacity = 1 - toEnd;
   $('e2').style.opacity = toEnd > 0 ? 1 : 0;
   { const p = lin(t, 47.45, .5); $('e2i').style.transform = `scale(${Math.max(0, back(p))}) rotate(${(1 - ease(p)) * -12}deg)`; }

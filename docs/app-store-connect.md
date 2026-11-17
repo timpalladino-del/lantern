@@ -176,3 +176,20 @@ Agreement, App Review contact phone number, then Submit for Review.
   `Emulation.setFocusEmulationEnabled` and then it works every time.
 - State after submit: version 1.0.1 and the three subscriptions WAITING_FOR_REVIEW. Group 50 left out on purpose.
   Release type is manual.
+
+## Availability and status check, November 17, 2026
+
+- Version 1.0.1 (build 12) and the Duo, Family 6 and Family 10 subscriptions all read Waiting for Review
+  at 22:10 UTC. Nothing was approved yet; an earlier "approved" report did not match App Store Connect.
+- Release type now reads After Approval (it read Manual earlier the same day), so the version goes live
+  on its own once Apple approves it. `~/.appstoreconnect/jobs/release_101.py` stays as a fallback and only
+  acts on Pending Developer Release.
+- App availability had never been set: `GET /v1/apps/6830418364/appAvailabilityV2` returned 404. Created it
+  with `POST /v2/appAvailabilities` listing all 175 territories, only USA available, and
+  `availableInNewTerritories` false. The owner wants the United States only; China mainland is off, so the
+  China compliance banners on the Distribution page do not apply.
+- The USA row reads `contentStatuses: CANNOT_SELL, AVAILABLE_FOR_SALE_UNRELEASED_APP`. Confirm in Business
+  that the Paid Apps agreement is Active before launch.
+- The subscriptions keep their own availability (175 territories). The app's availability limits where they
+  can actually be bought.
+- The App Store Connect API returned 500 for most requests for part of the day. The job scripts retry.

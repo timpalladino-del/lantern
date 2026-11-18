@@ -1,0 +1,34 @@
+<!doctype html><meta charset="utf-8"><style>
+@font-face{font-family:Newsreader;font-weight:500;src:url(../video/fonts/newsreader-latin-500-normal.woff2)}
+@font-face{font-family:Inter;font-weight:500;src:url(../video/fonts/inter-latin-500-normal.woff2)}
+@font-face{font-family:Inter;font-weight:600;src:url(../video/fonts/inter-latin-600-normal.woff2)}
+*{box-sizing:border-box;margin:0;padding:0}[hidden]{display:none!important}
+body{overflow:hidden;position:relative;background:#141823;font-family:Inter,sans-serif;color:#F6F1E7;-webkit-font-smoothing:antialiased}
+#bg{position:absolute;inset:0;background-size:cover;background-repeat:no-repeat}
+#shade{position:absolute;inset:0}
+#txt{position:absolute;display:flex;flex-direction:column;justify-content:center}
+.row{display:flex;align-items:center;gap:calc(22px*var(--u))}
+.row img{width:calc(92px*var(--u));height:calc(92px*var(--u));border-radius:22%}
+.k{font-weight:600;font-size:calc(19px*var(--u));letter-spacing:.2em;color:#F2B43C}
+h1{font-family:Newsreader,serif;font-weight:500;font-size:calc(118px*var(--u)*var(--h,1));line-height:1.1;margin-top:calc(12px*var(--u))}
+.t{font-family:Newsreader,serif;font-weight:500;font-size:calc(38px*var(--u));line-height:1.25;margin-top:calc(8px*var(--u))}
+.s{font-weight:500;font-size:calc(22px*var(--u));line-height:1.55;color:#C9CCD4;margin-top:calc(22px*var(--u))}
+.b{margin-top:calc(30px*var(--u));height:calc(66px*var(--u));align-self:flex-start}
+.chips{position:absolute;left:0;right:0;text-align:center;font-weight:600;font-size:calc(20px*var(--u));letter-spacing:.02em;white-space:nowrap}
+.chips i{display:inline-block;width:calc(7px*var(--u));height:calc(7px*var(--u));border-radius:50%;background:#F2B43C;margin:0 calc(18px*var(--u)) calc(3px*var(--u))}
+</style>
+<div id="bg"></div><div id="shade"></div>
+<div id="txt"><div class="row" id="row" hidden><img src="../../brand/icon/lantern-icon-1024.png"><div style="font-family:Newsreader,serif;font-weight:500" id="brand">Lantern</div></div>
+<div class="k" id="k"></div><h1 id="h"></h1><div class="t" id="t"></div><div class="s" id="s"></div><img class="b" id="b" src="../social/appstore-badge-black.svg" hidden></div>
+<div class="chips" id="chips">No account<i></i>No cloud<i></i>Toolkit free for everyone</div>
+<script>
+const c = JSON.parse(decodeURIComponent(location.hash.slice(1))); const $ = i => document.getElementById(i);
+document.body.style.width = c.w + 'px'; document.body.style.height = c.h + 'px'; document.body.style.setProperty('--u', c.u || 1); if (c.hs) document.body.style.setProperty('--h', c.hs);
+$('bg').style.backgroundImage = 'url(' + c.bg + ')'; $('bg').style.backgroundPosition = c.pos || '50% 40%'; if (c.size) $('bg').style.backgroundSize = c.size;
+$('shade').style.background = c.shade;
+Object.assign($('txt').style, c.box);
+if (c.align === 'center') { $('txt').style.alignItems = 'center'; $('txt').style.textAlign = 'center'; $('b').style.alignSelf = 'center'; }
+$('k').textContent = c.k || ''; $('k').hidden = !c.k; $('h').innerHTML = c.h1 || ''; $('h').hidden = !c.h1; $('t').textContent = c.t || ''; $('t').hidden = !c.t; $('s').textContent = c.s || ''; $('s').hidden = !c.s;
+$('b').hidden = !c.badge; $('chips').hidden = c.chips === false; $('chips').style.bottom = (c.chipsBottom || 38) + 'px';
+if (c.brand) { $('row').hidden = false; $('brand').style.fontSize = 'calc(64px*var(--u))'; }
+</script>
